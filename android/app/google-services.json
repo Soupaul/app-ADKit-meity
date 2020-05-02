@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "576437449728",
+    "firebase_url": "https://adkit-demo.firebaseio.com",
+    "project_id": "adkit-demo",
+    "storage_bucket": "adkit-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576437449728:android:c363547b897e0223be94e5",
+        "android_client_info": {
+          "package_name": "com.example.thefirstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576437449728-o95hejdmr5s2e60a2j0lqtd3352ruj8t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.thefirstone",
+            "certificate_hash": "df93963e5432305a2d8dac237c0ae805db1ae9e7"
+          }
+        },
+        {
+          "client_id": "576437449728-2681d6rth0akmerbod7qd7jmk3fqh6kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrstlj1UzWunmmweBkCZgaZ-yH3QXLgGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576437449728-2681d6rth0akmerbod7qd7jmk3fqh6kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
