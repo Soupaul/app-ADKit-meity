@@ -26,6 +26,16 @@ class AuthProvider {
     }
   }
 
+
+ Future<String> getCurrentUser() async {
+    final FirebaseUser user = await _auth.currentUser();
+    final uid = user.uid;
+    // Similarly we can get email as well
+    //final uemail = user.email;
+    return uid.toString();
+    //print(uemail);
+  }
+
   Future<bool> loginWithGoogle() async {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn();
