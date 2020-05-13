@@ -13,4 +13,4 @@
 - Added Firebase Authentication with Custom Email of Gmail
 - Enabled Firebase Storage 
 - Minor UI Changes
-- App now Uploads video to Firebase Storage
+- App now Uploads videos to Firebase Storage
