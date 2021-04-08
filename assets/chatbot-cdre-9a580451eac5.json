@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "chatbot-cdre",
+  "private_key_id": "9a580451eac54c8d9af94b03f6ddb5b04475877e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDpM1lRw5HxkfZF\nnKk6xLJZQSsEFNAS2862w/1ZWneVa9TyK/WniwnLCaMiy80rkYQkllAeZ/fYUzf+\n20C1JqulAm0r2gq5201tv5sQt3FXcpr7jH4/34GRiZ4r9PEimeXfBF2QbReVe1De\nd0GIFXfWXMDBNh7N8rhvqrUYANG1fu/T3KlYzkj2jBXswpSSwWhtilwVZ5zMVvXK\nq3MoHEETgbCLEXd/LJQP4CTF3HCe36W/clmgnX0um2iKZVX+a2w7P143cJrNDJvs\nsQzHfZu5hWGglUukI/V+2530tBR8l007HU6rCzVwSQyeqNgqBh9o4WS2sXGir50k\ntMnJQNi7AgMBAAECggEAWQD9JSTEbfOsj9MED+cEvuYNeehLpfb4xW62IkVSANiA\nFNHMV17MpQ6PkfdA3lESozgvaft6b7kLVRzvbHRO7JKpgiQdFeRqf+myUEYDX0Hh\nfwKXKN+wPxDMKrC42+DrCBxNbZMFfkrriYzwmPTAoTMTamqyhR4PYKdBqOCfKWqH\nqwtJ6eG/KP+ogWK71VdVKYzZ/tMLgA6x4DdmM926GHbgN20P7fgzZepT4qyqMOQh\n+z4BBnHvdtvKQBI9JTzOsBvi1+sEnZiOKHtgqqCt8UzFP1P3qeUmLCcL4P1SDHjE\nd004mosWjAll3fwEHCAXaQH9TR8LmdCA8ZsnCsNgiQKBgQD4g7ofG8nSIuaaMegP\n7gekWvIewJI3ccaFb/wkE+SE4U0ujllwKFDBuyJ6cci1hnBdWu6izV8fguxUe3N5\nv8DjVUHFz+iUPEWdDJQQnbjsfWHD5Kr/BWjJ1mP7dsf6FrkQxH3pg8xwd4QxOYlF\nMzm5t9OEIo4x3bAxcP4OkUU73QKBgQDwOYmFkdCyXU4AmzScnMBKXPByWa80/m39\nWRsYo1R22q2t6+vAR5O0TSELzbCrt58e+BQH1pnayA1EWNWJ7CJaV3ohogtfPiQK\npRrVjtJsgUmcpe3PVBoOOFV91LXWpX+9c0dzEyr8IAo9Jxo1y9yk+Lvad6lJCIkJ\n5fcPVABJdwKBgQDH4euJqegiREAGNa3ZYjJzV1L2uRzhy3lJSlEbE4Tx++UAVS5K\nr6KEr+eDZJFyr7cg30qhV13zEnLTYJf4jOqv7psAZ8FBuVikgMF2u+VJEW/ZB8sh\nY1BtRysTzu35kN05R1GeyIteykJg9U4bgqAjaF+QH9sO8KgOnDs7rExrYQKBgQCE\njCrOUWumzwbYHMtF0tPi9C8T2VpsUircTIs/5/cV8Yk9Wtxk5tmf9aLTQXZG+XVK\nADYFMSsJZbK0UJPamzlFQdk4r5G4xq/aU8lfpoOCrT+xuHhkGpKZ4AmD+ZcvzXeT\nUAVPgHcKUJ91qJq0rjybpkb4v2ffzV7X4FSW15Gk9wKBgF+EiHx1QRwoollkH1x3\n+QsOgmlexUgkfWc8288l6f72DP4dVmt/nNCzR86einENT1oBTJnMvTR4cHFqaEim\nLxHuRYlKTfMftHsigs0yCaTgrTfaikNHiyd4Fqsags/qA0vkgpv58LDDpyvRiJ10\n8K7p3+UfNgcpxUoSGpJQCA4f\n-----END PRIVATE KEY-----\n",
+  "client_email": "chatbotadkit@chatbot-cdre.iam.gserviceaccount.com",
+  "client_id": "106401139325838346435",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chatbotadkit%40chatbot-cdre.iam.gserviceaccount.com"
+}
