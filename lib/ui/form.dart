@@ -1013,167 +1013,166 @@ class _DataFormState extends State<DataForm> {
   @override
   Widget build(BuildContext context) {
     print(stateList.states[currState].text);
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("ADKit  Analysis"),
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  //Navigator.pop(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("ADKit  Analysis"),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                //Navigator.pop(context);
+              },
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+            );
+          },
+        ),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  this._showcontent();
                 },
-                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-              );
-            },
-          ),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    this._showcontent();
-                  },
-                  child: Icon(
-                    Icons.help,
-                    size: 26.0,
-                  ),
-                )),
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Icon(Icons.more_vert),
-                )),
-          ],
-        ),
-        bottomSheet: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: new LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width - 50,
-              animation: true,
-              lineHeight: 20.0,
-              animationDuration: 20,
-              percent: currState / 80,
-              linearStrokeCap: LinearStrokeCap.roundAll,
-              progressColor: Colors.greenAccent,
-              center: Text("Progress"),
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: AvatarGlow(
-          animate: _isListening,
-          glowColor: Theme.of(context).primaryColor,
-          endRadius: 75.0,
-          duration: const Duration(milliseconds: 2000),
-          repeatPauseDuration: const Duration(milliseconds: 100),
-          repeat: true,
-          child: GestureDetector(
-            onLongPressStart: (_) => _listen(),
-            onLongPressUp: () {
-              setState(() => _isListening = false);
-              _speech.stop();
-              print("lstening   : $_isListening");
-            },
-            child: Icon(_isListening ? Icons.stop : Icons.mic_none),
-          ),
-        ),
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.blue, // button color
-                            child: InkWell(
-                              splashColor: Colors.red, // inkwell color
-                              child: SizedBox(
-                                  width: 56,
-                                  height: 56,
-                                  child: Icon(Icons.volume_up)),
-                              onTap: () {
-                                setState(() {
-                                  _newVoiceText =
-                                      stateList.states[currState].text;
-                                });
-                                _speak();
-                              },
-                            ),
-                          ),
-                        )),
-                  ],
+                child: Icon(
+                  Icons.help,
+                  size: 26.0,
                 ),
+              )),
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: Icon(Icons.more_vert),
+              )),
+        ],
+      ),
+      bottomSheet: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(15.0),
+          child: new LinearPercentIndicator(
+            width: MediaQuery.of(context).size.width - 50,
+            animation: true,
+            lineHeight: 20.0,
+            animationDuration: 20,
+            percent: currState / 80,
+            linearStrokeCap: LinearStrokeCap.roundAll,
+            progressColor: Colors.greenAccent,
+            center: Text("Progress"),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: AvatarGlow(
+        animate: _isListening,
+        glowColor: Theme.of(context).primaryColor,
+        endRadius: 75.0,
+        duration: const Duration(milliseconds: 2000),
+        repeatPauseDuration: const Duration(milliseconds: 100),
+        repeat: true,
+        child: GestureDetector(
+          onLongPressStart: (_) => _listen(),
+          onLongPressUp: () {
+            setState(() => _isListening = false);
+            _speech.stop();
+            print("lstening   : $_isListening");
+          },
+          child: Icon(_isListening ? Icons.stop : Icons.mic_none),
+        ),
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(10),
+                      child: ClipOval(
+                        child: Material(
+                          color: Colors.blue, // button color
+                          child: InkWell(
+                            splashColor: Colors.red, // inkwell color
+                            child: SizedBox(
+                                width: 56,
+                                height: 56,
+                                child: Icon(Icons.volume_up)),
+                            onTap: () {
+                              setState(() {
+                                _newVoiceText =
+                                    stateList.states[currState].text;
+                              });
+                              _speak();
+                            },
+                          ),
+                        ),
+                      )),
+                ],
               ),
-              //Container(
-              //  child: Text(currState.toString() +
-              //    "        " +
-              //  stateList.s.toString())),
-              (stateList.states[currState].isMcq)
-                  ? Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                border:
-                                    Border.all(width: 2.0, color: Colors.blue)),
-                            margin: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    stateList.states[currState].text,
-                                    style: TextStyle(
-                                        color: Colors.blue, fontSize: 30),
+            ),
+            //Container(
+            //  child: Text(currState.toString() +
+            //    "        " +
+            //  stateList.s.toString())),
+            (stateList.states[currState].isMcq)
+                ? Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              border:
+                                  Border.all(width: 2.0, color: Colors.blue)),
+                          margin:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  stateList.states[currState].text,
+                                  style: TextStyle(
+                                      color: Colors.blue, fontSize: 25),
+                                ),
+                                const SizedBox(height: 20),
+                                Divider(
+                                  color: Colors.blue,
+                                ),
+                                ListTile(
+                                  title: const Text('Yes'),
+                                  leading: Radio(
+                                    value: "yes",
+                                    groupValue: mcqValue,
+                                    onChanged: (String value) {
+                                      setState(() {
+                                        mcqValue = value;
+                                      });
+                                    },
                                   ),
-                                  const SizedBox(height: 20),
-                                  Divider(
-                                    color: Colors.blue,
+                                ),
+                                ListTile(
+                                  title: const Text('No'),
+                                  leading: Radio(
+                                    value: "no",
+                                    groupValue: mcqValue,
+                                    onChanged: (String value) {
+                                      setState(() {
+                                        mcqValue = value;
+                                      });
+                                    },
                                   ),
-                                  ListTile(
-                                    title: const Text('Yes'),
-                                    leading: Radio(
-                                      value: "yes",
-                                      groupValue: mcqValue,
-                                      onChanged: (String value) {
-                                        setState(() {
-                                          mcqValue = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('No'),
-                                    leading: Radio(
-                                      value: "no",
-                                      groupValue: mcqValue,
-                                      onChanged: (String value) {
-                                        setState(() {
-                                          mcqValue = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          /*
+                        ),
+                        const SizedBox(height: 20),
+                        /*
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
@@ -1224,217 +1223,300 @@ class _DataFormState extends State<DataForm> {
                             ],
                           ),
                           */
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: ClipOval(
-                                    child: Material(
-                                      color: Colors.blue, // button color
-                                      child: InkWell(
-                                        splashColor:
-                                            Colors.red, // inkwell color
-                                        child: SizedBox(
-                                            width: 56,
-                                            height: 56,
-                                            child: Icon(Icons.navigate_before)),
-                                        onTap: () {
-                                          int newState = stateList.NextState(
-                                              currState, "back");
-                                          setState(() {
-                                            currState = newState;
-                                          });
-                                        },
-                                      ),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.all(10),
+                                child: ClipOval(
+                                  child: Material(
+                                    color: Colors.blue, // button color
+                                    child: InkWell(
+                                      splashColor: Colors.red, // inkwell color
+                                      child: SizedBox(
+                                          width: 56,
+                                          height: 56,
+                                          child: Icon(Icons.navigate_before)),
+                                      onTap: () {
+                                        int newState = stateList.NextState(
+                                            currState, "back");
+                                        setState(() {
+                                          currState = newState;
+                                        });
+                                      },
                                     ),
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: ClipOval(
-                                    child: Material(
-                                      color: Colors.greenAccent, // button color
-                                      child: InkWell(
-                                        splashColor:
-                                            Colors.red, // inkwell color
-                                        child: SizedBox(
-                                            width: 56,
-                                            height: 56,
-                                            child: Icon(Icons.navigate_next)),
-                                        onTap: () {
-                                          int newState = stateList.NextState(
-                                              currState, mcqValue);
-
-                                          setState(() {
-                                            mcqValue = "";
-                                            currState = newState;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  : (stateList.states[currState].isDropdown)
-                      ? Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    border: Border.all(
-                                        width: 2.0, color: Colors.blue)),
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                child: Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        stateList.states[currState].text,
-                                        style: TextStyle(
-                                            color: Colors.blue, fontSize: 30),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      Divider(
-                                        color: Colors.blue,
-                                      ),
-                                      DropdownButton<String>(
-                                        value: dropdownValue,
-                                        icon: Icon(Icons.arrow_downward),
-                                        iconSize: 24,
-                                        elevation: 16,
-                                        style:
-                                            TextStyle(color: Colors.blueAccent),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.blueAccent,
-                                        ),
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            dropdownValue = newValue;
-                                          });
-                                        },
-                                        items: stateList
-                                            .states[currState].options
-                                            .map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
                                   ),
+                                )),
+                            Padding(
+                                padding: EdgeInsets.all(10),
+                                child: ClipOval(
+                                  child: Material(
+                                    color: Colors.greenAccent, // button color
+                                    child: InkWell(
+                                      splashColor: Colors.red, // inkwell color
+                                      child: SizedBox(
+                                          width: 56,
+                                          height: 56,
+                                          child: Icon(Icons.navigate_next)),
+                                      onTap: () {
+                                        int newState = stateList.NextState(
+                                            currState, mcqValue);
+
+                                        setState(() {
+                                          mcqValue = "";
+                                          currState = newState;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                : (stateList.states[currState].isDropdown)
+                    ? Container(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  border: Border.all(
+                                      width: 2.0, color: Colors.blue)),
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              child: Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      stateList.states[currState].text,
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 30),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Divider(
+                                      color: Colors.blue,
+                                    ),
+                                    DropdownButton<String>(
+                                      value: dropdownValue,
+                                      icon: Icon(Icons.arrow_downward),
+                                      iconSize: 24,
+                                      elevation: 16,
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.blueAccent,
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          dropdownValue = newValue;
+                                        });
+                                      },
+                                      items: stateList.states[currState].options
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: ClipOval(
-                                        child: Material(
-                                          color: Colors.blue, // button color
-                                          child: InkWell(
-                                            splashColor:
-                                                Colors.red, // inkwell color
-                                            child: SizedBox(
-                                                width: 56,
-                                                height: 56,
-                                                child: Icon(
-                                                    Icons.navigate_before)),
-                                            onTap: () {
-                                              int newState =
-                                                  stateList.NextState(
-                                                      currState, "back");
-                                              setState(() {
-                                                currState = newState;
-                                              });
-                                            },
-                                          ),
+                            ),
+                            const SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: ClipOval(
+                                      child: Material(
+                                        color: Colors.blue, // button color
+                                        child: InkWell(
+                                          splashColor:
+                                              Colors.red, // inkwell color
+                                          child: SizedBox(
+                                              width: 56,
+                                              height: 56,
+                                              child:
+                                                  Icon(Icons.navigate_before)),
+                                          onTap: () {
+                                            int newState = stateList.NextState(
+                                                currState, "back");
+                                            setState(() {
+                                              currState = newState;
+                                            });
+                                          },
                                         ),
-                                      )),
-                                  Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: ClipOval(
-                                        child: Material(
-                                          color: Colors
-                                              .greenAccent, // button color
-                                          child: InkWell(
-                                            splashColor:
-                                                Colors.red, // inkwell color
-                                            child: SizedBox(
-                                                width: 56,
-                                                height: 56,
-                                                child:
-                                                    Icon(Icons.navigate_next)),
-                                            onTap: () {
-                                              int newState =
-                                                  stateList.NextState(
-                                                      currState, dropdownValue);
-                                              setState(() {
-                                                currState = newState;
-                                              });
-                                            },
-                                          ),
+                                      ),
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: ClipOval(
+                                      child: Material(
+                                        color:
+                                            Colors.greenAccent, // button color
+                                        child: InkWell(
+                                          splashColor:
+                                              Colors.red, // inkwell color
+                                          child: SizedBox(
+                                              width: 56,
+                                              height: 56,
+                                              child: Icon(Icons.navigate_next)),
+                                          onTap: () {
+                                            int newState = stateList.NextState(
+                                                currState, dropdownValue);
+                                            setState(() {
+                                              currState = newState;
+                                            });
+                                          },
                                         ),
-                                      )),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      : (stateList.states[currState].isInt)
-                          ? Container(
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    : (stateList.states[currState].isInt)
+                        ? Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      border: Border.all(
+                                          width: 2.0, color: Colors.blue)),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  child: Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          stateList.states[currState].text,
+                                          style: TextStyle(
+                                              color: Colors.blue, fontSize: 30),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Divider(
+                                          color: Colors.blue,
+                                        ),
+                                        TextFormField(
+                                          keyboardType: TextInputType.number,
+                                          controller: _textEditingController,
+                                          decoration: InputDecoration(
+                                              hintText: 'Your Answer'),
+                                          onChanged: (text) {
+                                            textValue = text;
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: ClipOval(
+                                          child: Material(
+                                            color: Colors.blue, // button color
+                                            child: InkWell(
+                                              splashColor:
+                                                  Colors.red, // inkwell color
+                                              child: SizedBox(
+                                                  width: 56,
+                                                  height: 56,
+                                                  child: Icon(
+                                                      Icons.navigate_before)),
+                                              onTap: () {
+                                                int newState =
+                                                    stateList.NextState(
+                                                        currState, "back");
+                                                setState(() {
+                                                  currState = newState;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        )),
+                                    Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: ClipOval(
+                                          child: Material(
+                                            color: Colors
+                                                .greenAccent, // button color
+                                            child: InkWell(
+                                              splashColor:
+                                                  Colors.red, // inkwell color
+                                              child: SizedBox(
+                                                  width: 56,
+                                                  height: 56,
+                                                  child: Icon(
+                                                      Icons.navigate_next)),
+                                              onTap: () {
+                                                try {
+                                                  print(
+                                                      " text value is $textValue");
+                                                  int newState =
+                                                      stateList.NextState(
+                                                          currState,
+                                                          int.parse(textValue));
+
+                                                  setState(() {
+                                                    currState = newState;
+                                                    textValue = "";
+                                                  });
+                                                } catch (e) {
+                                                  print("Reached here");
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : Center(
+                            child: Container(
                               child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
+                                  SafeArea(
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20)),
-                                        border: Border.all(
-                                            width: 2.0, color: Colors.blue)),
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 10),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 10),
-                                    child: Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text(
-                                            stateList.states[currState].text,
-                                            style: TextStyle(
-                                                color: Colors.blue,
-                                                fontSize: 30),
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Divider(
-                                            color: Colors.blue,
-                                          ),
-                                          TextFormField(
-                                            keyboardType: TextInputType.number,
-                                            controller: _textEditingController,
-                                            decoration: InputDecoration(
-                                                hintText: 'Your Answer'),
-                                            onChanged: (text) {
-                                              textValue = text;
-                                            },
-                                          ),
-                                        ],
+                                      ),
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 20, horizontal: 20),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 40, horizontal: 10),
+                                      child: Text(
+                                        stateList.states[currState].text,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 30),
                                       ),
                                     ),
                                   ),
@@ -1483,22 +1565,13 @@ class _DataFormState extends State<DataForm> {
                                                     child: Icon(
                                                         Icons.navigate_next)),
                                                 onTap: () {
-                                                  try {
-                                                    print(
-                                                        " text value is $textValue");
-                                                    int newState =
-                                                        stateList.NextState(
-                                                            currState,
-                                                            int.parse(
-                                                                textValue));
-
-                                                    setState(() {
-                                                      currState = newState;
-                                                      textValue = "";
-                                                    });
-                                                  } catch (e) {
-                                                    print("Reached here");
-                                                  }
+                                                  int newState =
+                                                      stateList.NextState(
+                                                          currState,
+                                                          dropdownValue);
+                                                  setState(() {
+                                                    currState = newState;
+                                                  });
                                                 },
                                               ),
                                             ),
@@ -1507,95 +1580,9 @@ class _DataFormState extends State<DataForm> {
                                   ),
                                 ],
                               ),
-                            )
-                          : Center(
-                              child: Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    SafeArea(
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 20, horizontal: 20),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 40, horizontal: 10),
-                                        child: Text(
-                                          stateList.states[currState].text,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 30),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 30),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.all(10),
-                                            child: ClipOval(
-                                              child: Material(
-                                                color:
-                                                    Colors.blue, // button color
-                                                child: InkWell(
-                                                  splashColor: Colors
-                                                      .red, // inkwell color
-                                                  child: SizedBox(
-                                                      width: 56,
-                                                      height: 56,
-                                                      child: Icon(Icons
-                                                          .navigate_before)),
-                                                  onTap: () {
-                                                    int newState =
-                                                        stateList.NextState(
-                                                            currState, "back");
-                                                    setState(() {
-                                                      currState = newState;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            )),
-                                        Padding(
-                                            padding: EdgeInsets.all(10),
-                                            child: ClipOval(
-                                              child: Material(
-                                                color: Colors
-                                                    .greenAccent, // button color
-                                                child: InkWell(
-                                                  splashColor: Colors
-                                                      .red, // inkwell color
-                                                  child: SizedBox(
-                                                      width: 56,
-                                                      height: 56,
-                                                      child: Icon(
-                                                          Icons.navigate_next)),
-                                                  onTap: () {
-                                                    int newState =
-                                                        stateList.NextState(
-                                                            currState,
-                                                            dropdownValue);
-                                                    setState(() {
-                                                      currState = newState;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            )),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
-            ],
-          ),
+                          ),
+          ],
         ),
       ),
     );

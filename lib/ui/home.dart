@@ -72,8 +72,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
       body: Container(
           color: Colors.white,
           child: SafeArea(
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       RaisedButton(
                         child: Text("Log out"),
                         onPressed: () {
-                          AuthProvider().logOut();
+                          AuthProvider.logOut();
                         },
                       )
                     ],
@@ -137,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           )),
-    ));
+    );
   }
 
   Widget enableUploadImage() {
