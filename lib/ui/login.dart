@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 import '../utils/firebase_auth.dart';
+import 'form.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -307,7 +308,9 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(color: Color(0xFFBF828A)),
                           ),
                         ),
-                        onPressed: () => {},
+                        onPressed: () => {
+                         
+                        },
                       ),
                     ),
                   ],

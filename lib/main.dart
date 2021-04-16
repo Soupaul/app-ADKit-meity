@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:thefirstone/ui/home.dart';
 import 'ui/home.dart';
+import 'ui/home.dart';
+import 'ui/login.dart';
 import 'ui/login.dart';
 import 'utils/firebase_auth.dart';
 
