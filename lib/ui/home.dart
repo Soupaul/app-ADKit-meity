@@ -88,9 +88,10 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         child: Text("Hi,\nWelcome to Adkit",
                             style: TextStyle(
-                                fontSize: textSize,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400)),
+                              fontSize: textSize,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            )),
                         alignment: Alignment.topLeft,
                         padding: EdgeInsets.all(25),
                       ),
@@ -98,13 +99,14 @@ class _HomePageState extends State<HomePage> {
                         margin: EdgeInsets.all(20),
                         child: Card(
                           elevation: 10,
+                          color: Theme.of(context).accentColor,
                           child: IconButton(
                             onPressed: () {
                               AuthProvider.logOut();
                             },
                             icon: Icon(
                               Icons.logout,
-                              color: Colors.redAccent,//Color(0xFFBF828A),
+                              color: Color(0xFFBF828A), //Color(0xFFBF828A),
                             ),
                           ),
                         ),
@@ -121,10 +123,11 @@ class _HomePageState extends State<HomePage> {
                     child: Card(
                       elevation: 10,
                       child: Container(
+                        color: Theme.of(context).accentColor,
                         padding: EdgeInsets.all(20),
                         child: Icon(
                           Icons.video_library,
-                          color: Colors.redAccent,//Color(0xFFBF828A),
+                          color: Color(0xFFBF828A),
                           size: 70,
                         ),
                       ),
@@ -144,10 +147,11 @@ class _HomePageState extends State<HomePage> {
                     child: Card(
                       elevation: 10,
                       child: Container(
+                        color: Theme.of(context).accentColor,
                         padding: EdgeInsets.all(20),
                         child: Icon(
                           Icons.videocam,
-                          color: Colors.redAccent,//Color(0xFFBF828A),
+                          color: Color(0xFFBF828A),
                           size: 70,
                         ),
                       ),
@@ -177,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    color: Colors.redAccent,//Color(0xFFBF828A),
+                    color: Color(0xFFBF828A),
                     child: Container(
                       child: new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                                 child: Icon(
                                   Icons.message,
-                                  color: Colors.redAccent///Color(0xFFBF828A),
+                                  color: Color(0xFFBF828A),
                                 ),
                                 onPressed: () {
                                   Navigator.push(

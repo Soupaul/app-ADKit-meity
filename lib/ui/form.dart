@@ -979,7 +979,6 @@ class _DataFormState extends State<DataForm> {
   void _showcontent() {
     showDialog(
       context: context, barrierDismissible: false, // user must tap button!
-
       builder: (BuildContext context) {
         return new AlertDialog(
           title: new Text('Help'),
@@ -999,6 +998,7 @@ class _DataFormState extends State<DataForm> {
           ),
           actions: [
             new FlatButton(
+              color: Color(0xFFBF828A),
               child: new Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -1013,511 +1013,454 @@ class _DataFormState extends State<DataForm> {
   @override
   Widget build(BuildContext context) {
     print(stateList.states[currState].text);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("ADKit  Analysis"),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                //Navigator.pop(context);
-              },
-              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            );
-          },
-        ),
-        actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  this._showcontent();
-                },
-                child: Icon(
-                  Icons.help,
-                  size: 26.0,
-                ),
-              )),
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.more_vert),
-              )),
-        ],
-      ),
-      bottomSheet: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(15.0),
-          child: new LinearPercentIndicator(
-            width: MediaQuery.of(context).size.width - 50,
-            animation: true,
-            lineHeight: 20.0,
-            animationDuration: 20,
-            percent: currState / 80,
-            linearStrokeCap: LinearStrokeCap.roundAll,
-            progressColor: Colors.greenAccent,
-            center: Text("Progress"),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: AvatarGlow(
-        animate: _isListening,
-        glowColor: Theme.of(context).primaryColor,
-        endRadius: 75.0,
-        duration: const Duration(milliseconds: 2000),
-        repeatPauseDuration: const Duration(milliseconds: 100),
-        repeat: true,
-        child: GestureDetector(
-          onLongPressStart: (_) => _listen(),
-          onLongPressUp: () {
-            setState(() => _isListening = false);
-            _speech.stop();
-            print("lstening   : $_isListening");
-          },
-          child: Icon(_isListening ? Icons.stop : Icons.mic_none),
-        ),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ClipOval(
-                        child: Material(
-                          color: Colors.blue, // button color
-                          child: InkWell(
-                            splashColor: Colors.red, // inkwell color
-                            child: SizedBox(
-                                width: 56,
-                                height: 56,
-                                child: Icon(Icons.volume_up)),
-                            onTap: () {
-                              setState(() {
-                                _newVoiceText =
-                                    stateList.states[currState].text;
-                              });
-                              _speak();
-                            },
-                          ),
-                        ),
-                      )),
-                ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: AvatarGlow(
+          animate: _isListening,
+          glowColor: Theme.of(context).primaryColor,
+          endRadius: 75.0,
+          duration: const Duration(milliseconds: 2000),
+          repeatPauseDuration: const Duration(milliseconds: 100),
+          repeat: true,
+          child: GestureDetector(
+            onLongPressStart: (_) => _listen(),
+            onLongPressUp: () {
+              setState(() => _isListening = false);
+              _speech.stop();
+              print("lstening   : $_isListening");
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).accentColor,
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              height: 60,
+              width: 60,
+              child: Icon(
+                _isListening ? Icons.stop : Icons.mic,
+                color: Color(0xFFBF828A),
               ),
             ),
-            //Container(
-            //  child: Text(currState.toString() +
-            //    "        " +
-            //  stateList.s.toString())),
-            (stateList.states[currState].isMcq)
-                ? Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              border:
-                                  Border.all(width: 2.0, color: Colors.blue)),
-                          margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          child: Container(
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  stateList.states[currState].text,
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: 25),
+          ),
+        ),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.all(10),
+                        child: ClipOval(
+                          child: Material(
+                            color: Theme.of(context).accentColor,
+                            child: SizedBox(
+                              width: 56,
+                              height: 56,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.help,
+                                  color: Color(0xFFBF828A),
                                 ),
-                                const SizedBox(height: 20),
-                                Divider(
-                                  color: Colors.blue,
-                                ),
-                                ListTile(
-                                  title: const Text('Yes'),
-                                  leading: Radio(
-                                    value: "yes",
-                                    groupValue: mcqValue,
-                                    onChanged: (String value) {
-                                      setState(() {
-                                        mcqValue = value;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  title: const Text('No'),
-                                  leading: Radio(
-                                    value: "no",
-                                    groupValue: mcqValue,
-                                    onChanged: (String value) {
-                                      setState(() {
-                                        mcqValue = value;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
+                                onPressed: () {
+                                  this._showcontent();
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        /*
+                        )),
+                    Padding(
+                        padding: EdgeInsets.all(10),
+                        child: ClipOval(
+                          child: Material(
+                            color: Theme.of(context).accentColor,
+                            child: SizedBox(
+                              width: 56,
+                              height: 56,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.volume_up,
+                                  color: Color(0xFFBF828A),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _newVoiceText =
+                                        stateList.states[currState].text;
+                                  });
+                                  _speak();
+                                },
+                              ),
+                            ),
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 25.0,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                child: new LinearPercentIndicator(
+                  width: MediaQuery.of(context).size.width,
+                  backgroundColor: Theme.of(context).accentColor,
+                  animation: true,
+                  lineHeight: 3.0,
+                  animationDuration: 20,
+                  percent: currState / 80,
+                  linearStrokeCap: LinearStrokeCap.roundAll,
+                  progressColor: Color(0xFFBF828A),
+                  // center: Text("Progress"),
+                ),
+              ),
+              (stateList.states[currState].isMcq)
+                  ? Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              stateList.states[currState].text,
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            elevation: 5.0,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  mcqValue = "yes";
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5.0,
+                                  horizontal: 8.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  color: mcqValue == "yes"
+                                      ? Theme.of(context).accentColor
+                                      : Colors.white,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Radio(
+                                      activeColor: Color(0xFFBF828A),
+                                      value: "yes",
+                                      groupValue: mcqValue,
+                                      onChanged: (String value) {
+                                        setState(() {
+                                          mcqValue = value;
+                                        });
+                                      },
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          'Yes',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: mcqValue == "yes"
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                            fontSize: 18.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            elevation: 5.0,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  mcqValue = "no";
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5.0,
+                                  horizontal: 8.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  color: mcqValue == "no"
+                                      ? Theme.of(context).accentColor
+                                      : Colors.white,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Radio(
+                                      activeColor: Color(0xFFBF828A),
+                                      value: "no",
+                                      groupValue: mcqValue,
+                                      onChanged: (String value) {
+                                        setState(() {
+                                          mcqValue = value;
+                                        });
+                                      },
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          'No',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: mcqValue == "no"
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                            fontSize: 18.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.all(10),
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.red)),
-                                  child: const Text(
-                                    'No',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 30),
-                                  ),
-                                  onPressed: () {
-                                    int newState =
-                                        stateList.NextState(currState, "no");
-                                    setState(() {
-                                      currState = newState;
-                                    });
-                                  },
+                              RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Padding(
-                                padding: EdgeInsets.all(10),
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.blueAccent)),
-                                  child: const Text(
-                                    'Yes',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 30),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 15.0),
+                                color: Color(0xFFBF828A),
+                                child: Text(
+                                  "Previous",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
                                   ),
-                                  onPressed: () {
-                                    int newState =
-                                        stateList.NextState(currState, "yes");
-                                    setState(() {
-                                      currState = newState;
-                                    });
-                                  },
                                 ),
+                                onPressed: () {
+                                  int newState =
+                                      stateList.NextState(currState, "back");
+                                  setState(() {
+                                    currState = newState;
+                                  });
+                                },
                               ),
-                              const SizedBox(width: 30),
+                              RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 15.0),
+                                color: Color(0xFFBF828A),
+                                child: Text(
+                                  "Next",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  int newState =
+                                      stateList.NextState(currState, mcqValue);
+
+                                  setState(() {
+                                    mcqValue = "";
+                                    currState = newState;
+                                  });
+                                },
+                              ),
                             ],
                           ),
-                          */
-                        const SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.all(10),
-                                child: ClipOval(
-                                  child: Material(
-                                    color: Colors.blue, // button color
-                                    child: InkWell(
-                                      splashColor: Colors.red, // inkwell color
-                                      child: SizedBox(
-                                          width: 56,
-                                          height: 56,
-                                          child: Icon(Icons.navigate_before)),
-                                      onTap: () {
-                                        int newState = stateList.NextState(
-                                            currState, "back");
-                                        setState(() {
-                                          currState = newState;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                )),
-                            Padding(
-                                padding: EdgeInsets.all(10),
-                                child: ClipOval(
-                                  child: Material(
-                                    color: Colors.greenAccent, // button color
-                                    child: InkWell(
-                                      splashColor: Colors.red, // inkwell color
-                                      child: SizedBox(
-                                          width: 56,
-                                          height: 56,
-                                          child: Icon(Icons.navigate_next)),
-                                      onTap: () {
-                                        int newState = stateList.NextState(
-                                            currState, mcqValue);
-
-                                        setState(() {
-                                          mcqValue = "";
-                                          currState = newState;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                : (stateList.states[currState].isDropdown)
-                    ? Container(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  border: Border.all(
-                                      width: 2.0, color: Colors.blue)),
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              child: Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      stateList.states[currState].text,
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 30),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Divider(
-                                      color: Colors.blue,
-                                    ),
-                                    DropdownButton<String>(
-                                      value: dropdownValue,
-                                      icon: Icon(Icons.arrow_downward),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      style:
-                                          TextStyle(color: Colors.blueAccent),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.blueAccent,
+                        ],
+                      ),
+                    )
+                  : (stateList.states[currState].isDropdown)
+                      ? Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(
+                                        width: 2.0, color: Colors.blue)),
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                child: Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        stateList.states[currState].text,
+                                        style: TextStyle(
+                                            color: Colors.blue, fontSize: 30),
                                       ),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          dropdownValue = newValue;
-                                        });
-                                      },
-                                      items: stateList.states[currState].options
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 20),
+                                      Divider(
+                                        color: Colors.blue,
+                                      ),
+                                      DropdownButton<String>(
+                                        value: dropdownValue,
+                                        icon: Icon(Icons.arrow_downward),
+                                        iconSize: 24,
+                                        elevation: 16,
+                                        style:
+                                            TextStyle(color: Colors.blueAccent),
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.blueAccent,
+                                        ),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            dropdownValue = newValue;
+                                          });
+                                        },
+                                        items: stateList
+                                            .states[currState].options
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: ClipOval(
-                                      child: Material(
-                                        color: Colors.blue, // button color
-                                        child: InkWell(
-                                          splashColor:
-                                              Colors.red, // inkwell color
-                                          child: SizedBox(
-                                              width: 56,
-                                              height: 56,
-                                              child:
-                                                  Icon(Icons.navigate_before)),
-                                          onTap: () {
-                                            int newState = stateList.NextState(
-                                                currState, "back");
-                                            setState(() {
-                                              currState = newState;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    )),
-                                Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: ClipOval(
-                                      child: Material(
-                                        color:
-                                            Colors.greenAccent, // button color
-                                        child: InkWell(
-                                          splashColor:
-                                              Colors.red, // inkwell color
-                                          child: SizedBox(
-                                              width: 56,
-                                              height: 56,
-                                              child: Icon(Icons.navigate_next)),
-                                          onTap: () {
-                                            int newState = stateList.NextState(
-                                                currState, dropdownValue);
-                                            setState(() {
-                                              currState = newState;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    : (stateList.states[currState].isInt)
-                        ? Container(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      border: Border.all(
-                                          width: 2.0, color: Colors.blue)),
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: Container(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          stateList.states[currState].text,
-                                          style: TextStyle(
-                                              color: Colors.blue, fontSize: 30),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Divider(
-                                          color: Colors.blue,
-                                        ),
-                                        TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          controller: _textEditingController,
-                                          decoration: InputDecoration(
-                                              hintText: 'Your Answer'),
-                                          onChanged: (text) {
-                                            textValue = text;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 30),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: ClipOval(
-                                          child: Material(
-                                            color: Colors.blue, // button color
-                                            child: InkWell(
-                                              splashColor:
-                                                  Colors.red, // inkwell color
-                                              child: SizedBox(
-                                                  width: 56,
-                                                  height: 56,
-                                                  child: Icon(
-                                                      Icons.navigate_before)),
-                                              onTap: () {
-                                                int newState =
-                                                    stateList.NextState(
-                                                        currState, "back");
-                                                setState(() {
-                                                  currState = newState;
-                                                });
-                                              },
-                                            ),
+                              const SizedBox(height: 30),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: ClipOval(
+                                        child: Material(
+                                          color: Colors.blue, // button color
+                                          child: InkWell(
+                                            splashColor:
+                                                Colors.red, // inkwell color
+                                            child: SizedBox(
+                                                width: 56,
+                                                height: 56,
+                                                child: Icon(
+                                                    Icons.navigate_before)),
+                                            onTap: () {
+                                              int newState =
+                                                  stateList.NextState(
+                                                      currState, "back");
+                                              setState(() {
+                                                currState = newState;
+                                              });
+                                            },
                                           ),
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: ClipOval(
-                                          child: Material(
-                                            color: Colors
-                                                .greenAccent, // button color
-                                            child: InkWell(
-                                              splashColor:
-                                                  Colors.red, // inkwell color
-                                              child: SizedBox(
-                                                  width: 56,
-                                                  height: 56,
-                                                  child: Icon(
-                                                      Icons.navigate_next)),
-                                              onTap: () {
-                                                try {
-                                                  print(
-                                                      " text value is $textValue");
-                                                  int newState =
-                                                      stateList.NextState(
-                                                          currState,
-                                                          int.parse(textValue));
-
-                                                  setState(() {
-                                                    currState = newState;
-                                                    textValue = "";
-                                                  });
-                                                } catch (e) {
-                                                  print("Reached here");
-                                                }
-                                              },
-                                            ),
+                                        ),
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: ClipOval(
+                                        child: Material(
+                                          color: Colors
+                                              .greenAccent, // button color
+                                          child: InkWell(
+                                            splashColor:
+                                                Colors.red, // inkwell color
+                                            child: SizedBox(
+                                                width: 56,
+                                                height: 56,
+                                                child:
+                                                    Icon(Icons.navigate_next)),
+                                            onTap: () {
+                                              int newState =
+                                                  stateList.NextState(
+                                                      currState, dropdownValue);
+                                              setState(() {
+                                                currState = newState;
+                                              });
+                                            },
                                           ),
-                                        )),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        : Center(
-                            child: Container(
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : (stateList.states[currState].isInt)
+                          ? Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
                               child: Column(
                                 children: <Widget>[
-                                  SafeArea(
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 20),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 40, horizontal: 10),
-                                      child: Text(
-                                        stateList.states[currState].text,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 30),
-                                      ),
+                                  Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: Text(
+                                            stateList.states[currState].text,
+                                            style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          elevation: 5.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 5.0),
+                                            child: TextFormField(
+                                              cursorColor: Color(0xFFBF828A),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              controller:
+                                                  _textEditingController,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: 'Your Answer'),
+                                              onChanged: (text) {
+                                                textValue = text;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(height: 30),
@@ -1525,64 +1468,153 @@ class _DataFormState extends State<DataForm> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: <Widget>[
-                                      Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: ClipOval(
-                                            child: Material(
-                                              color:
-                                                  Colors.blue, // button color
-                                              child: InkWell(
-                                                splashColor:
-                                                    Colors.red, // inkwell color
-                                                child: SizedBox(
-                                                    width: 56,
-                                                    height: 56,
-                                                    child: Icon(
-                                                        Icons.navigate_before)),
-                                                onTap: () {
-                                                  int newState =
-                                                      stateList.NextState(
-                                                          currState, "back");
-                                                  setState(() {
-                                                    currState = newState;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          )),
-                                      Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: ClipOval(
-                                            child: Material(
-                                              color: Colors
-                                                  .greenAccent, // button color
-                                              child: InkWell(
-                                                splashColor:
-                                                    Colors.red, // inkwell color
-                                                child: SizedBox(
-                                                    width: 56,
-                                                    height: 56,
-                                                    child: Icon(
-                                                        Icons.navigate_next)),
-                                                onTap: () {
-                                                  int newState =
-                                                      stateList.NextState(
-                                                          currState,
-                                                          dropdownValue);
-                                                  setState(() {
-                                                    currState = newState;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          )),
+                                      RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 15.0),
+                                        color: Color(0xFFBF828A),
+                                        child: Text(
+                                          "Previous",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          int newState = stateList.NextState(
+                                              currState, "back");
+                                          setState(() {
+                                            currState = newState;
+                                          });
+                                        },
+                                      ),
+                                      RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 15.0),
+                                        color: Color(0xFFBF828A),
+                                        child: Text(
+                                          "Next",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          try {
+                                            print(" text value is $textValue");
+                                            int newState = stateList.NextState(
+                                                currState,
+                                                int.parse(textValue));
+
+                                            setState(() {
+                                              currState = newState;
+                                              textValue = "";
+                                            });
+                                          } catch (e) {
+                                            print("Reached here");
+                                          }
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
+                            )
+                          : Center(
+                              child: Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    SafeArea(
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                        ),
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 20, horizontal: 20),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 40, horizontal: 10),
+                                        child: Text(
+                                          stateList.states[currState].text,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 30),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: ClipOval(
+                                              child: Material(
+                                                color:
+                                                    Colors.blue, // button color
+                                                child: InkWell(
+                                                  splashColor: Colors
+                                                      .red, // inkwell color
+                                                  child: SizedBox(
+                                                      width: 56,
+                                                      height: 56,
+                                                      child: Icon(Icons
+                                                          .navigate_before)),
+                                                  onTap: () {
+                                                    int newState =
+                                                        stateList.NextState(
+                                                            currState, "back");
+                                                    setState(() {
+                                                      currState = newState;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            )),
+                                        Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: ClipOval(
+                                              child: Material(
+                                                color: Colors
+                                                    .greenAccent, // button color
+                                                child: InkWell(
+                                                  splashColor: Colors
+                                                      .red, // inkwell color
+                                                  child: SizedBox(
+                                                      width: 56,
+                                                      height: 56,
+                                                      child: Icon(
+                                                          Icons.navigate_next)),
+                                                  onTap: () {
+                                                    int newState =
+                                                        stateList.NextState(
+                                                            currState,
+                                                            dropdownValue);
+                                                    setState(() {
+                                                      currState = newState;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-          ],
+            ],
+          ),
         ),
       ),
     );
