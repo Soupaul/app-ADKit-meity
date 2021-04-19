@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var currentImage;
   var currentVideo;
+  var height, weidth;
 
   Future _takePhoto() async {
     ImagePicker.pickVideo(source: ImageSource.gallery)
@@ -68,76 +69,167 @@ class _HomePageState extends State<HomePage> {
 
   String firstButtonText = 'Select Video from Gallery';
   String secondButtonText = 'Record a new video';
-  double textSize = 20;
+  double textSize = 22;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      body: Container(
-          color: Colors.white,
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                Flexible(
+    height = MediaQuery.of(context).size.height;
+    weidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: Container(
+            color: Colors.white,
+            child: SafeArea(
+                child: Stack(children: [
+              Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Text("Hi,\nWelcome to Adkit",
+                            style: TextStyle(
+                              fontSize: textSize,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.topLeft,
+                        padding: EdgeInsets.all(25),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child: Card(
+                          elevation: 10,
+                          color: Theme.of(context).accentColor,
+                          child: IconButton(
+                            onPressed: () {
+                              AuthProvider.logOut();
+                            },
+                            icon: Icon(
+                              Icons.logout,
+                              color: Color(0xFFBF828A), //Color(0xFFBF828A),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: height * .08,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _takePhoto();
+                    },
+                    child: Card(
+                      elevation: 10,
+                      child: Container(
+                        color: Theme.of(context).accentColor,
+                        padding: EdgeInsets.all(20),
+                        child: Icon(
+                          Icons.video_library,
+                          color: Color(0xFFBF828A),
+                          size: 70,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(firstButtonText),
+                  SizedBox(
+                    height: height * 0.06,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _recordVideo();
+                    },
+                    child: Card(
+                      elevation: 10,
+                      child: Container(
+                        color: Theme.of(context).accentColor,
+                        padding: EdgeInsets.all(20),
+                        child: Icon(
+                          Icons.videocam,
+                          color: Color(0xFFBF828A),
+                          size: 70,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(secondButtonText)
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DataForm()),
+                  );
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(top: height * .80, left: weidth - 250),
+                  height: 60,
+                  width: 240,
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    color: Color(0xFFBF828A),
                     child: Container(
-                        child: RaisedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DataForm()),
-                    );
-                  },
-                  color: Colors.blue,
-                ))),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    child: SizedBox.expand(
-                      child: RaisedButton(
-                        color: Colors.blue,
-                        onPressed: _takePhoto,
-                        child: currentImage == null
-                            ? Text(firstButtonText,
-                                style: TextStyle(
-                                    fontSize: textSize, color: Colors.white))
-                            : enableUploadImage(),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          new Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              "CHATBOT",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          new Transform.translate(
+                            offset: Offset(15.0, 0.0),
+                            child: new Container(
+                              padding: const EdgeInsets.only(
+                                top: 5.0,
+                                bottom: 5,
+                                right: 25,
+                              ),
+                              child: FlatButton(
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(20.0)),
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                child: Icon(
+                                  Icons.message,
+                                  color: Color(0xFFBF828A),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => DataForm()),
+                                  );
+                                },
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Flexible(
-                  child: Container(
-                      child: SizedBox.expand(
-                    child: RaisedButton(
-                      color: Colors.white,
-                      onPressed: _recordVideo,
-                      child: currentVideo == null
-                          ? Text(secondButtonText,
-                              style: TextStyle(
-                                  fontSize: textSize, color: Colors.blueGrey))
-                          : enableUploadVideo(),
-                    ),
-                  )),
-                  flex: 1,
-                ),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      RaisedButton(
-                        child: Text("Log out"),
-                        onPressed: () {
-                          AuthProvider().logOut();
-                        },
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )),
-    ));
+              ),
+            ]))));
   }
 
   Widget enableUploadImage() {
