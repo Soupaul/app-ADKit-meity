@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, UserTests
+from api.models import User, UserTests
 from rest_framework import serializers
 
 

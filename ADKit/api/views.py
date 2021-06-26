@@ -1,14 +1,14 @@
-from django.contrib.auth.models import User, UserTests
+from api.models import User, UserTests
 from rest_framework import viewsets
 from rest_framework import permissions
-from ADKit.api.serializers import UserSerializer, GroupSerializer
+from api.serializers import UserSerializer, GroupSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
