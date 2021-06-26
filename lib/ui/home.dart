@@ -15,16 +15,23 @@ class _HomePageState extends State<HomePage> {
   var currentImage;
   var currentVideo;
   var height, weidth;
+  StorageUploadTask _uploadTask;
+  StorageReference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
   Future _takePhoto() async {
     ImagePicker.pickVideo(source: ImageSource.gallery)
         .then((File recordedImage) {
       if (recordedImage != null && recordedImage.path != null) {
         setState(() {
-          firstButtonText = 'Video Uploaded, Add another from Gallery';
           currentImage = recordedImage;
         });
-        GallerySaver.saveImage(recordedImage.path).then((path) {
+        GallerySaver.saveImage(recordedImage.path);
+        setState(() {
+          firstButtonText = "Uploading...";
+        });
+        _uploadPhoto().whenComplete(() {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Upload Complete!")));
           setState(() {
             firstButtonText = 'Video Uploaded, Add another from Gallery';
           });
@@ -46,25 +53,32 @@ class _HomePageState extends State<HomePage> {
             secondButtonText = 'Video Saved!, Record another?';
           });
         });
+        // _uploadVideo().whenComplete(() {
+        //   ScaffoldMessenger.of(context)
+        //       .showSnackBar(SnackBar(content: Text("Upload Complete!")));
+        // });
       }
     });
   }
 
   Future _uploadPhoto() async {
-    StorageReference firebaseStorageRef = FirebaseStorage.instance
-        .ref()
+    var storagePath = _firebaseStorageRef
         .child('VideoG' + new DateTime.now().millisecondsSinceEpoch.toString());
-    StorageUploadTask task = firebaseStorageRef.putFile(currentImage);
-    var dowurl = await (await task.onComplete).ref.getDownloadURL();
+    setState(() {
+      _uploadTask = storagePath.putFile(currentImage);
+    });
+
+    var dowurl = await (await _uploadTask.onComplete).ref.getDownloadURL();
   }
 
   Future _uploadVideo() async {
-    StorageReference firebaseStorageRef = FirebaseStorage.instance
-        .ref()
+    var storagePath = _firebaseStorageRef
         .child('VideoR' + new DateTime.now().millisecondsSinceEpoch.toString());
-    StorageUploadTask task = firebaseStorageRef.putFile(currentVideo);
+    setState(() {
+      _uploadTask = storagePath.putFile(currentVideo);
+    });
 
-    var dowurl = await (await task.onComplete).ref.getDownloadURL();
+    var dowurl = await (await _uploadTask.onComplete).ref.getDownloadURL();
   }
 
   String firstButtonText = 'Select Video from Gallery';
@@ -160,7 +174,33 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(secondButtonText)
+                  Text(secondButtonText),
+                  SizedBox(
+                    height: height * .05,
+                  ),
+                  _uploadTask != null
+                      ? StreamBuilder<StorageTaskEvent>(
+                          stream: _uploadTask.events,
+                          builder: (context, snapshot) {
+                            var event = snapshot?.data?.snapshot;
+                            double progressPercent = event != null
+                                ? event.bytesTransferred / event.totalByteCount
+                                : 0;
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: _uploadTask.isInProgress
+                                  ? LinearProgressIndicator(
+                                      value: progressPercent,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xFFBF828A)),
+                                      backgroundColor:
+                                          Theme.of(context).accentColor,
+                                    )
+                                  : Offstage(),
+                            );
+                          })
+                      : Offstage(),
                 ],
               ),
               GestureDetector(
