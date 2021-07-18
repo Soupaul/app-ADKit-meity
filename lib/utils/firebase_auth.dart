@@ -7,7 +7,7 @@ class AuthProvider {
 
   static FirebaseAuth get getAuth => _auth;
 
-  static Future<bool> signInWithEmail(String email, String password) async {
+ /*static Future<bool> signInWithEmail(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -81,4 +81,8 @@ class AuthProvider {
     FirebaseUser user = await _auth.currentUser();
     return user.isEmailVerified;
   }
+
+   static Future<bool> isLoggedin() async {
+    return _auth.currentUser.uid.isEmpty?false:true;
+  }*/
 }

@@ -954,7 +954,7 @@ class _DataFormState extends State<DataForm> {
 
   Future _speak() async {
     await flutterTts.setPitch(pitch);
-    await flutterTts.setVoice("hi-in-x-hic-network");
+    await flutterTts.setVoice({"name": "Karen", "locale": "en-AU"});
     await flutterTts.setSpeechRate(1);
 
     if (_newVoiceText != null) {
@@ -999,12 +999,7 @@ class _DataFormState extends State<DataForm> {
           actions: [
             new FlatButton(
               color: Color(0xFFBF828A),
-              child: new Text(
-                'Ok',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              child: new Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

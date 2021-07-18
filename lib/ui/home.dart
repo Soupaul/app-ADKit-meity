@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+//import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/ui/form.dart';
+import 'package:thefirstone/ui/login.dart';
 import '../utils/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,27 +17,21 @@ class _HomePageState extends State<HomePage> {
   var currentImage;
   var currentVideo;
   var height, weidth;
-  StorageUploadTask _uploadTask;
-  StorageReference _firebaseStorageRef = FirebaseStorage.instance.ref();
+  var downUrl;
 
   Future _takePhoto() async {
     ImagePicker.pickVideo(source: ImageSource.gallery)
         .then((File recordedImage) {
       if (recordedImage != null && recordedImage.path != null) {
         setState(() {
+          firstButtonText = 'Video Uploaded, Add another from Gallery';
           currentImage = recordedImage;
         });
-        GallerySaver.saveImage(recordedImage.path);
-        setState(() {
-          firstButtonText = "Uploading...";
-        });
-        _uploadPhoto().whenComplete(() {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Upload Complete!")));
+        /*GallerySaver.saveImage(recordedImage.path).then((path) {
           setState(() {
             firstButtonText = 'Video Uploaded, Add another from Gallery';
           });
-        });
+        });*/
       }
     });
   }
@@ -48,37 +44,33 @@ class _HomePageState extends State<HomePage> {
           secondButtonText = 'Video Saved!, Record another?';
           currentVideo = recordedVideo;
         });
-        GallerySaver.saveVideo(recordedVideo.path).then((path) {
+       /* GallerySaver.saveVideo(recordedVideo.path).then((path) {
           setState(() {
             secondButtonText = 'Video Saved!, Record another?';
           });
-        });
-        // _uploadVideo().whenComplete(() {
-        //   ScaffoldMessenger.of(context)
-        //       .showSnackBar(SnackBar(content: Text("Upload Complete!")));
-        // });
+        });*/
       }
     });
   }
 
   Future _uploadPhoto() async {
-    var storagePath = _firebaseStorageRef
+    Reference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
         .child('VideoG' + new DateTime.now().millisecondsSinceEpoch.toString());
-    setState(() {
-      _uploadTask = storagePath.putFile(currentImage);
-    });
 
-    var dowurl = await (await _uploadTask.onComplete).ref.getDownloadURL();
+    UploadTask task = firebaseStorageRef.putFile(currentImage);
+    await task
+        .whenComplete(() => {downUrl = firebaseStorageRef.getDownloadURL()});
   }
 
   Future _uploadVideo() async {
-    var storagePath = _firebaseStorageRef
+    Reference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
         .child('VideoR' + new DateTime.now().millisecondsSinceEpoch.toString());
-    setState(() {
-      _uploadTask = storagePath.putFile(currentVideo);
-    });
+    UploadTask task = firebaseStorageRef.putFile(currentVideo);
 
-    var dowurl = await (await _uploadTask.onComplete).ref.getDownloadURL();
+    await task
+        .whenComplete(() => {downUrl = firebaseStorageRef.getDownloadURL()});
   }
 
   String firstButtonText = 'Select Video from Gallery';
@@ -115,8 +107,13 @@ class _HomePageState extends State<HomePage> {
                           elevation: 10,
                           color: Theme.of(context).accentColor,
                           child: IconButton(
-                            onPressed: () {
-                              AuthProvider.logOut();
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginPage()),
+                                  (route) => false);
                             },
                             icon: Icon(
                               Icons.logout,
@@ -174,33 +171,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(secondButtonText),
-                  SizedBox(
-                    height: height * .05,
-                  ),
-                  _uploadTask != null
-                      ? StreamBuilder<StorageTaskEvent>(
-                          stream: _uploadTask.events,
-                          builder: (context, snapshot) {
-                            var event = snapshot?.data?.snapshot;
-                            double progressPercent = event != null
-                                ? event.bytesTransferred / event.totalByteCount
-                                : 0;
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: _uploadTask.isInProgress
-                                  ? LinearProgressIndicator(
-                                      value: progressPercent,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Color(0xFFBF828A)),
-                                      backgroundColor:
-                                          Theme.of(context).accentColor,
-                                    )
-                                  : Offstage(),
-                            );
-                          })
-                      : Offstage(),
+                  Text(secondButtonText)
                 ],
               ),
               GestureDetector(
