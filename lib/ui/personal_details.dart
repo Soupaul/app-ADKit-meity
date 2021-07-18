@@ -15,6 +15,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   TextEditingController? _firstnameController;
   TextEditingController? _secondnameController;
   TextEditingController? _ageController;
+  String dropdownValue = 'Male';
 
   @override
   void initState() {
@@ -29,8 +30,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({'first_name': fn, 'second_name': sn, 'age': age}).then(
-            (value) => {after()});
+        .set({
+      'first_name': fn,
+      'second_name': sn,
+      'age': age,
+      'gender': dropdownValue
+    }).then((value) => {after()});
   }
 
   void after() {
@@ -126,6 +131,41 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       color: Colors.black,
                     ),
                   ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text("Select your gender"),
+                    DropdownButton<String>(
+                      value: dropdownValue,
+                      icon: const Icon(Icons.arrow_downward),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(
+                        color: Color(0xFFBF828A),
+                      ),
+                      underline: Container(
+                        height: 2,
+                        color: Color(0xFFBF828A),
+                      ),
+                      onChanged: (newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                        });
+                      },
+                      items: <String>['Male', 'Female', 'Others']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
               Container(
