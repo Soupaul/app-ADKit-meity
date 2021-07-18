@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/home.dart';
 import 'ui/home.dart';
 import 'ui/home.dart';
@@ -6,7 +7,10 @@ import 'ui/login.dart';
 import 'ui/login.dart';
 import 'utils/firebase_auth.dart';
 
-void main() => runApp(new MyApp());
+void main() {
+  API.processVideo();
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   _getScreen() {
