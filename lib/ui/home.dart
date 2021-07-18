@@ -18,10 +18,10 @@ class _HomePageState extends State<HomePage> {
   var currentVideo;
   var height, weidth;
   var downUrl;
+  ImagePicker _imagePicker = ImagePicker();
 
   Future _takePhoto() async {
-    ImagePicker.pickVideo(source: ImageSource.gallery)
-        .then((File recordedImage) {
+    _imagePicker.pickVideo(source: ImageSource.gallery).then((recordedImage) {
       if (recordedImage != null && recordedImage.path != null) {
         setState(() {
           firstButtonText = 'Video Uploaded, Add another from Gallery';
@@ -37,14 +37,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _recordVideo() async {
-    ImagePicker.pickVideo(source: ImageSource.camera)
-        .then((File recordedVideo) {
+    _imagePicker.pickVideo(source: ImageSource.camera).then((recordedVideo) {
       if (recordedVideo != null && recordedVideo.path != null) {
         setState(() {
           secondButtonText = 'Video Saved!, Record another?';
           currentVideo = recordedVideo;
         });
-       /* GallerySaver.saveVideo(recordedVideo.path).then((path) {
+        /* GallerySaver.saveVideo(recordedVideo.path).then((path) {
           setState(() {
             secondButtonText = 'Video Saved!, Record another?';
           });

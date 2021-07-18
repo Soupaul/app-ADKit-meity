@@ -12,9 +12,9 @@ class PersonalDetails extends StatefulWidget {
 }
 
 class _PersonalDetailsState extends State<PersonalDetails> {
-  TextEditingController _firstnameController;
-  TextEditingController _secondnameController;
-  TextEditingController _ageController;
+  TextEditingController? _firstnameController;
+  TextEditingController? _secondnameController;
+  TextEditingController? _ageController;
 
   @override
   void initState() {
@@ -28,14 +28,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   void createRecord(String fn, String sn, int age) async {
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({'first_name': fn, 'second_name': sn, 'age': age}).then(
             (value) => {after()});
   }
 
   void after() {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data saved')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Data saved')));
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
   }
@@ -170,18 +170,18 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       color: Color(0xFFBF828A),
                                     ),
                                     onPressed: () async {
-                                      if (_ageController.text.isEmpty ||
-                                          _firstnameController.text.isEmpty ||
-                                          _secondnameController.text.isEmpty) {
+                                      if (_ageController!.text.isEmpty ||
+                                          _firstnameController!.text.isEmpty ||
+                                          _secondnameController!.text.isEmpty) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                                 content: Text(
                                                     'Fill your information correctly')));
                                       } else {
                                         createRecord(
-                                            _firstnameController.text,
-                                            _secondnameController.text,
-                                            int.parse(_ageController.text));
+                                            _firstnameController!.text,
+                                            _secondnameController!.text,
+                                            int.parse(_ageController!.text));
                                       }
                                     }),
                               ),
@@ -189,17 +189,17 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                           ],
                         ),
                         onPressed: () async {
-                          if (_ageController.text.isEmpty ||
-                              _firstnameController.text.isEmpty ||
-                              _secondnameController.text.isEmpty) {
+                          if (_ageController!.text.isEmpty ||
+                              _firstnameController!.text.isEmpty ||
+                              _secondnameController!.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content:
                                     Text('Fill your information correctly')));
                           } else {
                             createRecord(
-                                _firstnameController.text,
-                                _secondnameController.text,
-                                int.parse(_ageController.text));
+                                _firstnameController!.text,
+                                _secondnameController!.text,
+                                int.parse(_ageController!.text));
                           }
                         },
                       ),

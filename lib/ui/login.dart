@@ -11,9 +11,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
-  TextEditingController _controller;
+  TextEditingController? _emailController;
+  TextEditingController? _passwordController;
+  TextEditingController? _controller;
 
   @override
   void initState() {
@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              OtpPage(_controller.text)),
+                                              OtpPage(_controller!.text)),
                                     );
                                     /*bool res =
                                         await AuthProvider.signInWithEmail(
@@ -200,8 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () async {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  OtpPage(_controller.text)
-                          ));
+                                  OtpPage(_controller!.text)));
                         },
                       ),
                     ),

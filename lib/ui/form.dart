@@ -11,12 +11,12 @@ class DataForm extends StatefulWidget {
 }
 
 class FormState {
-  int stateNumber;
-  String text;
-  List<String> options;
-  bool isMcq;
-  bool isInt;
-  bool isDropdown;
+  int? stateNumber;
+  String? text;
+  List<String>? options;
+  bool? isMcq;
+  bool? isInt;
+  bool? isDropdown;
   dynamic answer;
   FormState(int x) {
     stateNumber = x;
@@ -24,17 +24,17 @@ class FormState {
     isInt = false;
     isDropdown = false;
     answer = Null;
-    options = new List<String>();
+    options = [];
   }
 }
 
 class FormStateList {
-  List<FormState> states = new List<FormState>(80);
-  int currState;
-  int s = 0;
-  int age;
-  String sex;
-  List<Tuple2<FormState, int>> formStack = new List<Tuple2<FormState, int>>();
+  List<FormState> states = [];
+  int? currState;
+  num? s = 0;
+  int? age;
+  String? sex;
+  List<Tuple2<FormState, num>> formStack = [];
   FormStateList() {
     currState = 0;
     for (int i = 0; i < 80; i++) {
@@ -297,166 +297,166 @@ class FormStateList {
   }
   int NextState(int curr, dynamic answer) {
     if (answer == "back") {
-      Tuple2<FormState, int> f = formStack.last;
-      this.currState = f.item1.stateNumber;
+      Tuple2<FormState, num> f = formStack.last;
+      this.currState = f.item1.stateNumber!;
       formStack.removeLast();
       s = formStack.last.item2;
-      return this.currState;
+      return this.currState!;
     }
     print(answer);
     states[curr].answer = answer;
     if (curr == 0) {
-      if (answer == "yes") this.currState++;
+      if (answer == "yes") this.currState = this.currState! + 1;
     } else if (curr == 1) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       } else {
         this.currState = 6;
       }
     } else if (curr == 2) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
-        this.currState++;
-        s++;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
     } else if (curr == 3) {
       if (answer == "yes") {
-        this.currState++;
-        s++;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 4) {
       if (answer == "yes") {
         this.currState = 6;
-        s += 2;
+        s = s! + 2;
       }
-      if (answer == "no") this.currState++;
+      if (answer == "no") this.currState = this.currState! + 1;
     } else if (curr == 5) {
       if (answer == "yes") {
-        this.currState++;
-        s++;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 6) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
         this.currState = 11;
       }
     } else if (curr == 7) {
       if (answer == "yes") {
-        this.currState++;
-        s++;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
-        s++;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
     } else if (curr == 8) {
       if (answer == "yes") {
-        this.currState++;
-        s += 2;
+        this.currState = this.currState! + 1;
+        s = s! + 2;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 9) {
       if (answer == "yes") {
-        this.currState += 2;
-        s += 2;
+        this.currState = this.currState! + 2;
+        s = s! + 2;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 10) {
       if (answer == "yes") {
-        this.currState++;
-        s += 1;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 11) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
         this.currState = 17;
       }
     } else if (curr == 12) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
         this.currState = 15;
-        s++;
+        s = s! + 1;
       }
     } else if (curr == 13) {
       if (answer == "yes") {
         this.currState = 21;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 14) {
       if (answer == "yes") {
         this.currState = 21;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 15) {
       if (answer == "yes") {
-        this.currState += 2;
-        s += 2;
+        this.currState = this.currState! + 2;
+        s = s! + 2;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 16) {
       if (answer == "yes") {
-        this.currState++;
-        s += 1;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 17) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
         this.currState = 22;
       }
     } else if (curr == 18) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
-        this.currState += 2;
+        this.currState = this.currState! + 2;
       }
     } else if (curr == 19) {
       this.currState = 20;
     } else if (curr == 20) {
       this.currState = 22;
     } else if (curr == 21) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 22) {
       if (answer == "yes") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
       if (answer == "no") {
         this.currState = 34;
       }
     } else if (curr == 23) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 24) {
       if (answer == "yes") {
         this.currState = 26;
@@ -469,27 +469,27 @@ class FormStateList {
         this.currState = 30;
       }
       if (answer == "no") {
-        s = s + states[23].answer;
+        s = s! + states[23].answer;
         this.currState = 44;
       }
     } else if (curr == 26) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 27) {
       if (answer == "yes") {
         this.currState = 28;
       }
       if (answer == "no") {
         this.currState = 44;
-        s = s - (states[26].answer * 2);
+        s = s! - (states[26].answer * 2);
       }
     } else if (curr == 28) {
-      this.currState++;
+      this.currState = this.currState! + 1;
       int e = states[26].answer;
       int f = states[28].answer;
       print("Reached here");
       print(f);
 
-      s = s - ((e - f) * 2) + (f * 2);
+      s = s! - ((e - f) * 2) + (f * 2);
     } else if (curr == 29) {
       if (answer == "yes") {
         this.currState = 31;
@@ -501,7 +501,7 @@ class FormStateList {
       this.currState = 29;
       int c = states[23].answer;
       int d = states[30].answer;
-      s = s + (c - d) + (d * 3);
+      s = s! + (c - d) + (d * 3);
     } else if (curr == 31) {
       this.currState = 44;
     } else if (curr == 33) {
@@ -509,78 +509,78 @@ class FormStateList {
     } else if (curr == 34) {
       if (answer == "yes") {
         this.currState = 44;
-        s = s + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 35) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 2;
+        s = s! + 2;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 36) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 2;
+        s = s! + 2;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 37) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 38) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        if (age > 12 && sex == "female")
+        if (age! > 12 && sex == "female")
           this.currState = 39;
-        else if (age > 16 && age < 20 && sex == "female")
+        else if (age! > 16 && age! < 20 && sex == "female")
           this.currState = 40;
-        else if (age > 16 && age < 25 && sex == "female")
+        else if (age! > 16 && age! < 25 && sex == "female")
           this.currState = 41;
-        else if (age > 16 && sex == "female")
+        else if (age! > 16 && sex == "female")
           this.currState = 42;
-        else if (age < 10 && sex == "female") this.currState = 43;
+        else if (age! < 10 && sex == "female") this.currState = 43;
       }
     } else if (curr == 39) {
       if (answer == "yes") {
         this.currState = 44;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 40) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 41) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState++;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 42) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 44;
@@ -588,25 +588,25 @@ class FormStateList {
     } else if (curr == 43) {
       if (answer == "yes") {
         this.currState = 44;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 44;
       }
     } else if (curr == 44) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 45) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 46) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 47) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 48) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 49) {
-      this.currState++;
+      this.currState = this.currState! + 1;
     } else if (curr == 50) {
-      this.currState++;
+      this.currState = this.currState! + 1;
       //S UPDATE LOGIC HERE ADD //PENDING
     } else if (curr == 51) {
       if (answer == "yes") {
@@ -618,7 +618,7 @@ class FormStateList {
     } else if (curr == 52) {
       if (answer == "yes") {
         this.currState = 53;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 53;
@@ -626,7 +626,7 @@ class FormStateList {
     } else if (curr == 53) {
       if (answer == "yes") {
         this.currState = 54;
-        s += 3;
+        s = s! + 3;
       }
       if (answer == "no") {
         this.currState = 54;
@@ -634,7 +634,7 @@ class FormStateList {
     } else if (curr == 54) {
       if (answer == "yes") {
         this.currState = 55;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 55;
@@ -642,42 +642,42 @@ class FormStateList {
     } else if (curr == 55) {
       if (answer == "yes") {
         this.currState = 56;
-        s += 3;
+        s = s! + 3;
       }
       if (answer == "no") {
         this.currState = 60;
       }
     } else if (curr == 56) {
       if (answer == "yes") {
-        this.currState += 1;
-        s += 1;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState += 1;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 57) {
       if (answer == "yes") {
-        this.currState += 1;
-        s += 1;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState += 1;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 58) {
       if (answer == "yes") {
-        this.currState += 1;
-        s += 1;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState += 1;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 59) {
       if (answer == "yes") {
-        this.currState += 1;
-        s += 1;
+        this.currState = this.currState! + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
-        this.currState += 1;
+        this.currState = this.currState! + 1;
       }
     } else if (curr == 60) {
       if (answer == "yes") {
@@ -696,7 +696,7 @@ class FormStateList {
     } else if (curr == 62) {
       if (answer == "yes") {
         this.currState = 70;
-        s -= 1;
+        s = s! - 1;
       }
       if (answer == "no") {
         this.currState = 63;
@@ -710,12 +710,12 @@ class FormStateList {
       }
     } else if (curr == 64) {
       int t = states[64].answer;
-      s = s + (t * 2);
+      s = s! + (t * 2);
       this.currState = 65;
     } else if (curr == 65) {
       if (answer == "yes") {
         this.currState = 66;
-        s += 5;
+        s = s! + 5;
       }
       if (answer == "no") {
         this.currState = 66;
@@ -723,7 +723,7 @@ class FormStateList {
     } else if (curr == 65) {
       if (answer == "yes") {
         this.currState = 79;
-        s += 5;
+        s = s! + 5;
       }
       if (answer == "no") {
         this.currState = 66;
@@ -738,7 +738,7 @@ class FormStateList {
     } else if (curr == 67) {
       if (answer == "yes") {
         this.currState = 67;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 79;
@@ -746,7 +746,7 @@ class FormStateList {
     } else if (curr == 68) {
       if (answer == "yes") {
         this.currState = 67;
-        s += 3;
+        s = s! + 3;
       }
       if (answer == "no") {
         this.currState = 79;
@@ -754,7 +754,7 @@ class FormStateList {
     } else if (curr == 69) {
       if (answer == "yes") {
         this.currState = 67;
-        s += 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 79;
@@ -762,7 +762,7 @@ class FormStateList {
     } else if (curr == 70) {
       if (answer == "yes") {
         this.currState = 65;
-        s -= 5;
+        s = s! - 5;
       }
       if (answer == "no") {
         this.currState = 65;
@@ -777,7 +777,7 @@ class FormStateList {
     } else if (curr == 72) {
       if (answer == "yes") {
         this.currState = 73;
-        s -= 1;
+        s = s! - 1;
       }
       if (answer == "no") {
         this.currState = 79;
@@ -792,11 +792,11 @@ class FormStateList {
     } else if (curr == 74) {
       this.currState = 75;
       int t = states[74].answer;
-      s += (t * 2);
+      s = s! + (t * 2);
     } else if (curr == 75) {
       if (answer == "yes") {
         this.currState = 76;
-        s += 5;
+        s = s! + 5;
       }
       if (answer == "no") {
         this.currState = 79;
@@ -818,14 +818,14 @@ class FormStateList {
     } else if (curr == 78) {
       if (answer == "yes") {
         this.currState = 79;
-        s = s + 1;
+        s = s! + 1;
       }
       if (answer == "no") {
         this.currState = 79;
       }
     }
-    formStack.add(Tuple2(states[curr], s));
-    return this.currState;
+    formStack.add(Tuple2(states[curr], s!));
+    return this.currState!;
   }
 }
 
@@ -834,17 +834,17 @@ enum TtsState { playing, stopped }
 class _DataFormState extends State<DataForm> {
   FormStateList stateList = new FormStateList();
   int currState = 0;
-  String dropdownValue;
-  String mcqValue;
-  String textValue;
+  late String dropdownValue;
+  late String mcqValue;
+  late String textValue;
 
   //Flutter TTS
-  FlutterTts flutterTts;
+  late FlutterTts flutterTts;
   dynamic languages;
   String language = "hi-IN";
   double pitch = 1.0;
 
-  String _newVoiceText;
+  late String _newVoiceText;
 
   TtsState ttsState = TtsState.stopped;
 
@@ -852,7 +852,7 @@ class _DataFormState extends State<DataForm> {
 
   get isStopped => ttsState == TtsState.stopped;
 
-  stt.SpeechToText _speech;
+  late stt.SpeechToText _speech;
   bool _isListening = false;
   String _text = 'Press the button and start speaking';
   double _confidence = 1.0;
@@ -869,11 +869,11 @@ class _DataFormState extends State<DataForm> {
     _speech = stt.SpeechToText();
   }
 
-  bool isNumeric(String s) {
+  bool isNumeric(String? s) {
     if (s == null) {
       return false;
     }
-    return double.parse(s, (e) => null) != null;
+    return double.parse(s, (e) => -1) != null;
   }
 
   void _listen() async {
@@ -889,13 +889,13 @@ class _DataFormState extends State<DataForm> {
             _text = val.recognizedWords;
             print("$_text");
             if (_text == "yes") {
-              if (stateList.states[currState].isMcq) {
+              if (stateList.states[currState].isMcq!) {
                 setState(() {
                   mcqValue = "yes";
                 });
               }
             } else if (_text == "no") {
-              if (stateList.states[currState].isMcq) {
+              if (stateList.states[currState].isMcq!) {
                 setState(() {
                   mcqValue = "no";
                 });
@@ -1088,7 +1088,7 @@ class _DataFormState extends State<DataForm> {
                                 onPressed: () {
                                   setState(() {
                                     _newVoiceText =
-                                        stateList.states[currState].text;
+                                        stateList.states[currState].text!;
                                   });
                                   _speak();
                                 },
@@ -1116,7 +1116,7 @@ class _DataFormState extends State<DataForm> {
                   // center: Text("Progress"),
                 ),
               ),
-              (stateList.states[currState].isMcq)
+              (stateList.states[currState].isMcq!)
                   ? Container(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
@@ -1125,7 +1125,7 @@ class _DataFormState extends State<DataForm> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Text(
-                              stateList.states[currState].text,
+                              stateList.states[currState].text!,
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
@@ -1161,9 +1161,9 @@ class _DataFormState extends State<DataForm> {
                                       activeColor: Color(0xFFBF828A),
                                       value: "yes",
                                       groupValue: mcqValue,
-                                      onChanged: (String value) {
+                                      onChanged: (String? value) {
                                         setState(() {
-                                          mcqValue = value;
+                                          mcqValue = value!;
                                         });
                                       },
                                     ),
@@ -1218,9 +1218,9 @@ class _DataFormState extends State<DataForm> {
                                       activeColor: Color(0xFFBF828A),
                                       value: "no",
                                       groupValue: mcqValue,
-                                      onChanged: (String value) {
+                                      onChanged: (String? value) {
                                         setState(() {
-                                          mcqValue = value;
+                                          mcqValue = value!;
                                         });
                                       },
                                     ),
@@ -1299,7 +1299,7 @@ class _DataFormState extends State<DataForm> {
                         ],
                       ),
                     )
-                  : (stateList.states[currState].isDropdown)
+                  : (stateList.states[currState].isDropdown!)
                       ? Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -1319,7 +1319,7 @@ class _DataFormState extends State<DataForm> {
                                   child: Column(
                                     children: <Widget>[
                                       Text(
-                                        stateList.states[currState].text,
+                                        stateList.states[currState].text!,
                                         style: TextStyle(
                                             color: Colors.blue, fontSize: 30),
                                       ),
@@ -1338,13 +1338,13 @@ class _DataFormState extends State<DataForm> {
                                           height: 2,
                                           color: Colors.blueAccent,
                                         ),
-                                        onChanged: (String newValue) {
+                                        onChanged: (String? newValue) {
                                           setState(() {
-                                            dropdownValue = newValue;
+                                            dropdownValue = newValue!;
                                           });
                                         },
                                         items: stateList
-                                            .states[currState].options
+                                            .states[currState].options!
                                             .map<DropdownMenuItem<String>>(
                                                 (String value) {
                                           return DropdownMenuItem<String>(
@@ -1416,7 +1416,7 @@ class _DataFormState extends State<DataForm> {
                             ],
                           ),
                         )
-                      : (stateList.states[currState].isInt)
+                      : (stateList.states[currState].isInt!)
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 20.0),
                               child: Column(
@@ -1428,7 +1428,7 @@ class _DataFormState extends State<DataForm> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10.0),
                                           child: Text(
-                                            stateList.states[currState].text,
+                                            stateList.states[currState].text!,
                                             style: TextStyle(
                                               fontSize: 28,
                                               fontWeight: FontWeight.w900,
@@ -1543,7 +1543,7 @@ class _DataFormState extends State<DataForm> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 40, horizontal: 10),
                                         child: Text(
-                                          stateList.states[currState].text,
+                                          stateList.states[currState].text!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.white,

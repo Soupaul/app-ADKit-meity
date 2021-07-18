@@ -16,7 +16,7 @@ class OtpPage extends StatefulWidget {
 
 class _OtpPageState extends State<OtpPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _verificationID;
+  String? _verificationID;
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   final BoxDecoration pinPutDecoration = BoxDecoration(
@@ -63,17 +63,17 @@ class _OtpPageState extends State<OtpPage> {
                   await FirebaseAuth.instance
                       .signInWithCredential(
                     PhoneAuthProvider.credential(
-                        verificationId: _verificationID, smsCode: pin),
+                        verificationId: _verificationID!, smsCode: pin),
                   )
                       .then((value) async {
                     if (value.user != null) {
-                     _checkForDetais(value.user.uid);
+                      _checkForDetais(value.user!.uid);
                     }
                   });
                 } catch (e) {
                   FocusScope.of(context).unfocus();
-                //  _scaffoldKey.currentState
-                    //  .showSnackBar(SnackBar(content: Text('Invalid OTP')));
+                  //  _scaffoldKey.currentState
+                  //  .showSnackBar(SnackBar(content: Text('Invalid OTP')));
                 }
               },
             ),
@@ -83,17 +83,19 @@ class _OtpPageState extends State<OtpPage> {
     );
   }
 
-  _checkForDetais(String uid) async{
-
-     await FirebaseFirestore.instance
+  _checkForDetais(String uid) async {
+    await FirebaseFirestore.instance
         .collection("users")
-        .doc(FirebaseAuth.instance.currentUser.uid).get().then((value) => {
-            Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => value.exists?HomePage():PersonalDetails()),
-                          (route) => false)
-                    
-        });
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) => {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          value.exists ? HomePage() : PersonalDetails()),
+                  (route) => false)
+            });
   }
 
   _verifyPhone() async {
@@ -114,7 +116,7 @@ class _OtpPageState extends State<OtpPage> {
         verificationFailed: (FirebaseAuthException e) {
           print(e.message);
         },
-        codeSent: (String verID, int forceCodeResend) {
+        codeSent: (String verID, int? forceCodeResend) {
           setState(() {
             _verificationID = verID;
           });
