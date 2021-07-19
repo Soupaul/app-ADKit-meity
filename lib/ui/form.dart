@@ -999,7 +999,12 @@ class _DataFormState extends State<DataForm> {
           actions: [
             new FlatButton(
               color: Color(0xFFBF828A),
-              child: new Text('Ok'),
+              child: new Text(
+                'Ok',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
