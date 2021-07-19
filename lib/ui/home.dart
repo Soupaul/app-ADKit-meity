@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/form.dart';
 import 'package:thefirstone/ui/login.dart';
 // import '../utils/firebase_auth.dart';
@@ -22,12 +24,15 @@ class _HomePageState extends State<HomePage> {
   UploadTask? _uploadTask;
   Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
+  
+
+
   Future _takePhoto() async {
     final XFile? galleryVideoFile =
         await _imagePicker.pickVideo(source: ImageSource.gallery);
     if (galleryVideoFile != null) {
       setState(() {
-        // firstButtonText = 'Video Uploaded, Add another from Gallery';
+        firstButtonText = 'Video Uploaded, Add another from Gallery';
         currentImage = File(galleryVideoFile.path);
       });
       // GallerySaver.saveImage(recordedImage.path);
@@ -35,15 +40,36 @@ class _HomePageState extends State<HomePage> {
         firstButtonText = "Uploading...";
       });
       _uploadPhoto().whenComplete(() {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Upload Complete!")));
+       /* ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Upload Complete!")));*/
         print(downUrl);
         setState(() {
-          firstButtonText = 'Video Uploaded, Add another from Gallery';
+         // firstButtonText = 'Video Uploaded, Add another from Gallery';
+
+           
+      
+
         });
       });
     }
   }
+
+  String hValue="";
+
+  Future _getAPiResponse() async{
+
+    String? data = await API.processVideo("filePath");
+
+    setState(() {
+      hValue="";
+      hValue = "hemoglobin value is $data";
+    });
+    print("API response $data");
+
+  }
+
+  
+
 
   Future _recordVideo() async {
     final XFile? recordedVideo =
@@ -70,9 +96,11 @@ class _HomePageState extends State<HomePage> {
     });
 
     _uploadTask!.whenComplete(() async {
+    _getAPiResponse();
       var downurl =
           await storagePath.getDownloadURL(); // gives incorrect download URL
       setState(() {
+         firstButtonText = 'Video uoloaded!, upload another?';
         downUrl = downurl;
       });
     });
@@ -88,7 +116,9 @@ class _HomePageState extends State<HomePage> {
     });
 
     _uploadTask!.whenComplete(() {
+       _getAPiResponse();
       setState(() async {
+        firstButtonText = 'Video uoloaded!, upload another?';
         downUrl = await storagePath.getDownloadURL();
       });
     });
@@ -176,6 +206,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                       // _getAPiResponse();
+
                       _recordVideo();
                     },
                     child: Card(
@@ -208,10 +240,12 @@ class _HomePageState extends State<HomePage> {
                             double progressPercent = event != null
                                 ? event.bytesTransferred / event.totalBytes
                                 : 0;
+                    
                             return Padding(
+                              
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: state == TaskState.running
+                              child: (state == TaskState.running)
                                   ? LinearProgressIndicator(
                                       value: progressPercent,
                                       valueColor: AlwaysStoppedAnimation<Color>(
@@ -223,6 +257,8 @@ class _HomePageState extends State<HomePage> {
                             );
                           })
                       : Offstage(),
+
+                      Text(hValue)
                 ],
               ),
               GestureDetector(
