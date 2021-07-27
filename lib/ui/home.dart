@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:customgauge/customgauge.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/form.dart';
@@ -22,29 +22,6 @@ class _HomePageState extends State<HomePage> {
   String? downUrl;
   ImagePicker _imagePicker = ImagePicker();
   UploadTask? _uploadTask;
-
-  // Future _takePhoto() async {
-  //   final XFile? galleryVideoFile =
-  //       await _imagePicker.pickVideo(source: ImageSource.gallery);
-  //   if (galleryVideoFile != null) {
-  //     setState(() {
-  //       firstButtonText = 'Video Uploaded, Add another from Gallery';
-  //       currentImage = File(galleryVideoFile.path);
-  //     });
-  //     // GallerySaver.saveImage(recordedImage.path);
-  //     setState(() {
-  //       firstButtonText = "Uploading...";
-  //     });
-  //     _uploadPhoto().whenComplete(() {
-  //       /* ScaffoldMessenger.of(context)
-  //           .showSnackBar(SnackBar(content: Text("Upload Complete!")));*/
-  //       print(downUrl);
-  //       setState(() {
-  //         // firstButtonText = 'Video Uploaded, Add another from Gallery';
-  //       });
-  //     });
-  //   }
-  // }
 
   Future _selectAndUploadVideo() async {
     final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
@@ -73,17 +50,71 @@ class _HomePageState extends State<HomePage> {
       firstButtonText = 'Video uploaded. Add another from Gallery?';
       downUrl = url;
     });
+
+    _getAPiResponse();
   }
 
-  String hValue = "";
+  void _showGauge(double val) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Severity Meter'),
+            content: Container(
+              height: 200,
+              child: Center(
+                child: CustomGauge(
+                  gaugeSize: 200,
+                  minValue: 5,
+                  maxValue: 20,
+                  currentValue: val.roundToDouble(),
+                  segments: [
+                    GaugeSegment('Severely Anaemic', 5, Colors.red),
+                    GaugeSegment('Moderate Risk', 5, Colors.yellow),
+                    GaugeSegment('Healthy', 5, Colors.green),
+                  ],
+                  displayWidget: Text(
+                    'Risk Factor',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Color(0xFFBF828A),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          );
+        });
+  }
+
+  // String hValue = "";
 
   Future _getAPiResponse() async {
-    String? data = await API.processVideo("filePath");
+    if (downUrl == null) return;
 
-    setState(() {
-      hValue = "";
-      hValue = "hemoglobin value is $data";
-    });
+    double? data = await API.processVideo(downUrl!);
+
+    // setState(() {
+    //   hValue = "";
+    //   hValue = "hemoglobin value is $data";
+    // });
+
+    _showGauge(data!);
+
     print("API response $data");
   }
 
@@ -104,45 +135,6 @@ class _HomePageState extends State<HomePage> {
       }
     });
   }
-
-  // Used to upload videos too
-  // Future _uploadPhoto() async {
-  // var storagePath = _firebaseStorageRef
-  //     .child('VideoG' + new DateTime.now().millisecondsSinceEpoch.toString());
-  //   setState(() {
-  //     _uploadTask = storagePath.putFile(currentImage);
-  //   });
-
-  //   _uploadTask!.whenComplete(() async {
-  //     _getAPiResponse();
-  //     var downurl =
-  //         await storagePath.getDownloadURL(); // gives incorrect download URL
-  //     setState(() {
-  //       firstButtonText = 'Video uoloaded!, upload another?';
-  //       downUrl = downurl;
-  //     });
-  //   });
-  //   // var dowurl = await (await _uploadTask!.onComplete).ref.getDownloadURL();
-  // }
-
-  // Currently unused
-  // Future _uploadVideo() async {
-  //   var storagePath = _firebaseStorageRef
-  //       .child('VideoR' + new DateTime.now().millisecondsSinceEpoch.toString());
-  //   setState(() {
-  //     _uploadTask = storagePath.putFile(currentVideo);
-  //   });
-
-  //   _uploadTask!.whenComplete(() {
-  //     _getAPiResponse();
-  //     setState(() async {
-  //       firstButtonText = 'Video uoloaded!, upload another?';
-  //       downUrl = await storagePath.getDownloadURL();
-  //     });
-  //   });
-
-  //   // var dowurl = await (await _uploadTask!.onComplete).ref.getDownloadURL();
-  // }
 
   String firstButtonText = 'Select Video from Gallery';
   String secondButtonText = 'Record a new video';
@@ -202,6 +194,7 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () {
                       _selectAndUploadVideo();
+                      // _showGauge(12);
                     },
                     child: Card(
                       elevation: 10,
@@ -252,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                   _uploadTask != null
                       ? _uploadStatus(_uploadTask!)
                       : Offstage(),
-                  Text(hValue)
+                  // Text(hValue)
                 ],
               ),
               GestureDetector(

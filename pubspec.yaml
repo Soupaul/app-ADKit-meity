@@ -41,6 +41,7 @@ dependencies:
   pinput: ^1.2.0
   cloud_firestore: ^2.3.0
   http: ^0.13.0
+  customgauge: ^1.0.1
 
 dev_dependencies:
   flutter_test:
