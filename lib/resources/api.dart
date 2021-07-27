@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class API {
   static String _baseURL = 'https://82ec4d5e7aac.ngrok.io/api';
+  static Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
   static Future<String?> processVideo(String filePath) async {
     String url = '$_baseURL/processVideo';
@@ -38,5 +41,16 @@ class API {
     }
 
     return null;
+  }
+
+  static UploadTask? uploadVideo(File file) {
+    try {
+      var storagePath = _firebaseStorageRef.child(
+          'VideoG' + new DateTime.now().millisecondsSinceEpoch.toString());
+      return storagePath.putFile(file);
+    } on FirebaseException catch (e) {
+      print(e.message);
+      return null;
+    }
   }
 }
