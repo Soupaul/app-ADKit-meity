@@ -1,4 +1,6 @@
 import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
+// run with `flutter run --no-sound-null-safety` for testing
 import 'package:customgauge/customgauge.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
