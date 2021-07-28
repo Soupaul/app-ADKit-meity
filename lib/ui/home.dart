@@ -57,33 +57,86 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showGauge(double val) {
+    var verdict;
+    var color;
+
+    if ((val >= 5 && val <= 9.6) || (val >= 18.6 && val <= 20)) {
+      verdict = "High Risk!";
+      color = Colors.red;
+    } else if ((val > 9.6 && val < 12) || (val > 15.5 && val < 18.6)) {
+      verdict = "Moderate Risk";
+      color = Colors.yellow;
+    } else {
+      verdict = "No Risk";
+      color = Colors.green;
+    }
+
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Severity Meter'),
-            content: Container(
-              height: 200,
-              child: Center(
-                child: CustomGauge(
-                  gaugeSize: 200,
-                  minValue: 5,
-                  maxValue: 20,
-                  currentValue: val.roundToDouble(),
-                  segments: [
-                    GaugeSegment('Severely Anaemic', 5, Colors.red),
-                    GaugeSegment('Moderate Risk', 5, Colors.yellow),
-                    GaugeSegment('Healthy', 5, Colors.green),
-                  ],
-                  displayWidget: Text(
-                    'Risk Factor',
-                    style: TextStyle(
-                      fontSize: 14.0,
+            title: Text('Risk Factor'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  // This widget will be based on Gender.
+                  // Haven't factored it in right now for testing.
+                  child: CustomGauge(
+                    gaugeSize: 200,
+                    minValue: 5,
+                    maxValue: 20,
+                    currentValue: double.parse(val.toStringAsFixed(1)),
+                    segments: [
+                      GaugeSegment('Severely Anaemic', 4.6, Colors.red),
+                      GaugeSegment('Moderate Risk', 2.4, Colors.yellow),
+                      GaugeSegment('Healthy', 3.5, Colors.green),
+                      GaugeSegment('Moderate Risk', 3.1, Colors.yellow),
+                      GaugeSegment('Severely Anaemic', 1.4, Colors.red),
+                    ],
+                    showMarkers: false,
+                    displayWidget: Text(
+                      'Haemoglobin',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
                 ),
-              ),
+                Center(
+                  child: Text(
+                    verdict,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: color),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  "Next Steps:",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Advice 1",
+                  style: TextStyle(fontSize: 14),
+                ),
+                Text(
+                  "Advice 2",
+                  style: TextStyle(fontSize: 14),
+                ),
+                Text(
+                  "Advice 3",
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
             ),
             actions: [
               FlatButton(
@@ -196,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () {
                       _selectAndUploadVideo();
-                      // _showGauge(12);
+                      // _showGauge(13);
                     },
                     child: Card(
                       elevation: 10,
