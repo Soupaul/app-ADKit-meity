@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/home.dart';
+import 'package:thefirstone/ui/select_language.dart';
 import 'ui/home.dart';
 import 'ui/home.dart';
 import 'ui/login.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    return LoginPage();
+    return SelectLan();
   }
 
   @override
