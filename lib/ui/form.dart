@@ -38,7 +38,7 @@ class FormStateList {
   FormStateList() {
     currState = 0;
     for (int i = 0; i < 80; i++) {
-      states[i] = new FormState(i);
+      states.add(FormState(i));
     }
     //Define text of each state and type of question
     //STATE 0
@@ -834,9 +834,9 @@ enum TtsState { playing, stopped }
 class _DataFormState extends State<DataForm> {
   FormStateList stateList = new FormStateList();
   int currState = 0;
-  late String dropdownValue;
-  late String mcqValue;
-  late String textValue;
+  String? dropdownValue;
+  String? mcqValue;
+  String? textValue;
 
   //Flutter TTS
   late FlutterTts flutterTts;
@@ -1516,7 +1516,7 @@ class _DataFormState extends State<DataForm> {
                                             print(" text value is $textValue");
                                             int newState = stateList.NextState(
                                                 currState,
-                                                int.parse(textValue));
+                                                int.parse(textValue!));
 
                                             setState(() {
                                               currState = newState;

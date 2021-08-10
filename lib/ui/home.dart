@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/form.dart';
 import 'package:thefirstone/ui/login.dart';
+import 'package:thefirstone/ui/trend_graph.dart';
 // import '../utils/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       color = Colors.red;
     } else if ((val > 9.6 && val < 12) || (val > 15.5 && val < 18.6)) {
       verdict = "Moderate Risk";
-      color = Colors.yellow;
+      color = Color(0xFFF6C21A);
     } else {
       verdict = "No Risk";
       color = Colors.green;
@@ -91,19 +92,31 @@ class _HomePageState extends State<HomePage> {
                     currentValue: double.parse(val.toStringAsFixed(1)),
                     segments: [
                       GaugeSegment('Severely Anaemic', 4.6, Colors.red),
-                      GaugeSegment('Moderate Risk', 2.4, Colors.yellow),
+                      GaugeSegment('Moderate Risk', 2.4, Color(0xFFF6C21A)),
                       GaugeSegment('Healthy', 3.5, Colors.green),
-                      GaugeSegment('Moderate Risk', 3.1, Colors.yellow),
+                      GaugeSegment('Moderate Risk', 3.1, Color(0xFFF6C21A)),
                       GaugeSegment('Severely Anaemic', 1.4, Colors.red),
                     ],
                     showMarkers: false,
                     displayWidget: Text(
-                      'Haemoglobin',
+                      'Haemoglobin (gm/dl)',
                       style: TextStyle(
                         fontSize: 12.0,
                       ),
                     ),
                   ),
+                ),
+                Center(
+                  child: Text(
+                    "Normal Range: 12 - 15.5 gm/dl",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
                 ),
                 Center(
                   child: Text(
@@ -125,15 +138,15 @@ class _HomePageState extends State<HomePage> {
                   height: 5,
                 ),
                 Text(
-                  "Advice 1",
+                  "1. Consult a Doctor to treat the deficiency",
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
-                  "Advice 2",
+                  "2. Eat iron-rich foods(chicken, leafy vegetables and beans)",
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
-                  "Advice 3",
+                  "3. Eat and drink foods that help absorb iron(broccoli, fruits rich in Vitamin C)",
                   style: TextStyle(fontSize: 14),
                 ),
               ],
@@ -248,8 +261,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      _selectAndUploadVideo();
-                      // _showGauge(13);
+                      // _selectAndUploadVideo();
+                      // _showGauge(10);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => TrendGraph()),
+                      );
                     },
                     child: Card(
                       elevation: 10,
