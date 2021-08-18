@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class API {
-  static String _baseURL = 'https://82ec4d5e7aac.ngrok.io/api';
+  static String _baseURL = 'https://c72173ad250f.ngrok.io/api';
   static Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
   static Future<double?> processVideo(String filePath) async {
@@ -29,7 +29,7 @@ class API {
         "URL": filePath,
         // "URL":
         //     "https://firebasestorage.googleapis.com/v0/b/adkit-demo.appspot.com/o/e7_n1.mp4?alt=media&token=3e7b8ccc-219b-43cb-a4c9-8f670ad60b17",
-        "AGE": userData['age'],
+        "AGE": userData['age'].toString(),
         "GENDER": userData['gender'] == "Male" ? "1" : "0"
       }),
     );

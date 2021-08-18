@@ -50,11 +50,15 @@ class _HomePageState extends State<HomePage> {
     final url = await snapshot.ref.getDownloadURL();
     print("Download Link: $url");
     setState(() {
-      firstButtonText = 'Video uploaded. Add another from Gallery?';
+      firstButtonText = 'Processing...';
       downUrl = url;
     });
 
-    _getAPiResponse();
+    await _getAPiResponse();
+
+    setState(() {
+      firstButtonText = 'Video processed. Upload another?';
+    });
   }
 
   void _showGauge(double val) {
@@ -261,11 +265,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // _selectAndUploadVideo();
+                      _selectAndUploadVideo();
                       // _showGauge(10);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => TrendGraph()),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(builder: (context) => TrendGraph()),
+                      // );
                     },
                     child: Card(
                       elevation: 10,
