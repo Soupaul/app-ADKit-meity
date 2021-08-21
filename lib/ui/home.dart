@@ -30,9 +30,9 @@ class _HomePageState extends State<HomePage> {
     final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
 
     if (result == null) {
-      setState(() {
-        firstButtonText = 'No video was selected.';
-      });
+      // setState(() {
+      //   firstButtonText = 'No video was selected.';
+      // });
       return;
     }
 
@@ -263,60 +263,108 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: height * .08,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      _selectAndUploadVideo();
-                      // _showGauge(10);
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(builder: (context) => TrendGraph()),
-                      // );
-                    },
-                    child: Card(
-                      elevation: 10,
-                      child: Container(
-                        color: Theme.of(context).accentColor,
-                        padding: EdgeInsets.all(20),
-                        child: Icon(
-                          Icons.video_library,
-                          color: Color(0xFFBF828A),
-                          size: 70,
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _selectAndUploadVideo();
+                              // _showGauge(10);
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(builder: (context) => TrendGraph()),
+                              // );
+                            },
+                            child: Card(
+                              elevation: 10,
+                              child: Container(
+                                color: Theme.of(context).accentColor,
+                                padding: EdgeInsets.all(20),
+                                child: Icon(
+                                  Icons.video_library,
+                                  color: Color(0xFFBF828A),
+                                  size: 70,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(firstButtonText),
+                        ],
                       ),
-                    ),
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _recordVideo();
+                            },
+                            child: Card(
+                              elevation: 10,
+                              child: Container(
+                                color: Theme.of(context).accentColor,
+                                padding: EdgeInsets.all(20),
+                                child: Icon(
+                                  Icons.videocam,
+                                  color: Color(0xFFBF828A),
+                                  size: 70,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(secondButtonText),
+                        ],
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
-                  Text(firstButtonText),
-                  SizedBox(
-                    height: height * 0.06,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => TrendGraph()),
+                              );
+                            },
+                            child: Card(
+                              elevation: 10,
+                              child: Container(
+                                color: Theme.of(context).accentColor,
+                                padding: EdgeInsets.all(20),
+                                child: Icon(
+                                  Icons.auto_graph,
+                                  color: Color(0xFFBF828A),
+                                  size: 70,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("Show Trend Graph"),
+                        ],
+                      ),
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // _getAPiResponse();
+                  // SizedBox(
+                  //   height: height * 0.06,
+                  // ),
 
-                      _recordVideo();
-                    },
-                    child: Card(
-                      elevation: 10,
-                      child: Container(
-                        color: Theme.of(context).accentColor,
-                        padding: EdgeInsets.all(20),
-                        child: Icon(
-                          Icons.videocam,
-                          color: Color(0xFFBF828A),
-                          size: 70,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(secondButtonText),
-                  SizedBox(
-                    height: height * .05,
-                  ),
+                  // SizedBox(
+                  //   height: height * .05,
+                  // ),
                   _uploadTask != null
                       ? _uploadStatus(_uploadTask!)
                       : Offstage(),
