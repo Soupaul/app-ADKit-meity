@@ -7,10 +7,10 @@ class TrendGraph extends StatefulWidget {
 }
 
 class _TrendGraphState extends State<TrendGraph> {
-  List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
+  // List<Color> gradientColors = [
+  //   const Color(0xff23b6e6),
+  //   const Color(0xff02d39a),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +51,22 @@ class _TrendGraphState extends State<TrendGraph> {
               // SizedBox(
               //   height: 30,
               // ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(18),
-                    ),
-                    // color: Color(0xff232d37),
-                    color: Theme.of(context).accentColor,
-                    // color: Colors.grey[200],
+              Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(18),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        right: 18.0, left: 12.0, top: 24, bottom: 12),
-                    child: LineChart(
-                      mainData(),
-                    ),
+                  // color: Color(0xff232d37),
+                  color: Theme.of(context).accentColor,
+                  // color: Colors.grey[200],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      right: 18.0, left: 12.0, top: 24, bottom: 12),
+                  child: LineChart(
+                    mainData(),
                   ),
                 ),
               ),
@@ -102,7 +101,7 @@ class _TrendGraphState extends State<TrendGraph> {
         show: true,
         drawVerticalLine: true,
         getDrawingHorizontalLine: (value) {
-          if (value % 2 != 0)
+          if (value % 2 == 0)
             return FlLine(
               strokeWidth: 0,
             );
@@ -129,12 +128,30 @@ class _TrendGraphState extends State<TrendGraph> {
               fontSize: 16),
           getTitles: (value) {
             switch (value.toInt()) {
+              case 0:
+                return 'J';
+              case 1:
+                return 'F';
               case 2:
-                return 'MAR';
+                return 'M';
+              case 3:
+                return 'A';
+              case 4:
+                return 'M';
               case 5:
-                return 'JUN';
+                return 'J';
+              case 6:
+                return 'J';
+              case 7:
+                return 'A';
               case 8:
-                return 'SEP';
+                return 'S';
+              case 9:
+                return 'O';
+              case 10:
+                return 'N';
+              case 11:
+                return 'D';
             }
             return '';
           },
@@ -148,7 +165,7 @@ class _TrendGraphState extends State<TrendGraph> {
             fontSize: 15,
           ),
           getTitles: (value) {
-            if (value % 2 == 0) return value.toStringAsFixed(0);
+            if (value % 2 != 0) return value.toStringAsFixed(0);
             return '';
           },
           reservedSize: 28,
@@ -160,8 +177,8 @@ class _TrendGraphState extends State<TrendGraph> {
           border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
       maxX: 11,
-      minY: 0,
-      maxY: 24,
+      minY: 3,
+      maxY: 16,
       lineBarsData: [
         LineChartBarData(
           spots: [

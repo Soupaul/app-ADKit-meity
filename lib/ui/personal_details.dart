@@ -14,28 +14,42 @@ class PersonalDetails extends StatefulWidget {
 class _PersonalDetailsState extends State<PersonalDetails> {
   TextEditingController? _firstnameController;
   TextEditingController? _secondnameController;
-  TextEditingController? _ageController;
+  // TextEditingController? _ageController;
+  DateTime? _selectedDate;
   String dropdownValue = 'Male';
 
   @override
   void initState() {
     _firstnameController = TextEditingController(text: "");
     _secondnameController = TextEditingController(text: "");
-    _ageController = TextEditingController(text: "");
+    // _ageController = TextEditingController(text: "");
 
     super.initState();
   }
 
-  void createRecord(String fn, String sn, int age) async {
+  void createRecord(String fn, String sn, String dob) async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({
       'first_name': fn,
       'second_name': sn,
-      'age': age,
+      'dob': dob,
       'gender': dropdownValue
     }).then((value) => {after()});
+  }
+
+  void _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000), // Refer step 1
+      firstDate: DateTime(1900),
+      lastDate: DateTime(DateTime.now().year - 1, 12, 31),
+    );
+    if (picked != null && picked != _selectedDate)
+      setState(() {
+        _selectedDate = picked;
+      });
   }
 
   void after() {
@@ -47,9 +61,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               ClipPath(
@@ -113,24 +127,59 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  maxLength: 3,
-                  cursorColor: Colors.black,
-                  style: TextStyle(fontSize: 18.0, color: Colors.black),
-                  keyboardType: TextInputType.number,
-                  controller: _ageController,
-                  decoration: InputDecoration(
-                    fillColor: Colors.orange.withOpacity(0.1),
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                    labelText: 'Age',
-                    labelStyle: TextStyle(fontSize: 16.0, color: Colors.black),
-                    prefixIcon: Icon(
-                      Icons.confirmation_number,
-                      color: Colors.black,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(_selectedDate == null
+                        ? "Select your Date of Birth"
+                        : "${_selectedDate!.toLocal()}".split(' ')[0]),
+                    // Expanded(
+                    //   child: TextField(
+                    //     maxLength: 3,
+                    //     cursorColor: Colors.black,
+                    //     style: TextStyle(fontSize: 18.0, color: Colors.black),
+                    //     keyboardType: TextInputType.number,
+                    //     controller: _ageController,
+                    //     decoration: InputDecoration(
+                    //       fillColor: Colors.orange.withOpacity(0.1),
+                    //       filled: true,
+                    //       border: OutlineInputBorder(
+                    //           borderRadius:
+                    //               BorderRadius.all(Radius.circular(20.0))),
+                    //       labelText: 'Age',
+                    //       labelStyle:
+                    //           TextStyle(fontSize: 16.0, color: Colors.black),
+                    //       prefixIcon: Icon(
+                    //         Icons.date_range,
+                    //         color: Colors.black,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    FlatButton(
+                      minWidth: 0,
+                      onPressed: () => _selectDate(context),
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.black,
+                          width: 1.0,
+                          style: BorderStyle.solid,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      color: Theme.of(context).accentColor,
+                      splashColor: Theme.of(context).accentColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Icon(
+                          Icons.date_range,
+                          size: 30.0,
+                          color: Color(0xFFBF828A),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               Padding(
@@ -210,7 +259,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                       color: Color(0xFFBF828A),
                                     ),
                                     onPressed: () async {
-                                      if (_ageController!.text.isEmpty ||
+                                      if (_selectedDate == null ||
                                           _firstnameController!.text.isEmpty ||
                                           _secondnameController!.text.isEmpty) {
                                         ScaffoldMessenger.of(context)
@@ -221,7 +270,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                                         createRecord(
                                             _firstnameController!.text,
                                             _secondnameController!.text,
-                                            int.parse(_ageController!.text));
+                                            _selectedDate!
+                                                .toLocal()
+                                                .toString()
+                                                .split(' ')[0]);
                                       }
                                     }),
                               ),
@@ -229,7 +281,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                           ],
                         ),
                         onPressed: () async {
-                          if (_ageController!.text.isEmpty ||
+                          if (_selectedDate == null ||
                               _firstnameController!.text.isEmpty ||
                               _secondnameController!.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -239,7 +291,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             createRecord(
                                 _firstnameController!.text,
                                 _secondnameController!.text,
-                                int.parse(_ageController!.text));
+                                _selectedDate!
+                                    .toLocal()
+                                    .toString()
+                                    .split(' ')[0]);
                           }
                         },
                       ),

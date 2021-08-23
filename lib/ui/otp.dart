@@ -28,57 +28,59 @@ class _OtpPageState extends State<OtpPage> {
   );
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('OTP Verification Page'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: Center(
-              child: Text(
-                'Verify +91-${widget.phone}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('OTP Verification Page'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: Center(
+                child: Text(
+                  'Verify +91-${widget.phone}',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: PinPut(
-              fieldsCount: 6,
-              textStyle: const TextStyle(fontSize: 25.0, color: Colors.white),
-              eachFieldWidth: 40.0,
-              eachFieldHeight: 55.0,
-              focusNode: _pinPutFocusNode,
-              controller: _pinPutController,
-              submittedFieldDecoration: pinPutDecoration,
-              selectedFieldDecoration: pinPutDecoration,
-              followingFieldDecoration: pinPutDecoration,
-              pinAnimationType: PinAnimationType.fade,
-              onSubmit: (pin) async {
-                try {
-                  await FirebaseAuth.instance
-                      .signInWithCredential(
-                    PhoneAuthProvider.credential(
-                        verificationId: _verificationID!, smsCode: pin),
-                  )
-                      .then((value) async {
-                    if (value.user != null) {
-                      _checkForDetais(value.user!.uid);
-                    }
-                  });
-                } catch (e) {
-                  FocusScope.of(context).unfocus();
-                  //  _scaffoldKey.currentState
-                  //  .showSnackBar(SnackBar(content: Text('Invalid OTP')));
-                }
-              },
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: PinPut(
+                fieldsCount: 6,
+                textStyle: const TextStyle(fontSize: 25.0, color: Colors.white),
+                eachFieldWidth: 40.0,
+                eachFieldHeight: 55.0,
+                focusNode: _pinPutFocusNode,
+                controller: _pinPutController,
+                submittedFieldDecoration: pinPutDecoration,
+                selectedFieldDecoration: pinPutDecoration,
+                followingFieldDecoration: pinPutDecoration,
+                pinAnimationType: PinAnimationType.fade,
+                onSubmit: (pin) async {
+                  try {
+                    await FirebaseAuth.instance
+                        .signInWithCredential(
+                      PhoneAuthProvider.credential(
+                          verificationId: _verificationID!, smsCode: pin),
+                    )
+                        .then((value) async {
+                      if (value.user != null) {
+                        _checkForDetais(value.user!.uid);
+                      }
+                    });
+                  } catch (e) {
+                    FocusScope.of(context).unfocus();
+                    //  _scaffoldKey.currentState
+                    //  .showSnackBar(SnackBar(content: Text('Invalid OTP')));
+                  }
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

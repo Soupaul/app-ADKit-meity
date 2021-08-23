@@ -1,6 +1,7 @@
 import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 // run with `flutter run --no-sound-null-safety` for testing
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customgauge/customgauge.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,10 +22,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   File? _currentVideo;
-  var height, weidth;
+  var height, width;
   String? downUrl;
   ImagePicker _imagePicker = ImagePicker();
   UploadTask? _uploadTask;
+  bool? isPregnant;
+  DocumentSnapshot? userData;
+
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        userData = value;
+      });
+    });
+    super.initState();
+  }
 
   Future _selectAndUploadVideo() async {
     final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
@@ -49,6 +66,50 @@ class _HomePageState extends State<HomePage> {
     final snapshot = await _uploadTask!.whenComplete(() {});
     final url = await snapshot.ref.getDownloadURL();
     print("Download Link: $url");
+
+    if (userData!['gender'] == "Female") {
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: Text("Pregnancy"),
+          content: Text("Are you currently pregnant?"),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                setState(() {
+                  isPregnant = true;
+                });
+                Navigator.of(context).pop();
+              },
+              color: Color(0xFFBF828A),
+              child: Text(
+                'YES',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                setState(() {
+                  isPregnant = false;
+                });
+                Navigator.of(context).pop();
+              },
+              color: Color(0xFFBF828A),
+              child: Text(
+                'NO',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
     setState(() {
       firstButtonText = 'Processing...';
       downUrl = url;
@@ -61,19 +122,136 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _showGauge(double val) {
+  void _showGauge(double val, int age) {
     var verdict;
     var color;
+    List<double> hbRanges = [];
+    var normalRange = [];
 
-    if ((val >= 5 && val <= 9.6) || (val >= 18.6 && val <= 20)) {
-      verdict = "High Risk!";
-      color = Colors.red;
-    } else if ((val > 9.6 && val < 12) || (val > 15.5 && val < 18.6)) {
-      verdict = "Moderate Risk";
-      color = Color(0xFFF6C21A);
+    if (age <= 5) {
+      hbRanges.add(7 - 3);
+      hbRanges.add(10 - 7);
+      hbRanges.add(11 - 10);
+      hbRanges.add(16 - 11);
+      normalRange.add(11);
+      normalRange.add(16);
+      if (val < 7) {
+        verdict = "Severely Anaemic";
+        color = Colors.red;
+      } else if (val >= 7 && val < 10) {
+        verdict = "Moderately Anaemic";
+        color = Colors.orange;
+      } else if (val >= 10 && val < 11) {
+        verdict = "Mildy Anaemic";
+        color = Color(0xFFF6C21A);
+      } else {
+        verdict = "Non-Anaemic (Safe)";
+        color = Colors.green;
+      }
+    } else if (age > 5 && age <= 11) {
+      hbRanges.add(8 - 3);
+      hbRanges.add(11 - 8);
+      hbRanges.add(11.5 - 11);
+      hbRanges.add(16 - 11.5);
+      normalRange.add(11.5);
+      normalRange.add(16);
+      if (val < 8) {
+        verdict = "Severely Anaemic";
+        color = Colors.red;
+      } else if (val >= 8 && val < 11) {
+        verdict = "Moderately Anaemic";
+        color = Colors.orange;
+      } else if (val >= 11 && val < 11.5) {
+        verdict = "Mildy Anaemic";
+        color = Color(0xFFF6C21A);
+      } else {
+        verdict = "Non-Anaemic (Safe)";
+        color = Colors.green;
+      }
+    } else if (age > 11 && age < 15) {
+      hbRanges.add(8 - 3);
+      hbRanges.add(11 - 8);
+      hbRanges.add(12 - 11);
+      hbRanges.add(16 - 12);
+      normalRange.add(12);
+      normalRange.add(16);
+      if (val < 8) {
+        verdict = "Severely Anaemic";
+        color = Colors.red;
+      } else if (val >= 8 && val < 11) {
+        verdict = "Moderately Anaemic";
+        color = Colors.orange;
+      } else if (val >= 11 && val < 12) {
+        verdict = "Mildy Anaemic";
+        color = Color(0xFFF6C21A);
+      } else {
+        verdict = "Non-Anaemic (Safe)";
+        color = Colors.green;
+      }
     } else {
-      verdict = "No Risk";
-      color = Colors.green;
+      if (userData!['gender'] == "Female") {
+        if (isPregnant!) {
+          hbRanges.add(7 - 3);
+          hbRanges.add(10 - 7);
+          hbRanges.add(11 - 10);
+          hbRanges.add(16 - 11);
+          normalRange.add(11);
+          normalRange.add(16);
+          if (val < 7) {
+            verdict = "Severely Anaemic";
+            color = Colors.red;
+          } else if (val >= 7 && val < 10) {
+            verdict = "Moderately Anaemic";
+            color = Colors.orange;
+          } else if (val >= 10 && val < 11) {
+            verdict = "Mildy Anaemic";
+            color = Color(0xFFF6C21A);
+          } else {
+            verdict = "Non-Anaemic (Safe)";
+            color = Colors.green;
+          }
+        } else {
+          hbRanges.add(8 - 3);
+          hbRanges.add(11 - 8);
+          hbRanges.add(12 - 11);
+          hbRanges.add(16 - 12);
+          normalRange.add(12);
+          normalRange.add(16);
+          if (val < 8) {
+            verdict = "Severely Anaemic";
+            color = Colors.red;
+          } else if (val >= 8 && val < 11) {
+            verdict = "Moderately Anaemic";
+            color = Colors.orange;
+          } else if (val >= 11 && val < 12) {
+            verdict = "Mildy Anaemic";
+            color = Color(0xFFF6C21A);
+          } else {
+            verdict = "Non-Anaemic (Safe)";
+            color = Colors.green;
+          }
+        }
+      } else {
+        hbRanges.add(8 - 3);
+        hbRanges.add(11 - 8);
+        hbRanges.add(13 - 11);
+        hbRanges.add(16 - 13);
+        normalRange.add(13);
+        normalRange.add(16);
+        if (val < 8) {
+          verdict = "Severely Anaemic";
+          color = Colors.red;
+        } else if (val >= 8 && val < 11) {
+          verdict = "Moderately Anaemic";
+          color = Colors.orange;
+        } else if (val >= 11 && val < 13) {
+          verdict = "Mildy Anaemic";
+          color = Color(0xFFF6C21A);
+        } else {
+          verdict = "Non-Anaemic (Safe)";
+          color = Colors.green;
+        }
+      }
     }
 
     showDialog(
@@ -81,7 +259,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Risk Factor'),
+            title: Text('Verdict'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,15 +269,16 @@ class _HomePageState extends State<HomePage> {
                   // Haven't factored it in right now for testing.
                   child: CustomGauge(
                     gaugeSize: 200,
-                    minValue: 5,
-                    maxValue: 20,
+                    minValue: 3,
+                    maxValue: 16,
                     currentValue: double.parse(val.toStringAsFixed(1)),
                     segments: [
-                      GaugeSegment('Severely Anaemic', 4.6, Colors.red),
-                      GaugeSegment('Moderate Risk', 2.4, Color(0xFFF6C21A)),
-                      GaugeSegment('Healthy', 3.5, Colors.green),
-                      GaugeSegment('Moderate Risk', 3.1, Color(0xFFF6C21A)),
-                      GaugeSegment('Severely Anaemic', 1.4, Colors.red),
+                      GaugeSegment('Severely Anaemic', hbRanges[0], Colors.red),
+                      GaugeSegment(
+                          'Moderately Anaemic', hbRanges[1], Colors.orange),
+                      GaugeSegment(
+                          "Mildy Anaemic", hbRanges[2], Color(0xFFF6C21A)),
+                      GaugeSegment('Non-Anaemic', hbRanges[3], Colors.green),
                     ],
                     showMarkers: false,
                     displayWidget: Text(
@@ -112,7 +291,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Center(
                   child: Text(
-                    "Normal Range: 12 - 15.5 gm/dl",
+                    "Normal Range: ${normalRange[0]} - ${normalRange[1]} gm/dl",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -173,19 +352,24 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  // String hValue = "";
+  int _calcAge(String dob) {
+    DateTime dt = DateTime.parse(dob);
+    Duration diff = DateTime.now().difference(dt);
+
+    int age = (diff.inDays / 365).floor();
+
+    return age;
+  }
 
   Future _getAPiResponse() async {
     if (downUrl == null) return;
 
-    double? data = await API.processVideo(downUrl!);
+    int age = _calcAge(userData!['dob']);
+    String gender = userData!['gender'] == "Male" ? "1" : "0";
 
-    // setState(() {
-    //   hValue = "";
-    //   hValue = "hemoglobin value is $data";
-    // });
+    double? data = await API.processVideo(downUrl!, age.toString(), gender);
 
-    _showGauge(data!);
+    _showGauge(data!, age);
 
     print("API response $data");
   }
@@ -215,11 +399,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
-    weidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: SafeArea(
+    width = MediaQuery.of(context).size.width;
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          color: Colors.white,
           child: Stack(
             children: [
               Column(
@@ -271,7 +455,7 @@ class _HomePageState extends State<HomePage> {
                           InkWell(
                             onTap: () {
                               _selectAndUploadVideo();
-                              // _showGauge(10);
+                              // _showGauge(11.2, 5);
                               // Navigator.of(context).push(
                               //   MaterialPageRoute(builder: (context) => TrendGraph()),
                               // );
@@ -379,8 +563,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 child: Container(
-                  margin:
-                      EdgeInsets.only(top: height * .80, left: weidth - 250),
+                  margin: EdgeInsets.only(top: height * .80, left: width - 250),
                   height: 60,
                   width: 240,
                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),

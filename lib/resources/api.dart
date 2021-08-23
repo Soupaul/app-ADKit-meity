@@ -11,14 +11,10 @@ class API {
   static String _baseURL = 'https://c72173ad250f.ngrok.io/api';
   static Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
-  static Future<double?> processVideo(String filePath) async {
+  static Future<double?> processVideo(
+      String filePath, String age, String gender) async {
     String url = '$_baseURL/processVideo';
     print(url);
-
-    DocumentSnapshot userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
 
     Response response = await http.post(
       Uri.parse(url),
@@ -29,8 +25,8 @@ class API {
         "URL": filePath,
         // "URL":
         //     "https://firebasestorage.googleapis.com/v0/b/adkit-demo.appspot.com/o/e7_n1.mp4?alt=media&token=3e7b8ccc-219b-43cb-a4c9-8f670ad60b17",
-        "AGE": userData['age'].toString(),
-        "GENDER": userData['gender'] == "Male" ? "1" : "0"
+        "AGE": age,
+        "GENDER": gender
       }),
     );
 
