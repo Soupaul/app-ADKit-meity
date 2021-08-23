@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     FirebaseFirestore.instance
         .collection('users')
-           .doc(FirebaseAuth.instance.currentUser!.uid)
-       // .doc('jMYSw3V8EIUgQd4bKdMivxO4Zvd2')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        // .doc('jMYSw3V8EIUgQd4bKdMivxO4Zvd2')
         .get()
         .then((value) {
       setState(() {
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     final url = await snapshot.ref.getDownloadURL();
     print("Download Link: $url");
 
-   if (userData!['gender'] == "Female") {
+    if (userData!['gender'] == "Female") {
       await showDialog(
         context: context,
         barrierDismissible: false,
@@ -314,10 +314,13 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 15,
                 ),
-                verdict=="Non-Anaemic (Safe)"?SizedBox(): Text(
-                  "Next Steps:",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                verdict == "Non-Anaemic (Safe)"
+                    ? SizedBox()
+                    : Text(
+                        "Next Steps:",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                 SizedBox(
                   height: 5,
                 ),
@@ -344,7 +347,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget _advise(String type) {
     if (type == 'Severely Anaemic') {
-
       return Text(
         "1. Consult a Doctor to treat the deficiency as soon as possible \n3. Iron supplements should be taken by mouth.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
         style: TextStyle(fontSize: 14),
@@ -354,19 +356,17 @@ class _HomePageState extends State<HomePage> {
         "1. Sleep more at night and take naps during the day. \n3. Eat iron-rich foods(chicken, leafy vegetables and beans)\n3. Plan your day to include rest periods.",
         style: TextStyle(fontSize: 14),
       );
-    }
-    else if (type == "Mildy Anaemic") {
+    } else if (type == "Mildy Anaemic") {
       return Text(
         "1. Take Dried fruit, such as raisins and apricots. \n3. Sleep more at night and take naps during the day.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
         style: TextStyle(fontSize: 14),
       );
-    }else{
+    } else {
       return Text(
         "You are safe. Keep up the good work.",
         style: TextStyle(fontSize: 14),
       );
     }
-    
   }
 
   int _calcAge(String dob) {
@@ -386,7 +386,8 @@ class _HomePageState extends State<HomePage> {
 
     double? data = await API.processVideo(downUrl!, age.toString(), gender);
 
-    _showGauge(data!, age);
+    API.addResult(data!);
+    _showGauge(data, age);
 
     print("API response $data");
   }
@@ -500,8 +501,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           InkWell(
                             onTap: () {
-                               _recordVideo();
-                          
+                              _recordVideo();
                             },
                             child: Card(
                               elevation: 10,

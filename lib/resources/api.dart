@@ -50,4 +50,15 @@ class API {
       return null;
     }
   }
+
+  static void addResult(double hb) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('results')
+        .add({
+      "hb_val": hb,
+      "time": DateTime.now(),
+    });
+  }
 }

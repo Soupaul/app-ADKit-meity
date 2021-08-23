@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +13,49 @@ class _TrendGraphState extends State<TrendGraph> {
   //   const Color(0xff23b6e6),
   //   const Color(0xff02d39a),
   // ];
+  DocumentSnapshot? userData;
+
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        userData = value;
+      });
+    });
+    super.initState();
+  }
+
+  int _calcAge(String dob) {
+    DateTime dt = DateTime.parse(dob);
+    Duration diff = DateTime.now().difference(dt);
+
+    int age = (diff.inDays / 365).floor();
+
+    return age;
+  }
+
+  List<FlSpot> _normalRange(int age) {
+    double normalVal;
+    if (age <= 5) {
+      normalVal = 11;
+    } else if (age > 5 && age <= 11) {
+      normalVal = 11.5;
+    } else if (age > 11 && age < 15) {
+      normalVal = 12;
+    } else {
+      if (userData!['gender'] == "Female") {
+        normalVal = 12;
+      } else {
+        normalVal = 13;
+      }
+    }
+
+    return [FlSpot(1, normalVal), FlSpot(12, normalVal)];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +110,23 @@ class _TrendGraphState extends State<TrendGraph> {
                 child: Padding(
                   padding: const EdgeInsets.only(
                       right: 18.0, left: 12.0, top: 24, bottom: 12),
-                  child: LineChart(
-                    mainData(),
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .collection('results')
+                        .orderBy('time')
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) =>
+                        snapshot.hasData && userData != null
+                            ? LineChart(
+                                mainData(snapshot.data!.docs),
+                              )
+                            : Center(
+                                child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Color(0xFFBF828A)),
+                              )),
                   ),
                 ),
               ),
@@ -77,7 +137,7 @@ class _TrendGraphState extends State<TrendGraph> {
     );
   }
 
-  LineChartData mainData() {
+  LineChartData mainData(List<dynamic> plotData) {
     return LineChartData(
       axisTitleData: FlAxisTitleData(
         show: true,
@@ -128,29 +188,29 @@ class _TrendGraphState extends State<TrendGraph> {
               fontSize: 16),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 0:
-                return 'J';
               case 1:
-                return 'F';
-              case 2:
-                return 'M';
-              case 3:
-                return 'A';
-              case 4:
-                return 'M';
-              case 5:
                 return 'J';
+              case 2:
+                return 'F';
+              case 3:
+                return 'M';
+              case 4:
+                return 'A';
+              case 5:
+                return 'M';
               case 6:
                 return 'J';
               case 7:
-                return 'A';
+                return 'J';
               case 8:
-                return 'S';
+                return 'A';
               case 9:
-                return 'O';
+                return 'S';
               case 10:
-                return 'N';
+                return 'O';
               case 11:
+                return 'N';
+              case 12:
                 return 'D';
             }
             return '';
@@ -175,19 +235,27 @@ class _TrendGraphState extends State<TrendGraph> {
       borderData: FlBorderData(
           show: true,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
-      minX: 0,
-      maxX: 11,
+      minX: 1,
+      maxX: 12,
       minY: 3,
       maxY: 16,
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            FlSpot(2.6, 12.5),
-            FlSpot(4.9, 12.9),
-            FlSpot(6.8, 13.2),
-            FlSpot(8, 13),
-            FlSpot(9.5, 13.3),
-          ],
+          // spots: [
+          //   FlSpot(2.6, 12.5),
+          //   FlSpot(4.9, 12.9),
+          //   FlSpot(6.8, 13.2),
+          //   FlSpot(8, 13),
+          //   FlSpot(9.5, 13.3),
+          // ],
+          spots: plotData.map((data) {
+            double hb_val = data['hb_val'].toDouble();
+            int month = DateTime.fromMicrosecondsSinceEpoch(
+                    data['time'].microsecondsSinceEpoch)
+                .toLocal()
+                .month;
+            return FlSpot(month.toDouble(), hb_val);
+          }).toList(),
           // isCurved: true,
           colors: [Color(0xFFBF828A)],
           barWidth: 3,
@@ -201,29 +269,26 @@ class _TrendGraphState extends State<TrendGraph> {
           //       gradientColors.map((color) => color.withOpacity(0.3)).toList(),
           // ),
         ),
+        // LineChartBarData(
+        //   spots: [
+        //     FlSpot(1, 15.5),
+        //     FlSpot(12, 15.5),
+        //   ],
+        //   // isCurved: true,
+        //   colors: [Colors.green],
+        //   barWidth: 3,
+        //   isStrokeCapRound: true,
+        //   dotData: FlDotData(
+        //     show: true,
+        //   ),
+        //   // belowBarData: BarAreaData(
+        //   //   show: true,
+        //   //   colors:
+        //   //       gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+        //   // ),
+        // ),
         LineChartBarData(
-          spots: [
-            FlSpot(0, 15.5),
-            FlSpot(11, 15.5),
-          ],
-          // isCurved: true,
-          colors: [Colors.green],
-          barWidth: 3,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: true,
-          ),
-          // belowBarData: BarAreaData(
-          //   show: true,
-          //   colors:
-          //       gradientColors.map((color) => color.withOpacity(0.3)).toList(),
-          // ),
-        ),
-        LineChartBarData(
-          spots: [
-            FlSpot(0, 12),
-            FlSpot(11, 12),
-          ],
+          spots: _normalRange(_calcAge(userData!['dob'])),
           // isCurved: true,
           colors: [Colors.green],
           barWidth: 3,
