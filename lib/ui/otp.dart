@@ -110,7 +110,7 @@ class _OtpPageState extends State<OtpPage> {
             if (value.user != null) {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => PersonalDetails()),
                   (route) => false);
             }
           });
@@ -136,5 +136,6 @@ class _OtpPageState extends State<OtpPage> {
   void initState() {
     super.initState();
     _verifyPhone();
+
   }
 }
