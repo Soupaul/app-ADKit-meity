@@ -108,10 +108,7 @@ class _OtpPageState extends State<OtpPage> {
               .signInWithCredential(authCredential)
               .then((value) async {
             if (value.user != null) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                  (route) => false);
+              _checkForDetais(value.user!.uid);
             }
           });
         },
