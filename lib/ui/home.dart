@@ -384,7 +384,9 @@ class _HomePageState extends State<HomePage> {
     int age = _calcAge(userData!['dob']);
     String gender = userData!['gender'] == "Male" ? "1" : "0";
 
-    double? data = await API.processVideo(downUrl!, age.toString(), gender);
+    // double? data = await API.processVideo(downUrl!, age.toString(), gender);
+
+    double? data = await API.dummy();
 
     API.addResult(data!);
     _showGauge(data, age);
@@ -564,9 +566,9 @@ class _HomePageState extends State<HomePage> {
                   //   height: height * 0.06,
                   // ),
 
-                  // SizedBox(
-                  //   height: height * .05,
-                  // ),
+                  SizedBox(
+                    height: height * .05,
+                  ),
                   _uploadTask != null
                       ? _uploadStatus(_uploadTask!)
                       : Offstage(),

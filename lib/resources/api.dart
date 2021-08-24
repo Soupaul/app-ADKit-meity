@@ -40,6 +40,26 @@ class API {
     return null;
   }
 
+  static Future<double?> dummy() async {
+    String url = "https://mocki.io/v1/c9a3b173-a44f-4293-8672-d4d063431a60";
+
+    Response response = await http.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      print(body['val']);
+
+      return double.parse(body['val']);
+    }
+
+    return null;
+  }
+
   static UploadTask? uploadVideo(File file) {
     try {
       var storagePath = _firebaseStorageRef.child(
