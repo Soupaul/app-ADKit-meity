@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
     await _getAPiResponse();
 
     setState(() {
-      firstButtonText = 'Video processed. Upload another?';
+      firstButtonText = 'Select a Video from Gallery';
     });
   }
 
@@ -400,20 +400,42 @@ class _HomePageState extends State<HomePage> {
         .then((XFile? recordedVideo) async {
       if (recordedVideo != null && recordedVideo.path != null) {
         print(recordedVideo.path);
-        setState(() {
-          secondButtonText = 'Video is being saved...';
-        });
+        // setState(() {
+        //   secondButtonText = 'Video is being saved...';
+        // });
         final result = await ImageGallerySaver.saveFile(recordedVideo.path);
         print(result);
-        setState(() {
-          secondButtonText = 'Video saved. Record Another?';
-        });
+        // setState(() {
+        //   secondButtonText = 'Video saved. Record Another?';
+        // });
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: Text("Video Saved"),
+            content: Text("The video has been saved."),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Color(0xFFBF828A),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
       }
     });
   }
 
   String firstButtonText = 'Select Video from Gallery';
-  String secondButtonText = 'Record a new video';
+  String secondButtonText = 'Record a New video';
   double textSize = 22;
 
   @override

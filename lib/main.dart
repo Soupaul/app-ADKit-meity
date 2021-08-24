@@ -37,6 +37,8 @@ class _MyAppState extends State<MyApp> {
   _requestPermission() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
+      Permission.camera,
+      Permission.microphone
     ].request();
 
     final info = statuses[Permission.storage].toString();

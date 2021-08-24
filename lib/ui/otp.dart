@@ -136,6 +136,5 @@ class _OtpPageState extends State<OtpPage> {
   void initState() {
     super.initState();
     _verifyPhone();
-
   }
 }
