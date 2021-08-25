@@ -15,6 +15,10 @@ import json
 from api.code import exeCode
 import os
 import numpy as np
+import time
+import subprocess
+import shutil
+import platform
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -40,10 +44,14 @@ def processVideo(request):
         video_url = json_data['URL']
         age = json_data['AGE']
         gender = json_data['GENDER']
-        # count = FrameCapture(video_url)
-        # exeCode(count)
-        if(os.path.exists('api/frames/all_feat.csv')):
-            X = np.loadtxt("api/frames/all_feat.csv", delimiter=",")
+        uid = json_data['UID']
+        ts = "".join(str(time.time()).split('.'))
+        # path = settings.STORAGE + '/{}/{}'.format(uid,ts)
+        path = settings.STORAGE + '/{}/16299034544368901'.format(uid)
+        # count = FrameCapture(video_url,uid,ts)
+        # exeCode(count,uid,ts)
+        if(os.path.exists(path + '/csvs/all_feat.csv')):
+            X = np.loadtxt(path + '/csvs/all_feat.csv', delimiter=",")
             # print(X.shape)
             gender = int(gender)
             age = int(age)
@@ -52,5 +60,15 @@ def processVideo(request):
             # print(a.shape)
             prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
             # print(prediction)
-
+            location = path + '/frames'
+            ops = platform.system()
+            if ops == 'Linux':
+                subprocess.Popen(['rm','-rf',location])
+            elif ops == 'Windows':
+                subprocess.Popen(['RMDIR',location,'/S','/Q'],shell=True)
     return JsonResponse({"val":prediction[0]},safe=False)
+
+@csrf_exempt
+def isServerUp(request):
+    if request.method == "GET":
+        return JsonResponse({"state":"awake"},safe=False)

@@ -11,20 +11,22 @@ import imutils
 #from scipy.ndimage import gaussian_filter
 #from scipy.ndimage import laplace
 import api.frame as frame
+from django.conf import settings
 
 
 # count = 890
 
-def exeCode(count):
+def exeCode(count,uid,ts):
 
+    path = settings.STORAGE + '/{}/{}'.format(uid,ts)
     #---------  Image Registration ----------      
     frame=[]
     for i in range(count):
         frame.append(i)
-        im1 =  cv2.imread('api/frames/frame_0.png')
-        im2 = cv2.imread('api/frames/frame_'+str(i)+'.png')
+        im1 =  cv2.imread(path + '/frames/frame_0.png')
+        im2 = cv2.imread(path + '/frames/frame_'+str(i)+'.png')
         
-    #im2 =  cv2.imread("im_277.png");
+    #im2 =  cv2.imread("im_277.png")
         r1 = 200.0 / im1.shape[1]
         r2 = 200.0 / im2.shape[1]
         dim1 = (200, int(im1.shape[0] * r1))
@@ -66,14 +68,14 @@ def exeCode(count):
             im2_aligned = cv2.warpPerspective (im2r, warp_matrix, (sz[1],sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
         else :
         # Use warpAffine for Translation, Euclidean and Affine
-            im2_aligned = cv2.warpAffine(im2r, warp_matrix, (sz[1],sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP);
-        cv2.imwrite('api/frames/ima_'+str(i)+'.png', im2_aligned)  
+            im2_aligned = cv2.warpAffine(im2r, warp_matrix, (sz[1],sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
+        cv2.imwrite(path + '/frames/ima_'+str(i)+'.png', im2_aligned)  
         
 
 
     #------- Contour Detection -----------
     for frame in range(count):
-        image = cv2.imread("api/frames/ima_"+str(frame)+".png")  # load the image
+        image = cv2.imread(path + '/frames/ima_'+str(frame)+'.png')  # load the image
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  #convert it to grayscale
             #gray = cv2.GaussianBlur(gray, (5, 5), 0)        #blur it slightly
 
@@ -115,17 +117,17 @@ def exeCode(count):
         mid_col = int ((cl2-cl1)/2) + cl1
             #print (mid_row, mid_col)
         cropped=image [mid_row-10:mid_row+18,mid_col-15:mid_col+15]
-        cv2.imwrite('api/frames/im_'+str(frame)+'.png', cropped)
+        cv2.imwrite(path + '/frames/im_'+str(frame)+'.png', cropped)
 
 
 
     #------------ Correlation ------------    
     frame=[]
     res1=[]
-    imgr=cv2.imread('api/frames/im_0.png',0)
+    imgr=cv2.imread(path + '/frames/im_0.png',0)
     for i in range(count):
         frame.append(i)
-        img = cv2.imread('api/frames/im_'+str(i)+'.png',0)
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png',0)
         #img=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
         hist = cv2.calcHist([imgr],[0],None,[256],[0,256])
@@ -133,17 +135,17 @@ def exeCode(count):
         comparisonC = cv2.compareHist(hist, hist1, cv2.HISTCMP_CORREL)
         res1.append(comparisonC)
         
-    np.savetxt("api/frames/corr.csv",res1,delimiter=",")
+    np.savetxt(path +'/csvs/corr.csv',res1,delimiter=",")
 
 
     #-------- modify correlation-----------------
     frame=[]
     res1=[]
-    imgr=cv2.imread('api/frames/im_0.png',0)
+    imgr=cv2.imread(path + '/frames/im_0.png',0)
 
     for i in range(count):
         frame.append(i)
-        img = cv2.imread('api/frames/im_'+str(i)+'.png')
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png')
         img=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
         hist = cv2.calcHist([imgr],[0],None,[256],[0,256])
@@ -166,15 +168,15 @@ def exeCode(count):
         moving_averages.append(window_average)
         i += 1
 
-    np.savetxt("api/frames/corr_50.csv",moving_averages,delimiter=",")
+    np.savetxt(path +'/csvs/corr_50.csv',moving_averages,delimiter=",")
 
 
     #------------- gradient --------------------------
     nos=[]
 
-    corr_value=np.loadtxt("api/frames/corr_50.csv", delimiter=",")
+    corr_value=np.loadtxt(path + '/csvs/corr_50.csv', delimiter=",")
     grad=np.gradient(corr_value)
-    np.savetxt("api/frames/grad_corr_50.csv",grad,delimiter=",")
+    np.savetxt(path + '/csvs/grad_corr_50.csv',grad,delimiter=",")
 
 
     ln=int(len(corr_value)/2)
@@ -210,14 +212,14 @@ def exeCode(count):
     nos.append(slope_ratio)
 
     nos = np.reshape(np.asanyarray(nos),(1, 6))
-    np.savetxt("api/frames/feature.csv",nos,delimiter=",")
+    np.savetxt(path + '/csvs/feature.csv',nos,delimiter=",")
 
 
     #-----------------red channel ---------------------
 
     red = []
     for i in range(10):
-        img = cv2.imread('api/frames/im_'+str(i)+'.png')
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png')
         
         img_red = img[:,:,2]
         
@@ -226,7 +228,7 @@ def exeCode(count):
         red.append(img_avg)
         
     for i in range(dstart-10,dstart+10):
-        img = cv2.imread('api/frames/im_'+str(i)+'.png')
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png')
         
         img_red = img[:,:,2]
         
@@ -235,7 +237,7 @@ def exeCode(count):
         red.append(img_avg)
         
     for i in range(sstart-10,sstart+10):
-        img = cv2.imread('api/frames/im_'+str(i)+'.png')
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png')
         
         img_red = img[:,:,2]
         
@@ -244,7 +246,7 @@ def exeCode(count):
         red.append(img_avg)
         
     for i in range(sstop -10,sstop+10):
-        img = cv2.imread('api/frames/im_'+str(i)+'.png')
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png')
         
         img_red = img[:,:,2]
         
@@ -253,7 +255,7 @@ def exeCode(count):
         red.append(img_avg)
         
     for i in range(istop-10,istop+10):
-        img = cv2.imread('api/frames/im_'+str(i)+'.png')
+        img = cv2.imread(path + '/frames/im_'+str(i)+'.png')
         
         img_red = img[:,:,2]
         
@@ -265,10 +267,10 @@ def exeCode(count):
     reddy = np.asanyarray(red)
     reddy = np.reshape(red,(1,len(reddy)))
 
-    np.savetxt("api/frames/red.csv",reddy,delimiter=",")
+    np.savetxt(path + '/csvs/red.csv',reddy,delimiter=",")
 
     all_feat = np.concatenate((nos, reddy), axis = 1)
-    np.savetxt("api/frames/all_feat.csv", all_feat, delimiter = ",")
+    np.savetxt(path + '/csvs/all_feat.csv', all_feat, delimiter = ",")
 
 
 
