@@ -134,3 +134,5 @@ REST_FRAMEWORK = {
 }
 
 MODEL_OBJ = ML_Model()
+
+CELERY_BROKER_URL = 'amqp://localhost'

@@ -19,6 +19,7 @@ import time
 import subprocess
 import shutil
 import platform
+from celery import shared_task
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -38,6 +39,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 @csrf_exempt
+@shared_task
 def processVideo(request):
     if request.method == "POST":
         json_data = json.loads(request.body)
@@ -46,10 +48,10 @@ def processVideo(request):
         gender = json_data['GENDER']
         uid = json_data['UID']
         ts = "".join(str(time.time()).split('.'))
-        # path = settings.STORAGE + '/{}/{}'.format(uid,ts)
-        path = settings.STORAGE + '/{}/16299034544368901'.format(uid)
-        # count = FrameCapture(video_url,uid,ts)
-        # exeCode(count,uid,ts)
+        path = settings.STORAGE + '/{}/{}'.format(uid,ts)
+        # path = settings.STORAGE + '/{}/16299034544368901'.format(uid)
+        count = FrameCapture(video_url,uid,ts)
+        exeCode(count,uid,ts)
         if(os.path.exists(path + '/csvs/all_feat.csv')):
             X = np.loadtxt(path + '/csvs/all_feat.csv', delimiter=",")
             # print(X.shape)
