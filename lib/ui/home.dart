@@ -13,6 +13,8 @@ import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/form.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
+
+import 'firestore_form.dart';
 // import '../utils/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -650,7 +652,7 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => DataForm()),
+                                        builder: (context) => FirestoreForm()),
                                   );
                                 },
                               ),
