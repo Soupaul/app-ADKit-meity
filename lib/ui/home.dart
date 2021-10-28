@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> {
             verdict = "Moderately Anaemic";
             color = Colors.orange;
           } else if (val >= 11 && val < 12) {
-            verdict = "Mildy Anaemic";
+            verdict = "Mildly Anaemic";
             color = Color(0xFFF6C21A);
           } else {
             verdict = "Non-Anaemic (Safe)";
