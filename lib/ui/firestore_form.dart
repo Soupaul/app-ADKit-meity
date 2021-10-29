@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class FirestoreForm extends StatefulWidget {
   const FirestoreForm({Key? key}) : super(key: key);
@@ -9,15 +10,81 @@ class FirestoreForm extends StatefulWidget {
   _FirestoreFormState createState() => _FirestoreFormState();
 }
 
+enum TtsState { playing, stopped }
+
 class _FirestoreFormState extends State<FirestoreForm> {
-  @override
-  DocumentSnapshot? userData;
+  // DocumentSnapshot? userData;
+  late FlutterTts _flutterTts;
+  String language = "en-IN";
+  double volume = 1.0;
+  double pitch = 1.0;
+  double rate = 0.5;
+  bool isCurrentLanguageInstalled = false;
+  String? _newVoiceText;
+
+  TtsState ttsState = TtsState.stopped;
+
+  get isPlaying => ttsState == TtsState.playing;
+  get isStopped => ttsState == TtsState.stopped;
+
+  void _initTts() {
+    _flutterTts = FlutterTts();
+
+    _flutterTts.setStartHandler(() {
+      setState(() {
+        print("Playing");
+        ttsState = TtsState.playing;
+      });
+    });
+
+    _flutterTts.setCompletionHandler(() {
+      setState(() {
+        print("Complete");
+        ttsState = TtsState.stopped;
+      });
+    });
+
+    _flutterTts.setErrorHandler((msg) {
+      setState(() {
+        print("error: $msg");
+        ttsState = TtsState.stopped;
+      });
+    });
+  }
+
+  Future<dynamic> _getLanguages() => _flutterTts.getLanguages;
+
+  Future _speak() async {
+    await _flutterTts.setLanguage(language);
+    await _flutterTts.setVolume(volume);
+    await _flutterTts.setSpeechRate(rate);
+    await _flutterTts.setPitch(pitch);
+
+    if (_newVoiceText != null) {
+      if (_newVoiceText!.isNotEmpty) {
+        await _flutterTts.awaitSpeakCompletion(true);
+        await _flutterTts.speak(_newVoiceText!);
+      }
+    }
+  }
+
+  Future _stop() async {
+    var result = await _flutterTts.stop();
+    if (result == 1) setState(() => ttsState = TtsState.stopped);
+  }
 
   @override
   void initState() {
     print('on init');
     getData();
     super.initState();
+    _initTts();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _flutterTts.stop();
   }
 
   List list = [];
@@ -36,9 +103,9 @@ class _FirestoreFormState extends State<FirestoreForm> {
         checkList = List.filled(list.length, false);
       });
 
-      list.forEach((element) {
-        print(element['question']);
-      });
+      // list.forEach((element) {
+      //   print(element['question']);
+      // });
     });
   }
 
@@ -48,7 +115,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
         Padding(
           padding: EdgeInsets.all(10),
           child: Text(
-            "Which of the following symptoms do you have ?",
+            "Which of the following symptoms do you have?",
             style: TextStyle(
               // color: Color(0xFFBF828A),
               fontSize: 28.0,
@@ -60,30 +127,37 @@ class _FirestoreFormState extends State<FirestoreForm> {
           child: ListView.builder(
               itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  elevation: 3.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(children: [
-                      Checkbox(
-                        activeColor: Color(0xFFBF828A),
-                        value: checkList[index],
-                        onChanged: (bool? val) {
-                          setState(() {
-                            checkList[index] = val;
-                          });
-                        },
-                      ),
-                      Text(
-                        list[index]['question'],
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ]),
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      checkList[index] = !checkList[index];
+                    });
+                  },
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    elevation: 3.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(children: [
+                        Checkbox(
+                          activeColor: Color(0xFFBF828A),
+                          value: checkList[index],
+                          onChanged: (bool? val) {
+                            setState(() {
+                              checkList[index] = val;
+                            });
+                          },
+                        ),
+                        Text(
+                          list[index]['question'],
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ]),
+                    ),
                   ),
                 );
               }),
@@ -131,7 +205,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
         Padding(
           padding: EdgeInsets.all(10),
           child: Text(
-            "Choose suitable one about ${sym}",
+            "Choose a suitable option about ${sym}.",
             style: TextStyle(
               // color: Color(0xFFBF828A),
               fontSize: 28.0,
@@ -143,32 +217,40 @@ class _FirestoreFormState extends State<FirestoreForm> {
           child: ListView.builder(
               itemCount: subquestion.length,
               itemBuilder: (BuildContext context, int i) {
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  elevation: 3.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(children: [
-                      Radio(
-                        value: i,
-                        groupValue: v,
-                        onChanged: (int? value) {
-                          setState(() {
-                            wtMap[sym] = value!;
-                            v = value;
-                          });
-                        },
-                        activeColor: Color(0xFFBF828A),
-                      ),
-                      Text(
-                        subquestion[i]['q'],
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                    ]),
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      wtMap[sym] = i;
+                      v = i;
+                    });
+                  },
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    elevation: 3.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(children: [
+                        Radio(
+                          value: i,
+                          groupValue: v,
+                          onChanged: (int? value) {
+                            setState(() {
+                              wtMap[sym] = value!;
+                              v = value;
+                            });
+                          },
+                          activeColor: Color(0xFFBF828A),
+                        ),
+                        Text(
+                          subquestion[i]['q'],
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ]),
+                    ),
                   ),
                 );
               }),
@@ -179,89 +261,147 @@ class _FirestoreFormState extends State<FirestoreForm> {
 
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: list.isEmpty
-            ? Center(child: CircularProgressIndicator())
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                      child: state > 0
-                          ? getSubQuestionsView("", state - 1)
-                          : getQuestionsView(list)),
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        state > 0
-                            ? RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 15.0),
-                                color: Color(0xFFBF828A),
-                                child: Text(
-                                  "Previous",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
+      child: Stack(
+        children: [
+          Scaffold(
+            body: list.isEmpty
+                ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xFFBF828A),
+                      ),
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                          child: state > 0
+                              ? getSubQuestionsView("", state - 1)
+                              : getQuestionsView(list)),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            state > 0
+                                ? RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 15.0),
+                                    color: Color(0xFFBF828A),
+                                    child: Text(
+                                      "Previous",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        state = state - 1;
+                                      });
+                                    },
+                                  )
+                                : SizedBox(
+                                    width: 50,
                                   ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    state = state - 1;
-                                  });
-                                },
-                              )
-                            : SizedBox(
-                                width: 50,
+                            RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
-                          color: Color(0xFFBF828A),
-                          child: Text(
-                            (selectedSym.length == 0 ||
-                                    selectedSym.length > state)
-                                ? "Next"
-                                : "Finish",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          onPressed: () {
-                            if (state == 0) {
-                              selectedSym.clear();
-                              for (int i = 0; i < list.length; i++) {
-                                if (checkList[i]) {
-                                  selectedSym.add(list[i]);
-                                  if (wtMap[list[i]['question']] == null) {
-                                    wtMap[list[i]['question']] = 0;
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 15.0),
+                              color: Color(0xFFBF828A),
+                              child: Text(
+                                (selectedSym.length == 0 ||
+                                        selectedSym.length > state)
+                                    ? "Next"
+                                    : "Finish",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (state == 0) {
+                                  selectedSym.clear();
+                                  if (checkList
+                                          .where((val) => val == true)
+                                          .length ==
+                                      0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Please select atleast one symptom')));
+                                    return;
                                   }
+                                  for (int i = 0; i < list.length; i++) {
+                                    if (checkList[i]) {
+                                      selectedSym.add(list[i]);
+                                      if (wtMap[list[i]['question']] == null) {
+                                        wtMap[list[i]['question']] = 0;
+                                      }
+                                    }
+                                  }
+                                  print(selectedSym);
                                 }
-                              }
-                              print(selectedSym);
-                            }
-                            setState(() {
-                              if (state == 0 || state < selectedSym.length) {
-                                state = state + 1;
-                              } else {
-                                calculateValue();
-                              }
-                            });
-                          },
+                                setState(() {
+                                  if (state == 0 ||
+                                      state < selectedSym.length) {
+                                    state = state + 1;
+                                  } else {
+                                    calculateValue();
+                                  }
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+          ),
+          Positioned(
+            right: 5,
+            bottom: 80,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: ClipOval(
+                child: Material(
+                  color: Theme.of(context).accentColor,
+                  child: SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.volume_up,
+                        color: Color(0xFFBF828A),
+                      ),
+                      onPressed: () {
+                        if (state == 0) {
+                          setState(() {
+                            _newVoiceText =
+                                'Which of the following symptoms do you have?';
+                          });
+                        } else {
+                          setState(() {
+                            _newVoiceText =
+                                'Choose a suitable option about ${selectedSym[state - 1]['question']}';
+                          });
+                        }
+
+                        _speak();
+                      },
                     ),
                   ),
-                ],
+                ),
               ),
+            ),
+          ),
+        ],
       ),
     );
   }

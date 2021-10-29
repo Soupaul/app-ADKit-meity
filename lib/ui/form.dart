@@ -1078,29 +1078,30 @@ class _DataFormState extends State<DataForm> {
                           ),
                         )),
                     Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ClipOval(
-                          child: Material(
-                            color: Theme.of(context).accentColor,
-                            child: SizedBox(
-                              width: 56,
-                              height: 56,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.volume_up,
-                                  color: Color(0xFFBF828A),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _newVoiceText =
-                                        stateList.states[currState].text!;
-                                  });
-                                  _speak();
-                                },
+                      padding: EdgeInsets.all(10),
+                      child: ClipOval(
+                        child: Material(
+                          color: Theme.of(context).accentColor,
+                          child: SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.volume_up,
+                                color: Color(0xFFBF828A),
                               ),
+                              onPressed: () {
+                                setState(() {
+                                  _newVoiceText =
+                                      stateList.states[currState].text!;
+                                });
+                                _speak();
+                              },
                             ),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

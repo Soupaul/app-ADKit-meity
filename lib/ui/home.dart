@@ -603,7 +603,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DataForm()),
+                    MaterialPageRoute(builder: (context) => FirestoreForm()),
                   );
                 },
                 child: Container(
