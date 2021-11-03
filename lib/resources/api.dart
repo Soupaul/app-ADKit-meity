@@ -8,12 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class API {
-  static String _baseURL = 'https://c72173ad250f.ngrok.io/api';
+  // static String _baseURL = 'https://c72173ad250f.ngrok.io/api';
   static Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
   static Future<double?> processVideo(
       String filePath, String age, String gender) async {
-    String url = '$_baseURL/processVideo';
+    var coll = await FirebaseFirestore.instance.collection('API_URL').get();
+    String url = coll.docs[0]['url'];
     print(url);
 
     Response response = await http.post(
@@ -23,8 +24,7 @@ class API {
       },
       body: jsonEncode(<String, String>{
         "URL": filePath,
-        // "URL":
-        //     "https://firebasestorage.googleapis.com/v0/b/adkit-demo.appspot.com/o/e7_n1.mp4?alt=media&token=3e7b8ccc-219b-43cb-a4c9-8f670ad60b17",
+        "UID": FirebaseAuth.instance.currentUser!.uid,
         "AGE": age,
         "GENDER": gender
       }),
@@ -78,6 +78,17 @@ class API {
         .collection('results')
         .add({
       "hb_val": hb,
+      "time": DateTime.now(),
+    });
+  }
+
+  static void addChatbotResponse(double val) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('chatbot_responses')
+        .add({
+      "risk-score": val,
       "time": DateTime.now(),
     });
   }

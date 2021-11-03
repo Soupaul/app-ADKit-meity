@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:thefirstone/resources/api.dart';
+import 'package:thefirstone/ui/home.dart';
 
 class FirestoreForm extends StatefulWidget {
   const FirestoreForm({Key? key}) : super(key: key);
@@ -236,7 +238,13 @@ class _FirestoreFormState extends State<FirestoreForm> {
         actions: <Widget>[
           FlatButton(
             onPressed: () {
+              API.addChatbotResponse(total);
               Navigator.of(ctx).pop();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                  (route) => false);
             },
             child: Text("okay"),
           ),

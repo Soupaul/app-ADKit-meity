@@ -386,9 +386,9 @@ class _HomePageState extends State<HomePage> {
     int age = _calcAge(userData!['dob']);
     String gender = userData!['gender'] == "Male" ? "1" : "0";
 
-    // double? data = await API.processVideo(downUrl!, age.toString(), gender);
+    double? data = await API.processVideo(downUrl!, age.toString(), gender);
 
-    double? data = await API.dummy();
+    // double? data = await API.dummy();
 
     API.addResult(data!);
     _showGauge(data, age);
