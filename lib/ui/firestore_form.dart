@@ -231,6 +231,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
     });
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text("Value is"),
