@@ -205,6 +205,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
 
   void calculateValue() {
     double total = 0;
+    print(ansMap);
     allSelectedSym.forEach((element) {
       List grs = [];
       try {
@@ -216,6 +217,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
           s = "$s$e";
           s = "$s-${ansMap["$q-$e"]},";
         });
+        print(s);
 
         s = s.substring(0, s.length - 1);
 
@@ -256,13 +258,10 @@ class _FirestoreFormState extends State<FirestoreForm> {
         break;
       }
     }
-    try {
-      v = ansMap["$question-$id"];
-      print(v);
-      v == null ? v = 0 : v = ansMap["$question-$id"];
-    } catch (e) {
-      v = 0;
-    }
+    v = ansMap["$question-$id"];
+    print(v);
+    v == null ? v = 0 : v = ansMap["$question-$id"];
+    ansMap["$question-$id"] = v;
 
     List options = subQuestion['options'];
 
@@ -279,70 +278,65 @@ class _FirestoreFormState extends State<FirestoreForm> {
             ),
           ),
         ),
-        Card(
-          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          elevation: 3.0,
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  subQuestion['name'],
-                  style: TextStyle(
-                    // color: Color(0xFFBF828A),
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+        Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                subQuestion['name'],
+                style: TextStyle(
+                  // color: Color(0xFFBF828A),
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: options.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          v = i;
-                          ansMap["$question-$id"] = v;
-                          print(ansMap);
-                        });
-                      },
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        elevation: 1.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(children: [
-                            Radio(
-                              value: i,
-                              groupValue: v,
-                              onChanged: (int? value) {
-                                setState(() {
-                                  ansMap["$question-$id"] = value;
-                                  v = value!;
-                                });
-                              },
-                              activeColor: Color(0xFFBF828A),
-                            ),
-                            Text(
-                              options[i],
-                              style: TextStyle(fontSize: 16.0),
-                            ),
-                          ]),
-                        ),
+            ),
+            ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: options.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        v = i;
+                        ansMap["$question-$id"] = i;
+                        print('$question-$id');
+                        print(ansMap["$question-$id"]);
+                        print(ansMap);
+                      });
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
-                    );
-                  }),
-            ],
-          ),
+                      elevation: 1.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(children: [
+                          Radio(
+                            value: i,
+                            groupValue: v,
+                            onChanged: (int? value) {
+                              setState(() {
+                                ansMap["$question-$id"] = value;
+                                v = value!;
+                              });
+                            },
+                            activeColor: Color(0xFFBF828A),
+                          ),
+                          Text(
+                            options[i],
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ]),
+                      ),
+                    ),
+                  );
+                }),
+          ],
         ),
       ],
     );
@@ -384,7 +378,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
       });
     } else {
       int noOfQuestions = selectedSymToTravarse.length;
-      List groups = list[state - 1]['groups'];
+      List groups = selectedSymToTravarse[state - 1]['groups'];
       int maxGroups = groups.length;
 
       setState(() {
@@ -394,7 +388,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
         } else {
           if (state > 0) {
             state--;
-            List groups = list[state - 1]['groups'];
+            List groups = selectedSymToTravarse[state - 1]['groups'];
             int maxGroups = groups.length;
 
             subState = maxGroups - 1;
@@ -447,9 +441,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      setState(() {
-                                        goPre();
-                                      });
+                                      goPre();
                                     },
                                   )
                                 : SizedBox(
@@ -495,7 +487,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                 }
                                 if (selectedSymToTravarse.length == 0 &&
                                     allSelectedSym.length > 0) {
-                                      calculateValue();
+                                  calculateValue();
                                 } else {
                                   setState(() {
                                     if (!isEnded) {
@@ -538,7 +530,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
                         } else {
                           setState(() {
                             _newVoiceText =
-                                'Choose a suitable option about ${selectedSymToTravarse[state - 1]['question']}';
+                                'Choose a suitable option about ${selectedSymToTravarse[state - 1]['name']}';
                           });
                         }
 
