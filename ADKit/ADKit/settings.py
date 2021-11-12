@@ -17,6 +17,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 STORAGE = os.path.join(BASE_DIR,"Files")
+ML_FILES = os.path.join(BASE_DIR,"api/ml_assets/")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/

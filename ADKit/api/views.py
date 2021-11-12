@@ -20,6 +20,7 @@ import subprocess
 import shutil
 import platform
 from celery import shared_task
+from api.predict import load_data
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -59,8 +60,11 @@ def processVideo(request):
             age = int(age)
             x = np.array([gender,age])
             a = np.concatenate((x,X),axis=0)
+            a.reshape(1, -1)
+            # print("a shape")
             # print(a.shape)
-            prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
+            prediction = load_data(a)
+            # prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
             # print(prediction)
             location = path + '/frames'
             ops = platform.system()
@@ -68,9 +72,9 @@ def processVideo(request):
                 subprocess.Popen(['rm','-rf',location])
             elif ops == 'Windows':
                 subprocess.Popen(['RMDIR',location,'/S','/Q'],shell=True)
-    return JsonResponse({"val":prediction[0]},safe=False)
+    return JsonResponse({"val":prediction},safe=False)
 
 @csrf_exempt
 def isServerUp(request):
     if request.method == "GET":
-        return JsonResponse({"state":"awake"},safe=False)
+        return JsonResponse({"state":"active"},safe=False)
