@@ -12,7 +12,7 @@ from api.frame import FrameCapture
 from rest_framework import status
 from rest_framework.response import Response
 import json
-from api.code import exeCode
+from api.code import exeCode,execPalmCode
 import os
 import numpy as np
 import time
@@ -21,6 +21,7 @@ import shutil
 import platform
 from celery import shared_task
 from api.predict import load_data
+from api.predictpalm import palmpredictor
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -64,6 +65,44 @@ def processVideo(request):
             # print("a shape")
             # print(a.shape)
             prediction = load_data(a)
+            # prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
+            print(prediction)
+            location = path + '/frames'
+            ops = platform.system()
+            if ops == 'Linux':
+                subprocess.Popen(['rm','-rf',location])
+            elif ops == 'Windows':
+                subprocess.Popen(['RMDIR',location,'/S','/Q'],shell=True)
+    return JsonResponse({"val":prediction},safe=False)
+
+
+
+@csrf_exempt
+@shared_task
+def processPalmVideo(request):
+    if request.method == "POST":
+        json_data = json.loads(request.body)
+        video_url = json_data['URL']
+        age = json_data['AGE']
+        gender = json_data['GENDER']
+        uid = json_data['UID']
+        ts = "".join(str(time.time()).split('.'))
+        path = settings.STORAGE + '/{}/{}'.format(uid,ts)
+        # path = settings.STORAGE + '/{}/1637939772309768'.format(uid)
+        count = FrameCapture(video_url,uid,ts)
+        # count = 2997
+        execPalmCode(count,uid,ts)
+        if(os.path.exists(path + '/csvs/all_feat.csv')):
+            X = np.loadtxt(path + '/csvs/all_feat.csv', delimiter=",")
+            # print(X.shape)
+            gender = int(gender)
+            age = int(age)
+            x = np.array([gender,age])
+            a = np.concatenate((x,X),axis=0)
+            a.reshape(1, -1)
+            # print("a shape")
+            # print(a.shape)
+            prediction = palmpredictor(a)
             # prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
             # print(prediction)
             location = path + '/frames'

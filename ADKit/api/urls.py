@@ -5,4 +5,5 @@ from django.urls import path
 urlpatterns = [
     path('processVideo',v.processVideo,name="Process Video"),
     path('isServerUp',v.isServerUp,name="Server State"),
+    path('processPalmVideo',v.processPalmVideo,name="Process Palm Video"),
 ]
