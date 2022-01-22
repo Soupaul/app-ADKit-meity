@@ -12,7 +12,7 @@ from api.frame import FrameCapture
 from rest_framework import status
 from rest_framework.response import Response
 import json
-from api.code import exeCode,execPalmCode
+from api.code import exeCode,execPalmCode2
 import os
 import numpy as np
 import time
@@ -81,6 +81,7 @@ def processVideo(request):
 @shared_task
 def processPalmVideo(request):
     if request.method == "POST":
+        # print(request.method)
         json_data = json.loads(request.body)
         video_url = json_data['URL']
         age = json_data['AGE']
@@ -88,13 +89,14 @@ def processPalmVideo(request):
         uid = json_data['UID']
         ts = "".join(str(time.time()).split('.'))
         path = settings.STORAGE + '/{}/{}'.format(uid,ts)
-        # path = settings.STORAGE + '/{}/1637939772309768'.format(uid)
+        # path = settings.STORAGE + '/{}/16428521497839506'.format(uid)
+        # print(path)
         count = FrameCapture(video_url,uid,ts)
         # count = 2997
-        execPalmCode(count,uid,ts)
-        if(os.path.exists(path + '/csvs/all_feat.csv')):
-            X = np.loadtxt(path + '/csvs/all_feat.csv', delimiter=",")
-            # print(X.shape)
+        execPalmCode2(count,uid,ts)
+        if(os.path.exists(path + '/csvs/all_feat_wir.csv')):
+            X = np.loadtxt(path + '/csvs/all_feat_wir.csv', delimiter=",")
+            print(X.shape)
             gender = int(gender)
             age = int(age)
             x = np.array([gender,age])
@@ -102,7 +104,7 @@ def processPalmVideo(request):
             a.reshape(1, -1)
             # print("a shape")
             # print(a.shape)
-            prediction = palmpredictor(a)
+            palmprediction = palmpredictor(a)
             # prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
             # print(prediction)
             location = path + '/frames'
@@ -111,7 +113,7 @@ def processPalmVideo(request):
                 subprocess.Popen(['rm','-rf',location])
             elif ops == 'Windows':
                 subprocess.Popen(['RMDIR',location,'/S','/Q'],shell=True)
-    return JsonResponse({"val":prediction},safe=False)
+    return JsonResponse({"val":palmprediction},safe=False)
 
 @csrf_exempt
 def isServerUp(request):
