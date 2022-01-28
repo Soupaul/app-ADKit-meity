@@ -28,7 +28,7 @@ class _TrendGraphState extends State<TrendGraph> {
     });
     super.initState();
   }
-
+  
   int _calcAge(String dob) {
     DateTime dt = DateTime.parse(dob);
     Duration diff = DateTime.now().difference(dt);

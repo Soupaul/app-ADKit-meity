@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thefirstone/resources/api.dart';
+import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/select_language.dart';
 import 'ui/home.dart';
