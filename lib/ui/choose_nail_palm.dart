@@ -18,7 +18,7 @@ class _NailOrPalmState extends State<NailOrPalm> {
         child: Column(
           children: [
             Container(
-              child: Text("Hi,\nWelcome to Adkit",
+              child: Text("Choose App Type",
                   style: TextStyle(
                     fontSize: 22,
                     color: Colors.black,
@@ -39,7 +39,6 @@ class _NailOrPalmState extends State<NailOrPalm> {
                         fontSize: 20,
                         color: Colors.black,
                       )),
-                  alignment: Alignment.topLeft,
                   padding: EdgeInsets.all(25),
                 ),
                 SizedBox(
@@ -52,16 +51,17 @@ class _NailOrPalmState extends State<NailOrPalm> {
                     Column(
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop('nail');
+                          },
                           child: Card(
                             elevation: 10,
                             child: Container(
                               color: Theme.of(context).accentColor,
                               padding: EdgeInsets.all(20),
-                              child: Icon(
-                                Icons.videocam,
-                                color: Color(0xFFBF828A),
-                                size: 60,
+                              child: Image.asset(
+                                'assets/nail-clipper.png',
+                                height: 60,
                               ),
                             ),
                           ),
@@ -79,16 +79,17 @@ class _NailOrPalmState extends State<NailOrPalm> {
                     Column(
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop('palm');
+                          },
                           child: Card(
                             elevation: 10,
                             child: Container(
                               color: Theme.of(context).accentColor,
                               padding: EdgeInsets.all(20),
-                              child: Icon(
-                                Icons.videocam,
-                                color: Color(0xFFBF828A),
-                                size: 60,
+                              child: Image.asset(
+                                'assets/hello.png',
+                                height: 60,
                               ),
                             ),
                           ),

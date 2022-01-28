@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
+import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/form.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
@@ -30,13 +31,13 @@ class _HomePageState extends State<HomePage> {
   UploadTask? _uploadTask;
   bool? isPregnant;
   DocumentSnapshot? userData;
+  String? appType;
 
   @override
   void initState() {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        // .doc('jMYSw3V8EIUgQd4bKdMivxO4Zvd2')
         .get()
         .then((value) {
       setState(() {
@@ -47,16 +48,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _selectAndUploadVideo() async {
+    final type = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
+    print(type);
+
     final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
 
     if (result == null) {
-      // setState(() {
-      //   firstButtonText = 'No video was selected.';
-      // });
       return;
     }
 
     setState(() {
+      appType = type;
       firstButtonText = 'Uploading video...';
       _currentVideo = File(result.path);
     });
@@ -386,11 +389,12 @@ class _HomePageState extends State<HomePage> {
     int age = _calcAge(userData!['dob']);
     String gender = userData!['gender'] == "Male" ? "1" : "0";
 
-    double? data = await API.processVideo(downUrl!, age.toString(), gender);
+    double? data =
+        await API.processVideo(downUrl!, age.toString(), gender, appType!);
 
     // double? data = await API.dummy();
 
-    API.addResult(data!);
+    API.addResult(data!, appType!);
     _showGauge(data, age);
 
     print("API response $data");

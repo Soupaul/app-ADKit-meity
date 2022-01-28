@@ -12,9 +12,9 @@ class API {
   static Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
   static Future<double?> processVideo(
-      String filePath, String age, String gender) async {
+      String filePath, String age, String gender, String type) async {
     var coll = await FirebaseFirestore.instance.collection('API_URL').get();
-    String url = coll.docs[0]['url'];
+    String url = type == 'nail' ? coll.docs[0]['url'] : coll.docs[1]['url'];
     print(url);
 
     Response response = await http.post(
@@ -71,13 +71,14 @@ class API {
     }
   }
 
-  static void addResult(double hb) {
+  static void addResult(double hb, String type) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('results')
         .add({
       "hb_val": hb,
+      "type": type,
       "time": DateTime.now(),
     });
   }
