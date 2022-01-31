@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
         verdict = "Moderately Anaemic";
         color = Colors.orange;
       } else if (val >= 10 && val < 11) {
-        verdict = "Mildy Anaemic";
+        verdict = "Mildly Anaemic";
         color = Color(0xFFF6C21A);
       } else {
         verdict = "Non-Anaemic (Safe)";
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
         verdict = "Moderately Anaemic";
         color = Colors.orange;
       } else if (val >= 11 && val < 11.5) {
-        verdict = "Mildy Anaemic";
+        verdict = "Mildly Anaemic";
         color = Color(0xFFF6C21A);
       } else {
         verdict = "Non-Anaemic (Safe)";
@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
         verdict = "Moderately Anaemic";
         color = Colors.orange;
       } else if (val >= 11 && val < 12) {
-        verdict = "Mildy Anaemic";
+        verdict = "Mildly Anaemic";
         color = Color(0xFFF6C21A);
       } else {
         verdict = "Non-Anaemic (Safe)";
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
             verdict = "Moderately Anaemic";
             color = Colors.orange;
           } else if (val >= 10 && val < 11) {
-            verdict = "Mildy Anaemic";
+            verdict = "Mildly Anaemic";
             color = Color(0xFFF6C21A);
           } else {
             verdict = "Non-Anaemic (Safe)";
@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> {
           verdict = "Moderately Anaemic";
           color = Colors.orange;
         } else if (val >= 11 && val < 13) {
-          verdict = "Mildy Anaemic";
+          verdict = "Mildly Anaemic";
           color = Color(0xFFF6C21A);
         } else {
           verdict = "Non-Anaemic (Safe)";
@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                       GaugeSegment(
                           'Moderately Anaemic', hbRanges[1], Colors.orange),
                       GaugeSegment(
-                          "Mildy Anaemic", hbRanges[2], Color(0xFFF6C21A)),
+                          "Mildly Anaemic", hbRanges[2], Color(0xFFF6C21A)),
                       GaugeSegment('Non-Anaemic', hbRanges[3], Colors.green),
                     ],
                     showMarkers: false,
@@ -361,7 +361,7 @@ class _HomePageState extends State<HomePage> {
         "1. Sleep more at night and take naps during the day. \n3. Eat iron-rich foods(chicken, leafy vegetables and beans)\n3. Plan your day to include rest periods.",
         style: TextStyle(fontSize: 14),
       );
-    } else if (type == "Mildy Anaemic") {
+    } else if (type == "Mildly Anaemic") {
       return Text(
         "1. Take Dried fruit, such as raisins and apricots. \n3. Sleep more at night and take naps during the day.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
         style: TextStyle(fontSize: 14),
@@ -634,34 +634,24 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
-                          new Transform.translate(
-                            offset: Offset(15.0, 0.0),
-                            child: new Container(
-                              padding: const EdgeInsets.only(
-                                top: 5.0,
-                                bottom: 5,
-                                right: 25,
-                              ),
-                              child: FlatButton(
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(20.0)),
-                                splashColor: Colors.white,
-                                color: Colors.white,
-                                child: Icon(
-                                  Icons.message,
-                                  color: Color(0xFFBF828A),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FirestoreForm()),
-                                  );
-                                },
-                              ),
+                          FlatButton(
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(20.0)),
+                            splashColor: Colors.white,
+                            color: Colors.white,
+                            child: Icon(
+                              Icons.message,
+                              color: Color(0xFFBF828A),
                             ),
-                          )
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FirestoreForm()),
+                              );
+                            },
+                          ),
+                          SizedBox(width: 1)
                         ],
                       ),
                     ),
