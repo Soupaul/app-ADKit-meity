@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
+import 'package:thefirstone/ui/doctors.dart';
 import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/select_language.dart';
 import 'ui/home.dart';
@@ -49,7 +50,9 @@ class _MyAppState extends State<MyApp> {
   _getScreen() {
     if (FirebaseAuth.instance != null) {
       if (FirebaseAuth.instance.currentUser != null) {
-        if (!FirebaseAuth.instance.currentUser!.uid.isEmpty) return HomePage();
+        if (!FirebaseAuth.instance.currentUser!.uid.isEmpty)
+          return DoctorsPage();
+        // return HomePage();
       }
     }
 
