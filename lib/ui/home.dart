@@ -11,6 +11,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
+import 'package:thefirstone/ui/doctors.dart';
 import 'package:thefirstone/ui/form.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
@@ -586,6 +587,34 @@ class _HomePageState extends State<HomePage> {
                             height: 10,
                           ),
                           Text("Show Trend Graph"),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => DoctorsPage()),
+                              );
+                            },
+                            child: Card(
+                              elevation: 10,
+                              child: Container(
+                                color: Theme.of(context).accentColor,
+                                padding: EdgeInsets.all(20),
+                                child: Icon(
+                                  Icons.medical_services,
+                                  color: Color(0xFFBF828A),
+                                  size: 70,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("Show Nearby Doctors"),
                         ],
                       ),
                     ],

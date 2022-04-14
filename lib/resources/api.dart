@@ -93,4 +93,8 @@ class API {
       "time": DateTime.now(),
     });
   }
+
+  static Stream<QuerySnapshot> doctorsList() async* {
+    yield* FirebaseFirestore.instance.collection('doctors').snapshots();
+  }
 }

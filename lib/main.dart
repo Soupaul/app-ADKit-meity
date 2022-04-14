@@ -52,8 +52,8 @@ class _MyAppState extends State<MyApp> {
     if (FirebaseAuth.instance != null) {
       if (FirebaseAuth.instance.currentUser != null) {
         if (!FirebaseAuth.instance.currentUser!.uid.isEmpty)
-          return DoctorsPage();
-        // return HomePage();
+          // return DoctorsPage();
+          return HomePage();
       }
     }
 
