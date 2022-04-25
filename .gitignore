@@ -184,3 +184,6 @@ migrations
 ml_assets
 Files/
 frames/
+Python-3.9.5/
+*.tgz
+*.tar.gz
