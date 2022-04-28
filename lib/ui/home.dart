@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/doctors.dart';
-import 'package:thefirstone/ui/form.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
 

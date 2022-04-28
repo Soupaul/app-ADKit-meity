@@ -3,7 +3,6 @@ import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/personal_details.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 import '../utils/firebase_auth.dart';
-import 'form.dart';
 import 'otp.dart';
 
 class LoginPage extends StatefulWidget {
@@ -186,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                           OtpPage(_controller!.text)),
+                                                OtpPage(_controller!.text)),
                                       );
                                       /*bool res =
                                           await AuthProvider.signInWithEmail(
@@ -204,8 +203,8 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
-                                   OtpPage(_controller!.text)));
-                               // HomePage()));
+                                    OtpPage(_controller!.text)));
+                            // HomePage()));
                           },
                         ),
                       ),
