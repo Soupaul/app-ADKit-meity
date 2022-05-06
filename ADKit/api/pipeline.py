@@ -3,7 +3,7 @@ import pickle as pkl
 class ML_Model:
 
     def __init__(self):
-        self.load_pickle()
+        # self.load_pickle()
         self.bay()
         self.clf()
         self.elc()
@@ -15,8 +15,8 @@ class ML_Model:
         self.palmgbr()
         self.palmlgb()
     
-    def load_pickle(self):
-        self.model = pkl.load(open("api/ml_assets/trained_model.pkl","rb"))
+    # def load_pickle(self):
+    #     self.model = pkl.load(open("api/ml_assets/trained_model.pkl","rb"))
     
     def bay(self):
         self.baymodel = pkl.load(open("api/ml_assets/bay.pkl","rb"))
@@ -33,9 +33,9 @@ class ML_Model:
     def lgb(self):
         self.lgbmodel = pkl.load(open("api/ml_assets/lgb.pkl","rb"))
 
-    def predict(self,feature_list):
-        rObj = self.model.predict(feature_list)
-        return rObj
+    # def predict(self,feature_list):
+    #     rObj = self.model.predict(feature_list)
+    #     return rObj
 
     def predictbay(self,feature_list):
         rObj = self.baymodel.predict(feature_list)
