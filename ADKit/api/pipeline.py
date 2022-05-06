@@ -58,36 +58,36 @@ class ML_Model:
         return rObj
 
     def palmbay(self):
-        self.baymodel = pkl.load(open("api/ml_assets/palm/bay.pkl","rb"))
+        self.palmbaymodel = pkl.load(open("api/ml_assets/palm/bay.pkl","rb"))
 
     def palmclf(self):
-        self.clfmodel = pkl.load(open("api/ml_assets/palm/clf.pkl","rb"))
+        self.palmclfmodel = pkl.load(open("api/ml_assets/palm/clf.pkl","rb"))
 
     def palmelc(self):
-        self.elcmodel = pkl.load(open("api/ml_assets/palm/elc.pkl","rb"))
+        self.palmelcmodel = pkl.load(open("api/ml_assets/palm/elc.pkl","rb"))
 
     def palmgbr(self):
-        self.gbrmodel = pkl.load(open("api/ml_assets/palm/gbr.pkl","rb"))
+        self.palmgbrmodel = pkl.load(open("api/ml_assets/palm/gbr.pkl","rb"))
 
     def palmlgb(self):
-        self.lgbmodel = pkl.load(open("api/ml_assets/palm/lgb.pkl","rb"))
+        self.palmlgbmodel = pkl.load(open("api/ml_assets/palm/lgb.pkl","rb"))
 
     def predictpalmbay(self,feature_list):
-        rObj = self.baymodel.predict(feature_list)
+        rObj = self.palmbaymodel.predict(feature_list)
         return rObj
 
     def predictpalmclf(self,feature_list):
-        rObj = self.clfmodel.predict(feature_list)
+        rObj = self.palmclfmodel.predict(feature_list)
         return rObj
 
     def predictpalmelc(self,feature_list):
-        rObj = self.elcmodel.predict(feature_list)
+        rObj = self.palmelcmodel.predict(feature_list)
         return rObj
 
     def predictpalmgbr(self,feature_list):
-        rObj = self.gbrmodel.predict(feature_list)
+        rObj = self.palmgbrmodel.predict(feature_list)
         return rObj
     
     def predictpalmlgb(self,feature_list):
-        rObj = self.lgbmodel.predict(feature_list)
+        rObj = self.palmlgbmodel.predict(feature_list)
         return rObj
