@@ -765,9 +765,9 @@ def execPalmCode2(count,uid,ts):
     nos=[]
 
     y1 = pandas.read_csv(path + '/csvs/corr_wir_250.csv')
-    y2 = y1.values.tolist()
-    # test_y2 = y1.values.tolist()
-    # y2 =  [v for v in test_y2 if not np.isnan(v) and not np.isinf(v)]
+    # y2 = y1.values.tolist()
+    test_y2 = y1.values.tolist()
+    y2 =  [v for v in test_y2 if not np.isnan(v) and not np.isinf(v)]
     y = [x[0] for x in y2]
     x=np.array(range(0, len(y)))
     z=np.polyfit(x,y,6)
