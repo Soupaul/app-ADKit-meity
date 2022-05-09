@@ -765,16 +765,18 @@ def execPalmCode2(count,uid,ts):
     nos=[]
 
     y1 = pandas.read_csv(path + '/csvs/corr_wir_250.csv')
+    y1 = y1.replace('',0,regex=True)
+    y1 = y1.replace(np.nan,0,regex=True)
     # y2 = y1.values.tolist()
     test_y2 = y1.values.tolist()
     y2 =  [v for v in test_y2 if not np.isnan(v) and not np.isinf(v)]
     y = [x[0] for x in y2]
     x=np.array(range(0, len(y)))
     z=np.polyfit(x,y,6)
-    xp = np.linspace(0,len(y))
+    # xp = np.linspace(0,len(y))
     p = np.poly1d(z)
     ab=p(x)
-    p30 = np.poly1d(np.polyfit(x, y, 30))
+    # p30 = np.poly1d(np.polyfit(x, y, 30))
     # _ = plt.plot(x, y, '.', xp, p(xp), '-')
     #plt.ylim()
     #plt.show()
