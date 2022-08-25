@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   Future _selectAndUploadVideo() async {
     final type = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
-
+    if (type == null) return;
     final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
 
     if (result == null) {
@@ -407,7 +407,7 @@ class _HomePageState extends State<HomePage> {
         content: Text("Error"),
       ));
       setState(() {
-        firstButtonText = "Select Video from Gallery";
+        firstButtonText = "Select video from gallery";
         secondButtonText = "Record a new video";
       });
     } else {
@@ -421,7 +421,9 @@ class _HomePageState extends State<HomePage> {
   Future _recordVideo() async {
     final type = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
-    print(type);
+    print("app_type $type");
+
+    if (type == null) return;
 
     var result = null;
 
@@ -431,81 +433,81 @@ class _HomePageState extends State<HomePage> {
       if (recordedVideo != null && recordedVideo.path != null) {
         print(recordedVideo.path);
         result = recordedVideo;
-      }
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FirestoreForm()),
-      );
-
-      setState(() {
-        appType = type;
-        secondButtonText = 'Uploading video...';
-        _currentVideo = File(result.path);
-      });
-
-      _uploadTask = API.uploadVideo(_currentVideo!);
-      setState(() {});
-
-      if (_uploadTask == null) return;
-
-      final snapshot = await _uploadTask!.whenComplete(() {});
-      final url = await snapshot.ref.getDownloadURL();
-      print("Download Link: $url");
-
-      if (userData!['gender'] == "Female") {
-        await showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text("Pregnancy"),
-            content: Text("Are you currently pregnant?"),
-            actions: [
-              FlatButton(
-                onPressed: () {
-                  setState(() {
-                    isPregnant = true;
-                  });
-                  Navigator.of(context).pop();
-                },
-                color: Color(0xFFBF828A),
-                child: Text(
-                  'YES',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  setState(() {
-                    isPregnant = false;
-                  });
-                  Navigator.of(context).pop();
-                },
-                color: Color(0xFFBF828A),
-                child: Text(
-                  'NO',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FirestoreForm()),
         );
+
+        setState(() {
+          appType = type;
+          secondButtonText = 'Uploading video...';
+          _currentVideo = File(result.path);
+        });
+
+        _uploadTask = API.uploadVideo(_currentVideo!);
+        setState(() {});
+
+        if (_uploadTask == null) return;
+
+        final snapshot = await _uploadTask!.whenComplete(() {});
+        final url = await snapshot.ref.getDownloadURL();
+        print("Download Link: $url");
+
+        if (userData!['gender'] == "Female") {
+          await showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: Text("Pregnancy"),
+              content: Text("Are you currently pregnant?"),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      isPregnant = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  color: Color(0xFFBF828A),
+                  child: Text(
+                    'YES',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      isPregnant = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  color: Color(0xFFBF828A),
+                  child: Text(
+                    'NO',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        setState(() {
+          secondButtonText = 'Processing...';
+          downUrl = url;
+        });
+
+        await _getAPiResponse();
+
+        setState(() {
+          secondButtonText = 'Record a new video';
+        });
       }
-
-      setState(() {
-        secondButtonText = 'Processing...';
-        downUrl = url;
-      });
-
-      await _getAPiResponse();
-
-      setState(() {
-        secondButtonText = 'Record a new video';
-      });
     });
   }
 
