@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/home.dart';
@@ -70,6 +71,8 @@ class _FirestoreFormState extends State<FirestoreForm> {
       }
     }
   }
+
+  BuildContext? _context = null;
 
   Future _stop() async {
     var result = await _flutterTts.stop();
@@ -240,12 +243,8 @@ class _FirestoreFormState extends State<FirestoreForm> {
           FlatButton(
             onPressed: () {
               API.addChatbotResponse(total);
-              Navigator.of(ctx).pop();
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                  (route) => false);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
             child: Text("okay"),
           ),
@@ -410,6 +409,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
   }
 
   Widget build(BuildContext context) {
+    _context = context;
     return SafeArea(
       child: Stack(
         children: [

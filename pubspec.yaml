@@ -47,7 +47,7 @@ dependencies:
   percent_indicator: ^3.0.1
   tuple: ^2.0.0
   flutter_tts: ^3.2.0
-  speech_to_text: ^5.4.3
+  speech_to_text: ^5.6.1
   # speech_recognition: ^0.3.0+1
   avatar_glow: ^2.0.1
   pinput: ^1.2.0

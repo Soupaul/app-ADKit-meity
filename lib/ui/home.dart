@@ -50,13 +50,17 @@ class _HomePageState extends State<HomePage> {
   Future _selectAndUploadVideo() async {
     final type = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
-    print(type);
 
     final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
 
     if (result == null) {
       return;
     }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FirestoreForm()),
+    );
 
     setState(() {
       appType = type;
@@ -67,11 +71,18 @@ class _HomePageState extends State<HomePage> {
     _uploadTask = API.uploadVideo(_currentVideo!);
     setState(() {});
 
-    if (_uploadTask == null) return;
+    if (_uploadTask == null) {
+      print("error......................");
+      return;
+    }
 
     final snapshot = await _uploadTask!.whenComplete(() {});
+
+    print("_uploadTask2");
+
     final url = await snapshot.ref.getDownloadURL();
-    print("Download Link: $url");
+
+    //print("Download Link: $url");
 
     if (userData!['gender'] == "Female") {
       await showDialog(
@@ -118,7 +129,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       firstButtonText = 'Processing...';
-      downUrl = url;
+      downUrl = "url";
     });
 
     await _getAPiResponse();
@@ -389,45 +400,92 @@ class _HomePageState extends State<HomePage> {
     int age = _calcAge(userData!['dob']);
     String gender = userData!['gender'] == "Male" ? "1" : "0";
 
-    double? data =
+    var data =
         await API.processVideo(downUrl!, age.toString(), gender, appType!);
+    if (data == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error"),
+      ));
+      setState(() {
+        firstButtonText = "Select Video from Gallery";
+        secondButtonText = "Record a new video";
+      });
+    } else {
+      API.addResult(data!, appType!);
+      _showGauge(data, age);
 
-    // double? data = await API.dummy();
-
-    API.addResult(data!, appType!);
-    _showGauge(data, age);
-
-    print("API response $data");
+      print("API response $data");
+    }
   }
 
   Future _recordVideo() async {
+    final type = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
+    print(type);
+
+    var result = null;
+
     _imagePicker
         .pickVideo(source: ImageSource.camera)
         .then((XFile? recordedVideo) async {
       if (recordedVideo != null && recordedVideo.path != null) {
         print(recordedVideo.path);
-        // setState(() {
-        //   secondButtonText = 'Video is being saved...';
-        // });
-        final result = await ImageGallerySaver.saveFile(recordedVideo.path);
-        print(result);
-        // setState(() {
-        //   secondButtonText = 'Video saved. Record Another?';
-        // });
+        result = recordedVideo;
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FirestoreForm()),
+      );
+
+      setState(() {
+        appType = type;
+        secondButtonText = 'Uploading video...';
+        _currentVideo = File(result.path);
+      });
+
+      _uploadTask = API.uploadVideo(_currentVideo!);
+      setState(() {});
+
+      if (_uploadTask == null) return;
+
+      final snapshot = await _uploadTask!.whenComplete(() {});
+      final url = await snapshot.ref.getDownloadURL();
+      print("Download Link: $url");
+
+      if (userData!['gender'] == "Female") {
         await showDialog(
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: Text("Video Saved"),
-            content: Text("The video has been saved."),
+            title: Text("Pregnancy"),
+            content: Text("Are you currently pregnant?"),
             actions: [
               FlatButton(
                 onPressed: () {
+                  setState(() {
+                    isPregnant = true;
+                  });
                   Navigator.of(context).pop();
                 },
                 color: Color(0xFFBF828A),
                 child: Text(
-                  'OK',
+                  'YES',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    isPregnant = false;
+                  });
+                  Navigator.of(context).pop();
+                },
+                color: Color(0xFFBF828A),
+                child: Text(
+                  'NO',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -437,6 +495,17 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       }
+
+      setState(() {
+        secondButtonText = 'Processing...';
+        downUrl = url;
+      });
+
+      await _getAPiResponse();
+
+      setState(() {
+        secondButtonText = 'Record a New video';
+      });
     });
   }
 
@@ -631,61 +700,61 @@ class _HomePageState extends State<HomePage> {
                   // Text(hValue)
                 ],
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FirestoreForm()),
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.only(top: height * .80, left: width - 250),
-                  height: 60,
-                  width: 240,
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    color: Color(0xFFBF828A),
-                    child: Container(
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          new Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: Text(
-                              "CHATBOT",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                          FlatButton(
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(20.0)),
-                            splashColor: Colors.white,
-                            color: Colors.white,
-                            child: Icon(
-                              Icons.message,
-                              color: Color(0xFFBF828A),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FirestoreForm()),
-                              );
-                            },
-                          ),
-                          SizedBox(width: 1)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => FirestoreForm()),
+              //     );
+              //   },
+              //   child: Container(
+              //     margin: EdgeInsets.only(top: height * .80, left: width - 250),
+              //     height: 60,
+              //     width: 240,
+              //     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              //     child: Card(
+              //       elevation: 10,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(25.0),
+              //       ),
+              //       color: Color(0xFFBF828A),
+              //       child: Container(
+              //         child: new Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: <Widget>[
+              //             new Padding(
+              //               padding: const EdgeInsets.only(left: 16.0),
+              //               child: Text(
+              //                 "CHATBOT",
+              //                 style: TextStyle(
+              //                     color: Colors.white,
+              //                     fontWeight: FontWeight.w600),
+              //               ),
+              //             ),
+              //             FlatButton(
+              //               shape: new RoundedRectangleBorder(
+              //                   borderRadius: new BorderRadius.circular(20.0)),
+              //               splashColor: Colors.white,
+              //               color: Colors.white,
+              //               child: Icon(
+              //                 Icons.message,
+              //                 color: Color(0xFFBF828A),
+              //               ),
+              //               onPressed: () {
+              //                 Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(
+              //                       builder: (context) => FirestoreForm()),
+              //                 );
+              //               },
+              //             ),
+              //             SizedBox(width: 1)
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

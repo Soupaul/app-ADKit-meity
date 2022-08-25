@@ -15,7 +15,7 @@ class API {
       String filePath, String age, String gender, String type) async {
     var coll = await FirebaseFirestore.instance.collection('API_URL').get();
     String url = type == 'nail' ? coll.docs[0]['url'] : coll.docs[1]['url'];
-    print(url);
+    print(url + " " + filePath + " " + age + " " + gender);
 
     Response response = await http.post(
       Uri.parse(url),
@@ -31,6 +31,9 @@ class API {
     );
 
     if (response.statusCode == 200) {
+      if (response.body.contains("<!DOCTYPE html>")) {
+        return null;
+      }
       var body = jsonDecode(response.body);
       print(body['val'].toStringAsFixed(2));
 
@@ -66,7 +69,6 @@ class API {
           'VideoG' + new DateTime.now().millisecondsSinceEpoch.toString());
       return storagePath.putFile(file);
     } on FirebaseException catch (e) {
-      print(e.message);
       return null;
     }
   }
