@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       firstButtonText = 'Processing...';
-      downUrl = "url";
+      downUrl = url;
     });
 
     await _getAPiResponse();
@@ -504,13 +504,13 @@ class _HomePageState extends State<HomePage> {
       await _getAPiResponse();
 
       setState(() {
-        secondButtonText = 'Record a New video';
+        secondButtonText = 'Record a new video';
       });
     });
   }
 
   String firstButtonText = 'Select Video from Gallery';
-  String secondButtonText = 'Record a New video';
+  String secondButtonText = 'Record a new video';
   double textSize = 22;
 
   @override

@@ -30,6 +30,8 @@ class API {
       }),
     );
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       if (response.body.contains("<!DOCTYPE html>")) {
         return null;
