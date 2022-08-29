@@ -32,9 +32,11 @@ class _HomePageState extends State<HomePage> {
   bool? isPregnant;
   DocumentSnapshot? userData;
   String? appType;
+  late TextEditingController ageControler;
 
   @override
   void initState() {
+    ageControler = new TextEditingController();
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -47,11 +49,77 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  String dropdownValue = 'Female';
+  int selectedRadio = 0;
+  Color color1 = Colors.red;
+  Color color2 = Colors.black;
+  String gender = "0";
+
+  Future<void> showPersonalDetailsDialog() async {
+    await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          int selectedRadio = 0;
+          return AlertDialog(
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // ignore: unnecessary_new
+                    new GestureDetector(
+                      onTap: () {
+                        gender = "1";
+                        setState(() {
+                          color2 = Colors.black;
+                          color1 = Colors.red;
+                        });
+                      },
+                      child: new Text("Male", style: TextStyle(color: color1)),
+                    ),
+                    new GestureDetector(
+                      onTap: () {
+                        gender = "0";
+                        setState(() {
+                          color1 = Colors.black;
+                          color2 = Colors.red;
+                        });
+                      },
+                      child:
+                          new Text("Felmale", style: TextStyle(color: color2)),
+                    ),
+                    TextField(
+                      decoration: new InputDecoration(labelText: "Enter age"),
+                      keyboardType: TextInputType.number,
+                      controller: ageControler,
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'ok',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      color: Colors.blueAccent,
+                      textColor: Colors.white,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        });
+  }
+
   Future _selectAndUploadVideo() async {
     final type = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
     if (type == null) return;
-    final result = await _imagePicker.pickVideo(source: ImageSource.gallery);
+
+    await showPersonalDetailsDialog();
+
+    var result = await _imagePicker.pickVideo(source: ImageSource.gallery);
 
     if (result == null) {
       return;
@@ -78,13 +146,11 @@ class _HomePageState extends State<HomePage> {
 
     final snapshot = await _uploadTask!.whenComplete(() {});
 
-    print("_uploadTask2");
-
     final url = await snapshot.ref.getDownloadURL();
 
     //print("Download Link: $url");
-
-    if (userData!['gender'] == "Female") {
+//userData!['gender'] == "Female"
+    if (gender == "0") {
       await showDialog(
         context: context,
         barrierDismissible: false,
@@ -397,11 +463,12 @@ class _HomePageState extends State<HomePage> {
   Future _getAPiResponse() async {
     if (downUrl == null) return;
 
-    int age = _calcAge(userData!['dob']);
-    String gender = userData!['gender'] == "Male" ? "1" : "0";
+    // int age = _calcAge(userData!['dob']);
+    // String gender = userData!['gender'] == "Male" ? "1" : "0";
 
-    var data =
-        await API.processVideo(downUrl!, age.toString(), gender, appType!);
+    var data = await API.processVideo(
+        downUrl!, ageControler.text.toString(), gender, appType!);
+
     if (data == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error"),
@@ -412,7 +479,7 @@ class _HomePageState extends State<HomePage> {
       });
     } else {
       API.addResult(data!, appType!);
-      _showGauge(data, age);
+      _showGauge(data, int.parse(ageControler.text.toString()));
 
       print("API response $data");
     }
@@ -424,6 +491,8 @@ class _HomePageState extends State<HomePage> {
     print("app_type $type");
 
     if (type == null) return;
+
+    await showPersonalDetailsDialog();
 
     var result = null;
 
@@ -454,7 +523,8 @@ class _HomePageState extends State<HomePage> {
         final url = await snapshot.ref.getDownloadURL();
         print("Download Link: $url");
 
-        if (userData!['gender'] == "Female") {
+        //userData!['gender'] == "Female"
+        if (gender == "0") {
           await showDialog(
             context: context,
             barrierDismissible: false,
