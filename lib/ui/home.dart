@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       child:
-                          new Text("Felmale", style: TextStyle(color: color2)),
+                          new Text("Female", style: TextStyle(color: color2)),
                     ),
                     TextField(
                       decoration: new InputDecoration(labelText: "Enter age"),
