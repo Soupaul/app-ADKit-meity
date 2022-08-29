@@ -8,7 +8,7 @@ from django.conf import settings
 from django.http import JsonResponse, response
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from api.frame import FrameCapture
+from api.frame import FrameCapturePalm, FrameCaptureNail
 from rest_framework import status
 from rest_framework.response import Response
 import json
@@ -54,7 +54,7 @@ def processVideo(request):
         ts = "".join(str(time.time()).split('.'))
         path = settings.STORAGE + '/{}/{}'.format(uid, ts)
         # path = settings.STORAGE + '/{}/16299034544368901'.format(uid)
-        count = FrameCapture(video_url, uid, ts)
+        count = FrameCaptureNail(video_url, uid, ts)
         exeCode(count, uid, ts)
         if (os.path.exists(path + '/csvs/all_feat.csv')):
             X = np.loadtxt(path + '/csvs/all_feat.csv', delimiter=",")
@@ -92,7 +92,7 @@ def processPalmVideo(request):
         path = settings.STORAGE + '/{}/{}'.format(uid, ts)
         # path = settings.STORAGE + '/{}/16428521497839506'.format(uid)
         # print(path)
-        count = FrameCapture(video_url, uid, ts)
+        count = FrameCapturePalm(video_url, uid, ts)
         # print(count)
         # execPalmCode2(count, uid, ts)
         execPalmCode2FPS(count, uid, ts)
