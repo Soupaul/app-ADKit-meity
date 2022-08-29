@@ -12,7 +12,7 @@ from api.frame import FrameCapture
 from rest_framework import status
 from rest_framework.response import Response
 import json
-from api.code import exeCode, execPalmCode2
+from api.code import exeCode, execPalmCode2, execPalmCode2FPS
 import os
 import numpy as np
 import time
@@ -94,9 +94,12 @@ def processPalmVideo(request):
         # print(path)
         count = FrameCapture(video_url, uid, ts)
         # print(count)
-        execPalmCode2(count, uid, ts)
-        if (os.path.exists(path + '/csvs/all_feat_wir.csv')):
-            X = np.loadtxt(path + '/csvs/all_feat_wir.csv', delimiter=",")
+        # execPalmCode2(count, uid, ts)
+        execPalmCode2FPS(count, uid, ts)
+        # if (os.path.exists(path + '/csvs/all_feat_wir.csv')):
+        if (os.path.exists(path + '/csvs/m_all_feat_wir.csv')):
+            # X = np.loadtxt(path + '/csvs/all_feat_wir.csv', delimiter=",")
+            X = np.loadtxt(path + '/csvs/m_all_feat_wir.csv', delimiter=",")
             # print(X.shape)
             gender = int(gender)
             age = int(age)
