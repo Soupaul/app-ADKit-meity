@@ -12,7 +12,7 @@ from api.frame import FrameCapture
 from rest_framework import status
 from rest_framework.response import Response
 import json
-from api.code import exeCode,execPalmCode2
+from api.code import exeCode, execPalmCode2
 import os
 import numpy as np
 import time
@@ -22,6 +22,7 @@ import platform
 from celery import shared_task
 from api.predict import load_data
 from api.predictpalm import palmpredictor
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -40,6 +41,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
 @csrf_exempt
 @shared_task
 def processVideo(request):
@@ -50,17 +52,17 @@ def processVideo(request):
         gender = json_data['GENDER']
         uid = json_data['UID']
         ts = "".join(str(time.time()).split('.'))
-        path = settings.STORAGE + '/{}/{}'.format(uid,ts)
+        path = settings.STORAGE + '/{}/{}'.format(uid, ts)
         # path = settings.STORAGE + '/{}/16299034544368901'.format(uid)
-        count = FrameCapture(video_url,uid,ts)
-        exeCode(count,uid,ts)
-        if(os.path.exists(path + '/csvs/all_feat.csv')):
+        count = FrameCapture(video_url, uid, ts)
+        exeCode(count, uid, ts)
+        if (os.path.exists(path + '/csvs/all_feat.csv')):
             X = np.loadtxt(path + '/csvs/all_feat.csv', delimiter=",")
             # print(X.shape)
             gender = int(gender)
             age = int(age)
-            x = np.array([gender,age])
-            a = np.concatenate((x,X),axis=0)
+            x = np.array([gender, age])
+            a = np.concatenate((x, X), axis=0)
             a.reshape(1, -1)
             # print("a shape")
             # print(a.shape)
@@ -70,11 +72,10 @@ def processVideo(request):
             location = path + '/frames'
             ops = platform.system()
             if ops == 'Linux':
-                subprocess.Popen(['rm','-rf',location])
+                subprocess.Popen(['rm', '-rf', location])
             elif ops == 'Windows':
-                subprocess.Popen(['RMDIR',location,'/S','/Q'],shell=True)
-    return JsonResponse({"val":prediction},safe=False)
-
+                subprocess.Popen(['RMDIR', location, '/S', '/Q'], shell=True)
+    return JsonResponse({"val": prediction}, safe=False)
 
 
 @csrf_exempt
@@ -88,34 +89,36 @@ def processPalmVideo(request):
         gender = json_data['GENDER']
         uid = json_data['UID']
         ts = "".join(str(time.time()).split('.'))
-        path = settings.STORAGE + '/{}/{}'.format(uid,ts)
+        path = settings.STORAGE + '/{}/{}'.format(uid, ts)
         # path = settings.STORAGE + '/{}/16428521497839506'.format(uid)
         # print(path)
-        count = FrameCapture(video_url,uid,ts)
-        #print(count)
-        execPalmCode2(count,uid,ts)
-        if(os.path.exists(path + '/csvs/all_feat_wir.csv')):
+        count = FrameCapture(video_url, uid, ts)
+        # print(count)
+        execPalmCode2(count, uid, ts)
+        if (os.path.exists(path + '/csvs/all_feat_wir.csv')):
             X = np.loadtxt(path + '/csvs/all_feat_wir.csv', delimiter=",")
-            #print(X.shape)
+            # print(X.shape)
             gender = int(gender)
             age = int(age)
-            x = np.array([gender,age])
-            a = np.concatenate((x,X),axis=0)
+            x = np.array([gender, age])
+            a = np.concatenate((x, X), axis=0)
             a.reshape(1, -1)
             # print("a shape")
             # print(a.shape)
             palmprediction = palmpredictor(a)
+            print(palmprediction)
             # prediction = settings.MODEL_OBJ.predict(a.reshape(1, -1))
             # print(prediction)
             location = path + '/frames'
             ops = platform.system()
             if ops == 'Linux':
-                subprocess.Popen(['rm','-rf',location])
+                subprocess.Popen(['rm', '-rf', location])
             elif ops == 'Windows':
-                subprocess.Popen(['RMDIR',location,'/S','/Q'],shell=True)
-    return JsonResponse({"val":palmprediction},safe=False)
+                subprocess.Popen(['RMDIR', location, '/S', '/Q'], shell=True)
+    return JsonResponse({"val": palmprediction}, safe=False)
+
 
 @csrf_exempt
 def isServerUp(request):
     if request.method == "GET":
-        return JsonResponse({"state":"active"},safe=False)
+        return JsonResponse({"state": "active"}, safe=False)
