@@ -233,24 +233,25 @@ class _FirestoreFormState extends State<FirestoreForm> {
       }
     });
 
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text("Value is"),
-        content: Text(total.toStringAsFixed(3)),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              API.addChatbotResponse(total);
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: Text("okay"),
-          ),
-        ],
-      ),
-    );
+    API.addChatbotResponse(total);
+    Navigator.of(context).pop();
+
+    // showDialog(
+    //   barrierDismissible: false,
+    //   context: context,
+    //   builder: (ctx) => AlertDialog(
+    //     title: Text("Value is"),
+    //     content: Text(total.toStringAsFixed(3)),
+    //     actions: <Widget>[
+    //       FlatButton(
+    //         onPressed: () {
+    //           Navigator.of(context).pop();
+    //         },
+    //         child: Text("okay"),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   int v = 0;
@@ -434,28 +435,28 @@ class _FirestoreFormState extends State<FirestoreForm> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            !isAtStart
-                                ? RaisedButton(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15.0, vertical: 15.0),
-                                    color: Color(0xFFBF828A),
-                                    child: Text(
-                                      "Previous",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      goPre();
-                                    },
-                                  )
-                                : SizedBox(
-                                    width: 50,
-                                  ),
+                            RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 15.0),
+                              color: Color(0xFFBF828A),
+                              child: Text(
+                                isAtStart ? "No symptom" : "Previous",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (isAtStart) {
+                                  Navigator.pop(context);
+                                } else {
+                                  goPre();
+                                }
+                              },
+                            ),
                             RaisedButton(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),

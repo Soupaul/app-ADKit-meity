@@ -49,11 +49,56 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  String dropdownValue = 'Female';
   int selectedRadio = 0;
   Color color1 = Colors.red;
   Color color2 = Colors.black;
-  String gender = "0";
+  String gender = "1";
+
+  showPregnancyDialog() async {
+    //userData!['gender'] == "Female"
+    if (gender == "0") {
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: Text("Pregnancy"),
+          content: Text("Are you currently pregnant?"),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                setState(() {
+                  isPregnant = true;
+                });
+                Navigator.of(context).pop();
+              },
+              color: Color(0xFFBF828A),
+              child: Text(
+                'YES',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                setState(() {
+                  isPregnant = false;
+                });
+                Navigator.of(context).pop();
+              },
+              color: Color(0xFFBF828A),
+              child: Text(
+                'NO',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+  }
 
   Future<void> showPersonalDetailsDialog() async {
     await showDialog<void>(
@@ -118,6 +163,7 @@ class _HomePageState extends State<HomePage> {
     if (type == null) return;
 
     await showPersonalDetailsDialog();
+    await showPregnancyDialog();
 
     var result = await _imagePicker.pickVideo(source: ImageSource.gallery);
 
@@ -129,6 +175,8 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(builder: (context) => FirestoreForm()),
     );
+
+    //print("Download Link: $url");
 
     setState(() {
       appType = type;
@@ -147,51 +195,6 @@ class _HomePageState extends State<HomePage> {
     final snapshot = await _uploadTask!.whenComplete(() {});
 
     final url = await snapshot.ref.getDownloadURL();
-
-    //print("Download Link: $url");
-//userData!['gender'] == "Female"
-    if (gender == "0") {
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: Text("Pregnancy"),
-          content: Text("Are you currently pregnant?"),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                setState(() {
-                  isPregnant = true;
-                });
-                Navigator.of(context).pop();
-              },
-              color: Color(0xFFBF828A),
-              child: Text(
-                'YES',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            FlatButton(
-              onPressed: () {
-                setState(() {
-                  isPregnant = false;
-                });
-                Navigator.of(context).pop();
-              },
-              color: Color(0xFFBF828A),
-              child: Text(
-                'NO',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
 
     setState(() {
       firstButtonText = 'Processing...';
@@ -493,6 +496,7 @@ class _HomePageState extends State<HomePage> {
     if (type == null) return;
 
     await showPersonalDetailsDialog();
+    await showPregnancyDialog();
 
     var result = null;
 
@@ -502,11 +506,14 @@ class _HomePageState extends State<HomePage> {
       if (recordedVideo != null && recordedVideo.path != null) {
         print(recordedVideo.path);
         result = recordedVideo;
+        await ImageGallerySaver.saveFile(recordedVideo.path);
 
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FirestoreForm()),
         );
+
+        //userData!['gender'] == "Female"
 
         setState(() {
           appType = type;
@@ -522,50 +529,6 @@ class _HomePageState extends State<HomePage> {
         final snapshot = await _uploadTask!.whenComplete(() {});
         final url = await snapshot.ref.getDownloadURL();
         print("Download Link: $url");
-
-        //userData!['gender'] == "Female"
-        if (gender == "0") {
-          await showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AlertDialog(
-              title: Text("Pregnancy"),
-              content: Text("Are you currently pregnant?"),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      isPregnant = true;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  color: Color(0xFFBF828A),
-                  child: Text(
-                    'YES',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      isPregnant = false;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  color: Color(0xFFBF828A),
-                  child: Text(
-                    'NO',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        }
 
         setState(() {
           secondButtonText = 'Processing...';
