@@ -16,6 +16,7 @@ class ML_Model:
         self.palmelc()
         self.palmgbr()
         self.palmlgb()
+        self.palmrf()
 
     # def load_pickle(self):
     #     self.model = pkl.load(open("api/ml_assets/trained_model.pkl","rb"))
@@ -94,6 +95,10 @@ class ML_Model:
         self.palmlgbmodel = pkl.load(
             open(settings.ML_FILES + "/palm2FPS/lgb.pkl", "rb"))
 
+    def palmrf(self):
+        self.palmrfmodel = pkl.load(
+            open(settings.ML_FILES + "/palm2FPS_rf/rf.pkl", "rb"))
+
     def predictpalmbay(self, feature_list):
         rObj = self.palmbaymodel.predict(feature_list)
         return rObj
@@ -112,4 +117,8 @@ class ML_Model:
 
     def predictpalmlgb(self, feature_list):
         rObj = self.palmlgbmodel.predict(feature_list)
+        return rObj
+
+    def predictpalmrf(self, feature_list):
+        rObj = self.palmrfmodel.predict(feature_list)
         return rObj
