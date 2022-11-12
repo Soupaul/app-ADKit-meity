@@ -109,6 +109,8 @@ class _FirestoreFormState extends State<FirestoreForm> {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("profiles")
+        .doc(API.current_profile_id)
         .get()
         .then((value) {
       print(value['gender']);

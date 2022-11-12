@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 
 import 'home.dart';
@@ -31,7 +32,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({
+        .collection("profiles")
+        .add({
       'first_name': fn,
       'second_name': sn,
       'dob': dob,
@@ -55,8 +57,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   void after() {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Data saved')));
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Profiles()),
+        // value.exists ? HomePage() : PersonalDetails()),
+        (route) => false);
   }
 
   @override

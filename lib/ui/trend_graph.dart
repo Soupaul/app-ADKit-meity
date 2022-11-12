@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../resources/api.dart';
+
 class TrendGraph extends StatefulWidget {
   @override
   _TrendGraphState createState() => _TrendGraphState();
@@ -17,15 +19,16 @@ class _TrendGraphState extends State<TrendGraph> {
 
   @override
   void initState() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        userData = value;
-      });
-    });
+    // FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .get()
+    //     .then((value) {
+    //   setState(() {
+    //     userData = value;
+    //   });
+    // });
+    userData = API.profileData;
     super.initState();
   }
 
@@ -114,6 +117,8 @@ class _TrendGraphState extends State<TrendGraph> {
                     stream: FirebaseFirestore.instance
                         .collection('users')
                         .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .collection("profiles")
+                        .doc(API.current_profile_id)
                         .collection('results')
                         .orderBy('time')
                         .snapshots(),

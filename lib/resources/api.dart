@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class API {
+  static String current_profile_id = "";
+  static DocumentSnapshot? profileData;
   // static String _baseURL = 'https://c72173ad250f.ngrok.io/api';
   static Reference _firebaseStorageRef = FirebaseStorage.instance.ref();
 
@@ -79,6 +81,8 @@ class API {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("profiles")
+        .doc(API.current_profile_id)
         .collection('results')
         .add({
       "hb_val": hb,
@@ -91,6 +95,8 @@ class API {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("profiles")
+        .doc(API.current_profile_id)
         .collection('chatbot_responses')
         .add({
       "risk-score": val,

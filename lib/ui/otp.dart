@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/personal_details.dart';
+import 'package:thefirstone/ui/profiles.dart';
 
 class OtpPage extends StatefulWidget {
   final String phone;
@@ -93,9 +94,8 @@ class _OtpPageState extends State<OtpPage> {
         .then((value) => {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          value.exists ? HomePage() : PersonalDetails()),
+                  MaterialPageRoute(builder: (context) => Profiles()),
+                  // value.exists ? HomePage() : PersonalDetails()),
                   (route) => false)
             });
   }

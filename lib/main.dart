@@ -9,6 +9,7 @@ import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/doctors.dart';
 import 'package:thefirstone/ui/home.dart';
+import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/ui/select_language.dart';
 import 'ui/home.dart';
 import 'ui/home.dart';
@@ -53,7 +54,7 @@ class _MyAppState extends State<MyApp> {
       if (FirebaseAuth.instance.currentUser != null) {
         if (!FirebaseAuth.instance.currentUser!.uid.isEmpty)
           // return DoctorsPage();
-          return HomePage();
+          return Profiles();
       }
     }
 

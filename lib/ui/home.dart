@@ -13,8 +13,9 @@ import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/doctors.dart';
 import 'package:thefirstone/ui/login.dart';
+import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
-
+import 'package:thefirstone/ui/profiles.dart';
 import 'firestore_form.dart';
 // import '../utils/firebase_auth.dart';
 
@@ -33,26 +34,29 @@ class _HomePageState extends State<HomePage> {
   DocumentSnapshot? userData;
   String? appType;
   late TextEditingController ageControler;
+  String gender = "1";
 
   @override
   void initState() {
     ageControler = new TextEditingController();
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        userData = value;
-      });
-    });
+    // FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .get()
+    //     .then((value) {
+    //   setState(() {
+    //     userData = value;
+
+    //   });
+    // });
+    userData = API.profileData;
+    gender = userData!['gender'] == "Male" ? "1" : "0";
     super.initState();
   }
 
   int selectedRadio = 0;
   Color color1 = Colors.red;
   Color color2 = Colors.black;
-  String gender = "1";
 
   showPregnancyDialog() async {
     //userData!['gender'] == "Female"
@@ -162,7 +166,7 @@ class _HomePageState extends State<HomePage> {
         .push(MaterialPageRoute(builder: (context) => NailOrPalm()));
     if (type == null) return;
 
-    await showPersonalDetailsDialog();
+    // await showPersonalDetailsDialog();
     await showPregnancyDialog();
 
     var result = await _imagePicker.pickVideo(source: ImageSource.gallery);
@@ -466,11 +470,10 @@ class _HomePageState extends State<HomePage> {
   Future _getAPiResponse() async {
     if (downUrl == null) return;
 
-    // int age = _calcAge(userData!['dob']);
-    // String gender = userData!['gender'] == "Male" ? "1" : "0";
+    int age = _calcAge(userData!['dob']);
 
-    var data = await API.processVideo(
-        downUrl!, ageControler.text.toString(), gender, appType!);
+    var data =
+        await API.processVideo(downUrl!, age.toString(), gender, appType!);
 
     if (data == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -482,7 +485,7 @@ class _HomePageState extends State<HomePage> {
       });
     } else {
       API.addResult(data!, appType!);
-      _showGauge(data, int.parse(ageControler.text.toString()));
+      _showGauge(data, age);
 
       print("API response $data");
     }
@@ -564,7 +567,8 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        child: Text("Hi,\nWelcome to Adkit",
+                        child: Text(
+                            "Hi, ${userData!['first_name']}\nWelcome to Adkit",
                             style: TextStyle(
                               fontSize: textSize,
                               color: Colors.black,
