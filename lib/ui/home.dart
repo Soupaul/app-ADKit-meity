@@ -68,14 +68,17 @@ class _HomePageState extends State<HomePage> {
           title: Text("Pregnancy"),
           content: Text("Are you currently pregnant?"),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () {
                 setState(() {
                   isPregnant = true;
                 });
                 Navigator.of(context).pop();
               },
-              color: Color(0xFFBF828A),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(const Color(0xFFBF828A)),
+              ),
               child: Text(
                 'YES',
                 style: TextStyle(
@@ -83,14 +86,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 setState(() {
                   isPregnant = false;
                 });
                 Navigator.of(context).pop();
               },
-              color: Color(0xFFBF828A),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(const Color(0xFFBF828A)),
+              ),
               child: Text(
                 'NO',
                 style: TextStyle(
@@ -142,13 +148,20 @@ class _HomePageState extends State<HomePage> {
                       keyboardType: TextInputType.number,
                       controller: ageControler,
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text(
                         'ok',
                         style: TextStyle(fontSize: 20.0),
                       ),
-                      color: Colors.blueAccent,
-                      textColor: Colors.white,
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueAccent),
+                        textStyle: MaterialStateProperty.all(
+                          const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -417,11 +430,15 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                color: Color(0xFFBF828A),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFFBF828A),
+                  ),
+                ),
                 child: Text(
                   'OK',
                   style: TextStyle(
@@ -770,7 +787,7 @@ class _HomePageState extends State<HomePage> {
               //                     fontWeight: FontWeight.w600),
               //               ),
               //             ),
-              //             FlatButton(
+              //             TextButton(
               //               shape: new RoundedRectangleBorder(
               //                   borderRadius: new BorderRadius.circular(20.0)),
               //               splashColor: Colors.white,

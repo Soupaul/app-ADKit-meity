@@ -162,19 +162,27 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     //     ),
                     //   ),
                     // ),
-                    FlatButton(
-                      minWidth: 0,
+                    TextButton(
                       onPressed: () => _selectDate(context),
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.black,
-                          width: 1.0,
-                          style: BorderStyle.solid,
+                      style: ButtonStyle(
+                        // minWidth: 0,
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            side: const BorderSide(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
+                        backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).accentColor,
+                        ),
+                        overlayColor: MaterialStateProperty.all(
+                          Theme.of(context).accentColor,
+                        ),
                       ),
-                      color: Theme.of(context).accentColor,
-                      splashColor: Theme.of(context).accentColor,
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Icon(
@@ -225,40 +233,57 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               Container(
                 margin: const EdgeInsets.only(top: 20.0),
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                child: new Row(
+                child: Row(
                   children: <Widget>[
-                    new Expanded(
-                      child: FlatButton(
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
-                        splashColor: Color(0xFFBF828A),
-                        color: Color(0xFFBF828A),
-                        child: new Row(
+                    Expanded(
+                      child: TextButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                          ),
+                          overlayColor: MaterialStateProperty.all(
+                            const Color(0xFFBF828A),
+                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color(0xFFBF828A),
+                          ),
+                        ),
+                        child: Row(
                           children: <Widget>[
-                            new Padding(
+                            Padding(
                               padding: const EdgeInsets.only(left: 20.0),
                               child: Text(
                                 "SUBMIT",
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
-                            new Expanded(
+                            Expanded(
                               child: Container(),
                             ),
-                            new Transform.translate(
+                            Transform.translate(
                               offset: Offset(15.0, 0.0),
-                              child: new Container(
+                              child: Container(
                                 padding: const EdgeInsets.only(
                                   top: 5.0,
                                   bottom: 5.0,
                                   right: 10.0,
                                 ),
-                                child: FlatButton(
-                                    shape: new RoundedRectangleBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(28.0)),
-                                    splashColor: Colors.white,
-                                    color: Colors.white,
+                                child: TextButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(28.0)),
+                                      ),
+                                      overlayColor: MaterialStateProperty.all(
+                                        Colors.white,
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        Colors.white,
+                                      ),
+                                    ),
                                     child: Icon(
                                       Icons.arrow_forward,
                                       color: Color(0xFFBF828A),

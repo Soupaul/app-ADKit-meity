@@ -89,40 +89,56 @@ class _SelectLanState extends State<SelectLan> {
               Container(
                 margin: const EdgeInsets.only(top: 20.0),
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                child: new Row(
+                child: Row(
                   children: <Widget>[
-                    new Expanded(
-                      child: FlatButton(
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
-                        splashColor: Color(0xFFBF828A),
-                        color: Color(0xFFBF828A),
-                        child: new Row(
+                    Expanded(
+                      child: TextButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                          ),
+                          overlayColor: MaterialStateProperty.all(
+                            const Color(0xFFBF828A),
+                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color(0xFFBF828A),
+                          ),
+                        ),
+                        child: Row(
                           children: <Widget>[
-                            new Padding(
+                            Padding(
                               padding: const EdgeInsets.only(left: 20.0),
                               child: Text(
                                 "GO TO LOGIN PAGE",
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
-                            new Expanded(
+                            Expanded(
                               child: Container(),
                             ),
-                            new Transform.translate(
+                            Transform.translate(
                               offset: Offset(15.0, 0.0),
-                              child: new Container(
+                              child: Container(
                                 padding: const EdgeInsets.only(
                                   top: 5.0,
                                   bottom: 5.0,
                                   right: 10.0,
                                 ),
-                                child: FlatButton(
-                                  shape: new RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(28.0)),
-                                  splashColor: Colors.white,
-                                  color: Colors.white,
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(28.0)),
+                                    ),
+                                    overlayColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                  ),
                                   child: Icon(
                                     Icons.arrow_forward,
                                     color: Color(0xFFBF828A),

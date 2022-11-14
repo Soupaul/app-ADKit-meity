@@ -129,12 +129,20 @@ class _ProfilesState extends State<Profiles> {
                   )),
         Padding(
           padding: EdgeInsets.all(8),
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
+          child: ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              ),
+              backgroundColor: MaterialStateProperty.all(
+                const Color(0xFFBF828A),
+              ),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-            color: Color(0xFFBF828A),
             child: Text(
               "Add new profile",
               style: TextStyle(

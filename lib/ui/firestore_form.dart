@@ -437,16 +437,24 @@ class _FirestoreFormState extends State<FirestoreForm> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 15.0),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFBF828A),
+                                ),
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 15.0),
-                              color: Color(0xFFBF828A),
                               child: Text(
                                 isAtStart ? "No symptom" : "Previous",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
                                 ),
@@ -459,16 +467,24 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                 }
                               },
                             ),
-                            RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 15.0),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFBF828A),
+                                ),
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 15.0),
-                              color: Color(0xFFBF828A),
                               child: Text(
                                 !isEnded ? "Next" : "Finish",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
                                 ),
