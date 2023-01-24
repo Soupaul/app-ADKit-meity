@@ -1,0 +1,131 @@
+{
+    "language": "English",
+    "@language":{
+        "description": "The current language"
+    },
+    "hi": "Hi {username}",
+    "@hi":{
+        "description": "A greeting",
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
+    "welcome": "Welcome to ADKit",
+    "@welcome": {
+        "description": "A welcome message"
+    },
+    "selectVideo": "Select video from Gallery",
+    "@selectVideo": {
+        "description": "Message to select video"
+    },
+    "recordVideo": "Record new video",
+    "@recordVideo": {
+        "description": "Message to record video"
+    },
+    "showTrend": "Show Trend Graph",
+    "@showTrend": {
+        "description": "Message to show trend graph"
+    },
+    "showDoctors": "Show nearby Doctors",
+    "@showDoctors": {
+        "description": "Message to show nearby doctors"
+    },
+    "trendGraph": "Trend Graph",
+    "@trendGraph": {
+        "description": "Screen Title"
+    },
+    "nearbyDoctors": "Nearby Doctors",
+    "@nearbyDoctors": {
+        "description": "Screen Title"
+    },
+    "haemoglobin": "Haemoglobin",
+    "@haemoglobin": {
+        "description": "A word"
+    },
+    "month": "Month",
+    "@month": {
+        "description": "A word"
+    },
+    "appType": "Choose App Type",
+    "@appType": {
+        "description": "Screen Title"
+    },
+    "appTypeQ": "Which app type do you want to use?",
+    "@appTypeQ": {
+        "description": "A question regarding app type"
+    },
+    "nail": "Nail",
+    "@nail": {
+        "description": "A word"
+    },
+    "palm": "Palm",
+    "@palm": {
+        "description": "A word"
+    },
+    "firstName": "First Name",
+    "@firstName": {
+        "description": "A label text"
+    },
+    "lastName": "Last Name",
+    "@lastName": {
+        "description": "A label text"
+    },
+    "dob": "Date of Birth",
+    "@dob": {
+        "description": "A word"
+    },
+    "dobSelect": "Select your Date of Birth",
+    "@dobSelect": {
+        "description": "Date of Birth selection message"
+    },
+    "gender": "Gender",
+    "@gender": {
+        "description": "A word"
+    },
+    "genderSelect": "Select your Gender",
+    "@genderSelect": {
+        "description": "Gender selection message"
+    },
+    "male": "Male",
+    "@male": {
+        "description": "A word"
+    },
+    "female": "Female",
+    "@female": {
+        "description": "A word"
+    },
+    "others": "Others",
+    "@others": {
+        "description": "A word"
+    },
+    "submit": "Submit",
+    "@submit": {
+        "description": "Button text"
+    },
+    "profiles": "Profiles",
+    "@profiles": {
+        "description": "Screen Title"
+    },
+    "addProfile": "Add new profile",
+    "@addProfile": {
+        "description": "Button text"
+    },
+    "login": "LOGIN",
+    "@login": {
+        "description": "Button text"
+    },
+    "phoneNumber": "Phone Number",
+    "@phoneNumber": {
+        "description": "A label text"
+    },
+    "otpVerification": "OTP Verification",
+    "@otpVerification": {
+        "description": "Screen Title"
+    },
+    "verify": "Verify",
+    "@verify": {
+        "description": "A word"
+    }
+}

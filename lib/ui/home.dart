@@ -17,6 +17,7 @@ import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
 import 'package:thefirstone/ui/profiles.dart';
 import 'firestore_form.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // import '../utils/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -439,7 +440,7 @@ class _HomePageState extends State<HomePage> {
                     const Color(0xFFBF828A),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'OK',
                   style: TextStyle(
                     color: Colors.white,
@@ -453,22 +454,22 @@ class _HomePageState extends State<HomePage> {
 
   Widget _advise(String type) {
     if (type == 'Severely Anaemic') {
-      return Text(
+      return const Text(
         "1. Consult a Doctor to treat the deficiency as soon as possible \n3. Iron supplements should be taken by mouth.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
         style: TextStyle(fontSize: 14),
       );
     } else if (type == 'Moderately Anaemic') {
-      return Text(
+      return const Text(
         "1. Sleep more at night and take naps during the day. \n3. Eat iron-rich foods(chicken, leafy vegetables and beans)\n3. Plan your day to include rest periods.",
         style: TextStyle(fontSize: 14),
       );
     } else if (type == "Mildly Anaemic") {
-      return Text(
+      return const Text(
         "1. Take Dried fruit, such as raisins and apricots. \n3. Sleep more at night and take naps during the day.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
         style: TextStyle(fontSize: 14),
       );
     } else {
-      return Text(
+      return const Text(
         "You are safe. Keep up the good work.",
         style: TextStyle(fontSize: 14),
       );
@@ -493,7 +494,7 @@ class _HomePageState extends State<HomePage> {
         await API.processVideo(downUrl!, age.toString(), gender, appType!);
 
     if (data == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error"),
       ));
       setState(() {
@@ -501,7 +502,7 @@ class _HomePageState extends State<HomePage> {
         secondButtonText = "Record a new video";
       });
     } else {
-      API.addResult(data!, appType!);
+      API.addResult(data, appType!);
       _showGauge(data, age);
 
       print("API response $data");
@@ -564,12 +565,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  String firstButtonText = 'Select Video from Gallery';
-  String secondButtonText = 'Record a new video';
+  late String firstButtonText;
+  late String secondButtonText;
   double textSize = 22;
 
   @override
   Widget build(BuildContext context) {
+    firstButtonText = AppLocalizations.of(context)!.selectVideo;
+    secondButtonText = AppLocalizations.of(context)!.recordVideo;
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -585,7 +588,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Container(
                         child: Text(
-                            "Hi, ${userData!['first_name']}\nWelcome to Adkit",
+                            "${AppLocalizations.of(context)!.hi(userData!['first_name'])},\n${AppLocalizations.of(context)!.welcome}",
                             style: TextStyle(
                               fontSize: textSize,
                               color: Colors.black,
@@ -710,7 +713,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text("Show Trend Graph"),
+                          Text(AppLocalizations.of(context)!.showTrend),
                         ],
                       ),
                       Column(
@@ -738,7 +741,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text("Show Nearby Doctors"),
+                          Text(AppLocalizations.of(context)!.showDoctors),
                         ],
                       ),
                     ],

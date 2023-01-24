@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../resources/api.dart';
 
@@ -88,7 +89,7 @@ class _TrendGraphState extends State<TrendGraph> {
                     width: 20,
                   ),
                   Text(
-                    "Trend Graph",
+                    AppLocalizations.of(context)!.trendGraph,
                     style: TextStyle(
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold,
@@ -148,12 +149,12 @@ class _TrendGraphState extends State<TrendGraph> {
         show: true,
         leftTitle: AxisTitle(
           showTitle: true,
-          titleText: 'Haemoglobin (gm/dl)',
+          titleText: '${AppLocalizations.of(context)!.haemoglobin} (gm/dl)',
           textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
         ),
         bottomTitle: AxisTitle(
           showTitle: true,
-          titleText: 'Month',
+          titleText: AppLocalizations.of(context)!.month,
           textStyle: TextStyle(fontSize: 16.0, color: Colors.black),
         ),
         // topTitle: AxisTitle(

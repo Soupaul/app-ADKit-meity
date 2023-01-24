@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'home.dart';
 
@@ -17,7 +18,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   TextEditingController? _secondnameController;
   // TextEditingController? _ageController;
   DateTime? _selectedDate;
-  String dropdownValue = 'Male';
+  late List<Map<String, String>> genderList;
+  late String dropdownValue;
 
   @override
   void initState() {
@@ -29,6 +31,14 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   }
 
   void createRecord(String fn, String sn, String dob) async {
+    String genderVal = "";
+
+    for (var mp in genderList) {
+      if (mp['key'] == dropdownValue) {
+        genderVal = mp['value']!;
+      }
+    }
+
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -37,7 +47,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
       'first_name': fn,
       'second_name': sn,
       'dob': dob,
-      'gender': dropdownValue
+      'gender': genderVal
     }).then((value) => {after()});
   }
 
@@ -66,6 +76,21 @@ class _PersonalDetailsState extends State<PersonalDetails> {
 
   @override
   Widget build(BuildContext context) {
+    genderList = [
+      <String, String>{
+        "key": AppLocalizations.of(context)!.male,
+        "value": "Male"
+      },
+      <String, String>{
+        "key": AppLocalizations.of(context)!.female,
+        "value": "Female"
+      },
+      <String, String>{
+        "key": AppLocalizations.of(context)!.others,
+        "value": "Others"
+      }
+    ];
+    dropdownValue = AppLocalizations.of(context)!.male;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -100,7 +125,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     filled: true,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                    labelText: 'First name',
+                    labelText: AppLocalizations.of(context)!.firstName,
                     labelStyle: TextStyle(fontSize: 16.0, color: Colors.black),
                     prefixIcon: Icon(
                       Icons.person,
@@ -121,7 +146,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     filled: true,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                    labelText: 'Last name',
+                    labelText: AppLocalizations.of(context)!.lastName,
                     labelStyle: TextStyle(fontSize: 16.0, color: Colors.black),
                     prefixIcon: Icon(
                       Icons.person,
@@ -137,7 +162,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(_selectedDate == null
-                        ? "Select your Date of Birth"
+                        ? AppLocalizations.of(context)!.dobSelect
                         : "${_selectedDate!.toLocal()}".split(' ')[0]),
                     // Expanded(
                     //   child: TextField(
@@ -201,7 +226,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("Select your gender"),
+                    Text(AppLocalizations.of(context)!.genderSelect),
                     DropdownButton<String>(
                       value: dropdownValue,
                       icon: const Icon(Icons.arrow_downward),
@@ -219,11 +244,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                           dropdownValue = newValue!;
                         });
                       },
-                      items: <String>['Male', 'Female', 'Others']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: genderList.map<DropdownMenuItem<String>>(
+                          (Map<String, String> mp) {
                         return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                          value: mp['key'],
+                          child: Text(mp['key']!),
                         );
                       }).toList(),
                     ),
@@ -254,7 +279,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             Padding(
                               padding: const EdgeInsets.only(left: 20.0),
                               child: Text(
-                                "SUBMIT",
+                                AppLocalizations.of(context)!.submit,
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NailOrPalm extends StatefulWidget {
   const NailOrPalm({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _NailOrPalmState extends State<NailOrPalm> {
         child: Column(
           children: [
             Container(
-              child: Text("Choose App Type",
+              child: Text(AppLocalizations.of(context)!.appType,
                   style: TextStyle(
                     fontSize: 22,
                     color: Colors.black,
@@ -33,7 +34,7 @@ class _NailOrPalmState extends State<NailOrPalm> {
                   height: height * 0.15,
                 ),
                 Container(
-                  child: Text("Which app type do you want to use?",
+                  child: Text(AppLocalizations.of(context)!.appTypeQ,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
@@ -69,7 +70,7 @@ class _NailOrPalmState extends State<NailOrPalm> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text("Nail",
+                        Text(AppLocalizations.of(context)!.nail,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,
@@ -97,7 +98,7 @@ class _NailOrPalmState extends State<NailOrPalm> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text("Palm",
+                        Text(AppLocalizations.of(context)!.palm,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,

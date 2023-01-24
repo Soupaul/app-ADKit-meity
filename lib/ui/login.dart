@@ -4,6 +4,7 @@ import 'package:thefirstone/ui/personal_details.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 import '../utils/firebase_auth.dart';
 import 'otp.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 70.0),
                   child: Text(
-                    "Login",
+                    "",
                     style: TextStyle(
                       color: Color(0xFFBF828A),
                       fontSize: 18.0,
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       border: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(20.0))),
-                      labelText: 'Phone Number',
+                      labelText: AppLocalizations.of(context)!.phoneNumber,
                       labelStyle:
                           TextStyle(fontSize: 16.0, color: Colors.black),
                       prefixIcon: Icon(
@@ -164,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: Text(
-                                  "LOGIN",
+                                  AppLocalizations.of(context)!.login,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),

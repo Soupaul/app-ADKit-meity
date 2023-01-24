@@ -6,6 +6,7 @@ import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/personal_details.dart';
 import 'package:thefirstone/ui/profiles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OtpPage extends StatefulWidget {
   final String phone;
@@ -34,7 +35,7 @@ class _OtpPageState extends State<OtpPage> {
         key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('OTP Verification Page'),
+          title: Text(AppLocalizations.of(context)!.otpVerification),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +43,7 @@ class _OtpPageState extends State<OtpPage> {
             Container(
               child: Center(
                 child: Text(
-                  'Verify +91-${widget.phone}',
+                  '${AppLocalizations.of(context)!.verify} +91-${widget.phone}',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
               ),

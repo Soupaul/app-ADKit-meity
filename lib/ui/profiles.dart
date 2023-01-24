@@ -7,6 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:thefirstone/ui/home.dart';
 import 'package:thefirstone/ui/personal_details.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../resources/api.dart';
 
@@ -20,6 +21,16 @@ class Profiles extends StatefulWidget {
 class _ProfilesState extends State<Profiles> {
   List list = [];
   bool isLoaded = false;
+  late List<Map<String, String>> genderList;
+
+  String getGender(String val) {
+    for (var item in genderList) {
+      if (item['value'] == val) {
+        return item['key']!;
+      }
+    }
+    return "";
+  }
 
   Future _fetchList() async {
     FirebaseFirestore.instance
@@ -49,7 +60,7 @@ class _ProfilesState extends State<Profiles> {
         Padding(
           padding: EdgeInsets.all(10),
           child: Text(
-            "Profiles",
+            AppLocalizations.of(context)!.profiles,
             style: TextStyle(
               // color: Color(0xFFBF828A),
               fontSize: 28.0,
@@ -88,11 +99,11 @@ class _ProfilesState extends State<Profiles> {
                               style: TextStyle(fontSize: 16),
                             ),
                             Text(
-                              "${'Gender : '} ${list[index]['gender']}",
+                              "${AppLocalizations.of(context)!.gender}: ${getGender(list[index]['gender'])}",
                               style: TextStyle(fontSize: 16),
                             ),
                             Text(
-                              "${'DOB : '} ${list[index]['dob']}",
+                              "${AppLocalizations.of(context)!.dob}: ${list[index]['dob']}",
                               style: TextStyle(fontSize: 16),
                             ),
                           ]),
@@ -113,6 +124,20 @@ class _ProfilesState extends State<Profiles> {
 
   @override
   Widget build(BuildContext context) {
+    genderList = [
+      <String, String>{
+        "key": AppLocalizations.of(context)!.male,
+        "value": "Male"
+      },
+      <String, String>{
+        "key": AppLocalizations.of(context)!.female,
+        "value": "Female"
+      },
+      <String, String>{
+        "key": AppLocalizations.of(context)!.others,
+        "value": "Others"
+      }
+    ];
     return SafeArea(
         child: Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -144,7 +169,7 @@ class _ProfilesState extends State<Profiles> {
               ),
             ),
             child: Text(
-              "Add new profile",
+              AppLocalizations.of(context)!.addProfile,
               style: TextStyle(
                 color: Colors.white,
               ),

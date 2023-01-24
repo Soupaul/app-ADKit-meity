@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:thefirstone/resources/api.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DoctorsPage extends StatefulWidget {
   const DoctorsPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "Nearby Doctors",
+                AppLocalizations.of(context)!.nearbyDoctors,
                 style: TextStyle(
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold,
