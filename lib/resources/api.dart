@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:translator/translator.dart';
 
 class API {
   static String current_profile_id = "";
@@ -106,5 +107,13 @@ class API {
 
   static Stream<QuerySnapshot> doctorsList() async* {
     yield* FirebaseFirestore.instance.collection('doctors').snapshots();
+  }
+
+  static Future<String> translate(
+      String message, String fromLanguageCode, String toLanguageCode) async {
+    final translation = await GoogleTranslator()
+        .translate(message, from: fromLanguageCode, to: toLanguageCode);
+
+    return translation.text;
   }
 }

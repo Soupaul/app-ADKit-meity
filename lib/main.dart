@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
       ),
       debugShowCheckedModeBanner: false,
       home: _getScreen(),
-      locale: const Locale('en'),
+      // locale: const Locale('en'),
       supportedLocales: L10n.all,
       localizationsDelegates: const [
         AppLocalizations.delegate,

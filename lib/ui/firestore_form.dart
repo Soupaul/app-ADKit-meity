@@ -19,7 +19,13 @@ enum TtsState { playing, stopped }
 class _FirestoreFormState extends State<FirestoreForm> {
   // DocumentSnapshot? userData;
   late FlutterTts _flutterTts;
-  String language = "en-IN";
+  List<Map<String, String>> languageList = [
+    {'key': 'English', 'value': 'en'},
+    {'key': 'Hindi', 'value': 'hi'},
+    {'key': 'Bengali', 'value': 'bn'},
+  ];
+  late String dropdownValue;
+  late String language;
   double volume = 1.0;
   double pitch = 1.0;
   double rate = 0.5;
@@ -33,6 +39,8 @@ class _FirestoreFormState extends State<FirestoreForm> {
 
   void _initTts() {
     _flutterTts = FlutterTts();
+
+    language = '$dropdownValue-IN';
 
     _flutterTts.setStartHandler(() {
       setState(() {
@@ -84,6 +92,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
     print('on init');
     getData();
     super.initState();
+    dropdownValue = languageList[0]['value']!;
     _initTts();
   }
 
@@ -158,12 +167,20 @@ class _FirestoreFormState extends State<FirestoreForm> {
       children: [
         Padding(
           padding: EdgeInsets.all(10),
-          child: Text(
-            "Which of the following symptoms do you have?",
-            style: TextStyle(
-              // color: Color(0xFFBF828A),
-              fontSize: 28.0,
-              fontWeight: FontWeight.w900,
+          child: FutureBuilder(
+            future: API.translate(
+                "Which of the following symptoms do you have?",
+                'en',
+                dropdownValue),
+            builder: (context, snapshot) => Text(
+              dropdownValue != 'en'
+                  ? snapshot.data.toString()
+                  : "Which of the following symptoms do you have?",
+              style: TextStyle(
+                // color: Color(0xFFBF828A),
+                fontSize: 28.0,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
         ),
@@ -196,10 +213,28 @@ class _FirestoreFormState extends State<FirestoreForm> {
                             });
                           },
                         ),
-                        Text(
-                          list[index]['name'],
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        FutureBuilder(
+                            future: API.translate(
+                                list[index]['name'], 'en', dropdownValue),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFFBF828A),
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return Text(
+                                dropdownValue != 'en'
+                                    ? snapshot.data.toString()
+                                    : list[index]['name'],
+                                style: TextStyle(fontSize: 16),
+                              );
+                            }),
                       ]),
                     ),
                   ),
@@ -280,12 +315,18 @@ class _FirestoreFormState extends State<FirestoreForm> {
       children: [
         Padding(
           padding: EdgeInsets.all(10),
-          child: Text(
-            "Choose a suitable option about ${question}",
-            style: TextStyle(
-              // color: Color(0xFFBF828A),
-              fontSize: 28.0,
-              fontWeight: FontWeight.w900,
+          child: FutureBuilder(
+            future: API.translate("Choose a suitable option about $question",
+                'en', dropdownValue),
+            builder: (context, snapshot) => Text(
+              dropdownValue != 'en'
+                  ? snapshot.data.toString()
+                  : "Choose a suitable option about $question",
+              style: TextStyle(
+                // color: Color(0xFFBF828A),
+                fontSize: 28.0,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
         ),
@@ -293,12 +334,17 @@ class _FirestoreFormState extends State<FirestoreForm> {
           children: [
             Padding(
               padding: EdgeInsets.all(10),
-              child: Text(
-                subQuestion['name'],
-                style: TextStyle(
-                  // color: Color(0xFFBF828A),
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
+              child: FutureBuilder(
+                future: API.translate(subQuestion['name'], 'en', dropdownValue),
+                builder: (context, snapshot) => Text(
+                  dropdownValue != 'en'
+                      ? snapshot.data.toString()
+                      : subQuestion['name'],
+                  style: TextStyle(
+                    // color: Color(0xFFBF828A),
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -338,9 +384,15 @@ class _FirestoreFormState extends State<FirestoreForm> {
                             },
                             activeColor: Color(0xFFBF828A),
                           ),
-                          Text(
-                            options[i],
-                            style: TextStyle(fontSize: 16.0),
+                          FutureBuilder(
+                            future:
+                                API.translate(options[i], 'en', dropdownValue),
+                            builder: (context, snapshot) => Text(
+                              dropdownValue != 'en'
+                                  ? snapshot.data.toString()
+                                  : options[i],
+                              style: TextStyle(fontSize: 16.0),
+                            ),
                           ),
                         ]),
                       ),
@@ -413,6 +465,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
 
   Widget build(BuildContext context) {
     _context = context;
+
     return SafeArea(
       child: Stack(
         children: [
@@ -428,6 +481,40 @@ class _FirestoreFormState extends State<FirestoreForm> {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Display Language"),
+                            DropdownButton<String>(
+                              value: dropdownValue,
+                              icon: const Icon(Icons.arrow_downward),
+                              elevation: 16,
+                              style: const TextStyle(
+                                  color: const Color(0xFFBF828A)),
+                              underline: Container(
+                                height: 2,
+                                color: const Color(0xFFBF828A),
+                              ),
+                              onChanged: (String? value) {
+                                // This is called when the user selects an item.
+                                setState(() {
+                                  dropdownValue = value!;
+                                  language = '$dropdownValue-IN';
+                                });
+                              },
+                              items: languageList.map<DropdownMenuItem<String>>(
+                                  (Map<String, String> mp) {
+                                return DropdownMenuItem<String>(
+                                  value: mp['value'],
+                                  child: Text(mp['key']!),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                      ),
                       Expanded(
                           child: state > 0
                               ? getSubQuestionsView()
@@ -549,16 +636,30 @@ class _FirestoreFormState extends State<FirestoreForm> {
                         Icons.volume_up,
                         color: Color(0xFFBF828A),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        var whichSymptom = dropdownValue != 'en'
+                            ? await API.translate(
+                                'Which of the following symptoms do you have?',
+                                'en',
+                                dropdownValue)
+                            : 'Which of the following symptoms do you have?';
+
+                        var chooseOption = state != 0
+                            ? dropdownValue != 'en'
+                                ? await API.translate(
+                                    'Choose a suitable option about ${selectedSymToTravarse[state - 1]['name']}',
+                                    'en',
+                                    dropdownValue)
+                                : 'Choose a suitable option about ${selectedSymToTravarse[state - 1]['name']}'
+                            : "";
+
                         if (state == 0) {
                           setState(() {
-                            _newVoiceText =
-                                'Which of the following symptoms do you have?';
+                            _newVoiceText = whichSymptom;
                           });
                         } else {
                           setState(() {
-                            _newVoiceText =
-                                'Choose a suitable option about ${selectedSymToTravarse[state - 1]['name']}';
+                            _newVoiceText = chooseOption;
                           });
                         }
 
