@@ -127,5 +127,85 @@
     "verify": "Verify",
     "@verify": {
         "description": "A word"
+    },
+    "languageWord": "LANGUAGE",
+    "@languageWord": {
+        "description": "A word"
+    },
+    "uploadingVideo": "Uploading video...",
+    "@uploadingVideo": {
+        "description": "Video uploading state"
+    },
+    "processing": "Processing...",
+    "@processing": {
+        "description": "Video processing state"
+    },
+    "deleteProfile": "Delete Profile",
+    "@deleteProfile": {
+        "description": "Profile deletion"
+    },
+    "yes": "YES",
+    "@yes": {
+        "description": "Agree"
+    },
+    "no": "NO",
+    "@no": {
+        "description": "Disagree"
+    },
+    "sure": "Are you sure?",
+    "@sure": {
+        "description": "Surety check"
+    },
+    "pregnancy": "Pregnancy",
+    "@pregnancy": {
+        "description": "A word"
+    },
+    "isPregnant": "Are you pregnant?",
+    "@isPregnant": {
+        "description": "Pregnancy Status"
+    },
+    "verdict": "Verdict",
+    "@verdict": {
+        "description": "A word"
+    },
+    "severelyAnaemic": "Severely Anaemic",
+    "@severelyAnaemic": {
+        "description": "Anaemia Status"
+    },
+    "moderatelyAnaemic": "Moderately Anaemic",
+    "@moderatelyAnaemic": {
+        "description": "Anaemia Status"
+    },
+    "mildlyAnaemic": "Mildly Anaemic",
+    "@mildlyAnaemic": {
+        "description": "Anaemia Status"
+    },
+    "nonAnaemic": "Non-Anaemic (Safe)",
+    "@nonAnaemic": {
+        "description": "Anaemia Status"
+    },
+    "normalRange": "Normal Range",
+    "@normalRange": {
+        "description": "Normal range of haemoglobin"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "Okay"
+    },
+    "adviceSevere": "1. Consult a Doctor to treat the deficiency as soon as possible \n2. Iron supplements should be taken by mouth.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
+    "@adviceSevere": {
+        "description": "advice"
+    },
+    "adviceModerate": "1. Sleep more at night and take naps during the day. \n2. Eat iron-rich foods(chicken, leafy vegetables and beans)\n3. Plan your day to include rest periods.",
+    "@adviceModerate": {
+        "description": "advice"
+    },
+    "adviceMild": "1. Take Dried fruit, such as raisins and apricots. \n2. Sleep more at night and take naps during the day.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
+    "@adviceMild": {
+        "description": "advice"
+    },
+    "adviceSafe": "You are safe. Keep up the good work.",
+    "@adviceSafe": {
+        "description": "advice"
     }
 }

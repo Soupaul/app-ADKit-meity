@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thefirstone/ui/home.dart';
+import 'package:thefirstone/ui/language_select.dart';
 import 'package:thefirstone/ui/personal_details.dart';
 import 'package:thefirstone/widgets/custom_clipper.dart';
 import '../utils/firebase_auth.dart';
@@ -176,9 +177,9 @@ class _LoginPageState extends State<LoginPage> {
                                 offset: Offset(15.0, 0.0),
                                 child: Container(
                                   padding: const EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    right: 10.0,
+                                    // top: 5.0,
+                                    // bottom: 5.0,
+                                    right: 15.0,
                                   ),
                                   child: TextButton(
                                     style: ButtonStyle(
@@ -198,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                                       color: Color(0xFFBF828A),
                                     ),
                                     onPressed: () async {
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 OtpPage(_controller!.text)),
@@ -217,74 +218,11 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                           onPressed: () async {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    OtpPage(_controller!.text)));
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        OtpPage(_controller!.text)));
                             // HomePage()));
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                /* Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: new Row(
-                    children: <Widget>[
-                      new Expanded(
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0)),
-                          splashColor: Colors.redAccent,
-                          color: Colors.redAccent,
-                          // splashColor: Color(0xFFBF828A),
-                          // color: Color(0xFFBF828A),
-                          child: new Row(
-                            children: <Widget>[
-                              new Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: Text(
-                                  "LOGIN WITH GOOGLE",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              new Expanded(
-                                child: Container(),
-                              ),
-                              new Transform.translate(
-                                offset: Offset(15.0, 0.0),
-                                child: new Container(
-                                  padding: const EdgeInsets.only(
-                                    top: 5.0,
-                                    bottom: 5.0,
-                                    right: 10.0,
-                                  ),
-                                  child: FlatButton(
-                                    shape: new RoundedRectangleBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(28.0)),
-                                    splashColor: Colors.white,
-                                    color: Colors.white,
-                                    child: Image(
-                                      image: AssetImage("assets/google-plus.png"),
-                                      height: 28.0,
-                                      color: Colors.redAccent,
-                                    ),
-                                    onPressed: () async {
-                                      bool res =
-                                          await AuthProvider.loginWithGoogle();
-                                      if (!res)
-                                        print("error logging in with google");
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          onPressed: () async {
-                            bool res = await AuthProvider.loginWithGoogle();
-                            if (!res) print("error logging in with google");
                           },
                         ),
                       ),
@@ -294,29 +232,88 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   margin: const EdgeInsets.only(top: 20.0),
                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: new Row(
+                  child: Row(
                     children: <Widget>[
-                      new Expanded(
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0)),
-                          color: Colors.transparent,
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "DON'T HAVE AN ACCOUNT?",
-                              style: TextStyle(color: Color(0xFFBF828A)),
+                      Expanded(
+                        child: TextButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)),
+                            ),
+                            overlayColor: MaterialStateProperty.all(
+                              const Color(0xFFBF828A),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFBF828A),
                             ),
                           ),
-                          onPressed: () => {
-                           
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Text(
+                                  AppLocalizations.of(context)!.languageWord,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              Transform.translate(
+                                offset: const Offset(15.0, 0.0),
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                    // top: 5.0,
+                                    // bottom: 5.0,
+                                    right: 15.0,
+                                  ),
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      padding: MaterialStateProperty.all(
+                                          const EdgeInsets.all(12.0)),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(28.0)),
+                                      ),
+                                      overlayColor: MaterialStateProperty.all(
+                                          Colors.white),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.language,
+                                      style: const TextStyle(
+                                          color: Color(0xFFBF828A)),
+                                    ),
+                                    // child: Icon(
+                                    //   Icons.arrow_forward,
+                                    //   color: Color(0xFFBF828A),
+                                    // ),
+                                    onPressed: () async {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LanguageSelect()),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          onPressed: () async {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const LanguageSelect()));
+                            // HomePage()));
                           },
                         ),
                       ),
                     ],
                   ),
-                ),*/
+                ),
               ],
             ),
           ),

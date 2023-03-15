@@ -90,7 +90,7 @@ class _OtpPageState extends State<OtpPage> {
   _checkForDetais(String uid) async {
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(uid)
         .get()
         .then((value) => {
               Navigator.pushAndRemoveUntil(

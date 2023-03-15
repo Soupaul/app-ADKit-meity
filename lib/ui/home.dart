@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:thefirstone/resources/api.dart';
 import 'package:thefirstone/ui/choose_nail_palm.dart';
 import 'package:thefirstone/ui/doctors.dart';
+import 'package:thefirstone/ui/language_select.dart';
 import 'package:thefirstone/ui/login.dart';
 import 'package:thefirstone/ui/profiles.dart';
 import 'package:thefirstone/ui/trend_graph.dart';
@@ -36,9 +37,18 @@ class _HomePageState extends State<HomePage> {
   String? appType;
   late TextEditingController ageControler;
   String gender = "1";
+  String? firstButtonText;
+  String? secondButtonText;
+  double textSize = 22;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        firstButtonText = AppLocalizations.of(context)!.selectVideo;
+        secondButtonText = AppLocalizations.of(context)!.recordVideo;
+      });
+    });
     ageControler = new TextEditingController();
     // FirebaseFirestore.instance
     //     .collection('users')
@@ -66,8 +76,8 @@ class _HomePageState extends State<HomePage> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: Text("Pregnancy"),
-          content: Text("Are you currently pregnant?"),
+          title: Text(AppLocalizations.of(context)!.pregnancy),
+          content: Text(AppLocalizations.of(context)!.isPregnant),
           actions: [
             TextButton(
               onPressed: () {
@@ -81,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialStateProperty.all(const Color(0xFFBF828A)),
               ),
               child: Text(
-                'YES',
+                AppLocalizations.of(context)!.yes,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -99,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialStateProperty.all(const Color(0xFFBF828A)),
               ),
               child: Text(
-                'NO',
+                AppLocalizations.of(context)!.no,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -198,7 +208,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       appType = type;
-      firstButtonText = 'Uploading video...';
+      firstButtonText = AppLocalizations.of(context)!.uploadingVideo;
       _currentVideo = File(result.path);
     });
 
@@ -215,14 +225,14 @@ class _HomePageState extends State<HomePage> {
     final url = await snapshot.ref.getDownloadURL();
 
     setState(() {
-      firstButtonText = 'Processing...';
+      firstButtonText = AppLocalizations.of(context)!.processing;
       downUrl = url;
     });
 
     await _getAPiResponse();
 
     setState(() {
-      firstButtonText = 'Select a Video from Gallery';
+      firstButtonText = AppLocalizations.of(context)!.selectVideo;
     });
   }
 
@@ -240,16 +250,16 @@ class _HomePageState extends State<HomePage> {
       normalRange.add(11);
       normalRange.add(16);
       if (val < 7) {
-        verdict = "Severely Anaemic";
+        verdict = AppLocalizations.of(context)!.severelyAnaemic;
         color = Colors.red;
       } else if (val >= 7 && val < 10) {
-        verdict = "Moderately Anaemic";
+        verdict = AppLocalizations.of(context)!.moderatelyAnaemic;
         color = Colors.orange;
       } else if (val >= 10 && val < 11) {
-        verdict = "Mildly Anaemic";
+        verdict = AppLocalizations.of(context)!.mildlyAnaemic;
         color = Color(0xFFF6C21A);
       } else {
-        verdict = "Non-Anaemic (Safe)";
+        verdict = AppLocalizations.of(context)!.nonAnaemic;
         color = Colors.green;
       }
     } else if (age > 5 && age <= 11) {
@@ -260,16 +270,16 @@ class _HomePageState extends State<HomePage> {
       normalRange.add(11.5);
       normalRange.add(16);
       if (val < 8) {
-        verdict = "Severely Anaemic";
+        verdict = AppLocalizations.of(context)!.severelyAnaemic;
         color = Colors.red;
       } else if (val >= 8 && val < 11) {
-        verdict = "Moderately Anaemic";
+        verdict = AppLocalizations.of(context)!.moderatelyAnaemic;
         color = Colors.orange;
       } else if (val >= 11 && val < 11.5) {
-        verdict = "Mildly Anaemic";
+        verdict = AppLocalizations.of(context)!.mildlyAnaemic;
         color = Color(0xFFF6C21A);
       } else {
-        verdict = "Non-Anaemic (Safe)";
+        verdict = AppLocalizations.of(context)!.nonAnaemic;
         color = Colors.green;
       }
     } else if (age > 11 && age < 15) {
@@ -280,16 +290,16 @@ class _HomePageState extends State<HomePage> {
       normalRange.add(12);
       normalRange.add(16);
       if (val < 8) {
-        verdict = "Severely Anaemic";
+        verdict = AppLocalizations.of(context)!.severelyAnaemic;
         color = Colors.red;
       } else if (val >= 8 && val < 11) {
-        verdict = "Moderately Anaemic";
+        verdict = AppLocalizations.of(context)!.moderatelyAnaemic;
         color = Colors.orange;
       } else if (val >= 11 && val < 12) {
-        verdict = "Mildly Anaemic";
+        verdict = AppLocalizations.of(context)!.mildlyAnaemic;
         color = Color(0xFFF6C21A);
       } else {
-        verdict = "Non-Anaemic (Safe)";
+        verdict = AppLocalizations.of(context)!.nonAnaemic;
         color = Colors.green;
       }
     } else {
@@ -302,16 +312,16 @@ class _HomePageState extends State<HomePage> {
           normalRange.add(11);
           normalRange.add(16);
           if (val < 7) {
-            verdict = "Severely Anaemic";
+            verdict = AppLocalizations.of(context)!.severelyAnaemic;
             color = Colors.red;
           } else if (val >= 7 && val < 10) {
-            verdict = "Moderately Anaemic";
+            verdict = AppLocalizations.of(context)!.moderatelyAnaemic;
             color = Colors.orange;
           } else if (val >= 10 && val < 11) {
-            verdict = "Mildly Anaemic";
+            verdict = AppLocalizations.of(context)!.mildlyAnaemic;
             color = Color(0xFFF6C21A);
           } else {
-            verdict = "Non-Anaemic (Safe)";
+            verdict = AppLocalizations.of(context)!.nonAnaemic;
             color = Colors.green;
           }
         } else {
@@ -322,16 +332,16 @@ class _HomePageState extends State<HomePage> {
           normalRange.add(12);
           normalRange.add(16);
           if (val < 8) {
-            verdict = "Severely Anaemic";
+            verdict = AppLocalizations.of(context)!.severelyAnaemic;
             color = Colors.red;
           } else if (val >= 8 && val < 11) {
-            verdict = "Moderately Anaemic";
+            verdict = AppLocalizations.of(context)!.moderatelyAnaemic;
             color = Colors.orange;
           } else if (val >= 11 && val < 12) {
-            verdict = "Mildly Anaemic";
+            verdict = AppLocalizations.of(context)!.mildlyAnaemic;
             color = Color(0xFFF6C21A);
           } else {
-            verdict = "Non-Anaemic (Safe)";
+            verdict = AppLocalizations.of(context)!.nonAnaemic;
             color = Colors.green;
           }
         }
@@ -343,16 +353,16 @@ class _HomePageState extends State<HomePage> {
         normalRange.add(13);
         normalRange.add(16);
         if (val < 8) {
-          verdict = "Severely Anaemic";
+          verdict = AppLocalizations.of(context)!.severelyAnaemic;
           color = Colors.red;
         } else if (val >= 8 && val < 11) {
-          verdict = "Moderately Anaemic";
+          verdict = AppLocalizations.of(context)!.moderatelyAnaemic;
           color = Colors.orange;
         } else if (val >= 11 && val < 13) {
-          verdict = "Mildly Anaemic";
+          verdict = AppLocalizations.of(context)!.mildlyAnaemic;
           color = Color(0xFFF6C21A);
         } else {
-          verdict = "Non-Anaemic (Safe)";
+          verdict = AppLocalizations.of(context)!.nonAnaemic;
           color = Colors.green;
         }
       }
@@ -363,7 +373,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Verdict'),
+            title: Text(AppLocalizations.of(context)!.verdict),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,16 +387,22 @@ class _HomePageState extends State<HomePage> {
                     maxValue: 16,
                     currentValue: double.parse(val.toStringAsFixed(1)),
                     segments: [
-                      GaugeSegment('Severely Anaemic', hbRanges[0], Colors.red),
                       GaugeSegment(
-                          'Moderately Anaemic', hbRanges[1], Colors.orange),
+                          AppLocalizations.of(context)!.severelyAnaemic,
+                          hbRanges[0],
+                          Colors.red),
                       GaugeSegment(
-                          "Mildly Anaemic", hbRanges[2], Color(0xFFF6C21A)),
-                      GaugeSegment('Non-Anaemic', hbRanges[3], Colors.green),
+                          AppLocalizations.of(context)!.moderatelyAnaemic,
+                          hbRanges[1],
+                          Colors.orange),
+                      GaugeSegment(AppLocalizations.of(context)!.mildlyAnaemic,
+                          hbRanges[2], Color(0xFFF6C21A)),
+                      GaugeSegment(AppLocalizations.of(context)!.nonAnaemic,
+                          hbRanges[3], Colors.green),
                     ],
                     showMarkers: false,
                     displayWidget: Text(
-                      'Haemoglobin (gm/dl)',
+                      '${AppLocalizations.of(context)!.haemoglobin} (gm/dl)',
                       style: TextStyle(
                         fontSize: 12.0,
                       ),
@@ -395,7 +411,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Center(
                   child: Text(
-                    "Normal Range: ${normalRange[0]} - ${normalRange[1]} gm/dl",
+                    "${AppLocalizations.of(context)!.normalRange}: ${normalRange[0]} - ${normalRange[1]} gm/dl",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -417,7 +433,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 15,
                 ),
-                verdict == "Non-Anaemic (Safe)"
+                verdict == AppLocalizations.of(context)!.nonAnaemic
                     ? SizedBox()
                     : Text(
                         "Next Steps:",
@@ -440,8 +456,8 @@ class _HomePageState extends State<HomePage> {
                     const Color(0xFFBF828A),
                   ),
                 ),
-                child: const Text(
-                  'OK',
+                child: Text(
+                  AppLocalizations.of(context)!.ok,
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -453,24 +469,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _advise(String type) {
-    if (type == 'Severely Anaemic') {
-      return const Text(
-        "1. Consult a Doctor to treat the deficiency as soon as possible \n3. Iron supplements should be taken by mouth.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
+    if (type == AppLocalizations.of(context)!.severelyAnaemic) {
+      return Text(
+        AppLocalizations.of(context)!.adviceSevere,
         style: TextStyle(fontSize: 14),
       );
-    } else if (type == 'Moderately Anaemic') {
-      return const Text(
-        "1. Sleep more at night and take naps during the day. \n3. Eat iron-rich foods(chicken, leafy vegetables and beans)\n3. Plan your day to include rest periods.",
+    } else if (type == AppLocalizations.of(context)!.moderatelyAnaemic) {
+      return Text(
+        AppLocalizations.of(context)!.adviceModerate,
         style: TextStyle(fontSize: 14),
       );
-    } else if (type == "Mildly Anaemic") {
-      return const Text(
-        "1. Take Dried fruit, such as raisins and apricots. \n3. Sleep more at night and take naps during the day.\n3. Eat iron-rich foods(chicken, leafy vegetables and beans)",
+    } else if (type == AppLocalizations.of(context)!.mildlyAnaemic) {
+      return Text(
+        AppLocalizations.of(context)!.adviceMild,
         style: TextStyle(fontSize: 14),
       );
     } else {
-      return const Text(
-        "You are safe. Keep up the good work.",
+      return Text(
+        AppLocalizations.of(context)!.adviceSafe,
         style: TextStyle(fontSize: 14),
       );
     }
@@ -497,10 +513,6 @@ class _HomePageState extends State<HomePage> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error"),
       ));
-      setState(() {
-        firstButtonText = "Select video from gallery";
-        secondButtonText = "Record a new video";
-      });
     } else {
       API.addResult(data, appType!);
       _showGauge(data, age);
@@ -516,7 +528,7 @@ class _HomePageState extends State<HomePage> {
 
     if (type == null) return;
 
-    await showPersonalDetailsDialog();
+    // await showPersonalDetailsDialog();
     await showPregnancyDialog();
 
     var result = null;
@@ -538,7 +550,7 @@ class _HomePageState extends State<HomePage> {
 
         setState(() {
           appType = type;
-          secondButtonText = 'Uploading video...';
+          secondButtonText = AppLocalizations.of(context)!.uploadingVideo;
           _currentVideo = File(result.path);
         });
 
@@ -552,27 +564,21 @@ class _HomePageState extends State<HomePage> {
         print("Download Link: $url");
 
         setState(() {
-          secondButtonText = 'Processing...';
+          secondButtonText = AppLocalizations.of(context)!.processing;
           downUrl = url;
         });
 
         await _getAPiResponse();
 
         setState(() {
-          secondButtonText = 'Record a new video';
+          secondButtonText = AppLocalizations.of(context)!.recordVideo;
         });
       }
     });
   }
 
-  late String firstButtonText;
-  late String secondButtonText;
-  double textSize = 22;
-
   @override
   Widget build(BuildContext context) {
-    firstButtonText = AppLocalizations.of(context)!.selectVideo;
-    secondButtonText = AppLocalizations.of(context)!.recordVideo;
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -584,7 +590,7 @@ class _HomePageState extends State<HomePage> {
               Column(
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
                         child: Text(
@@ -595,10 +601,35 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.bold,
                             )),
                         alignment: Alignment.topLeft,
-                        padding: EdgeInsets.all(25),
+                        padding: EdgeInsets.symmetric(vertical: 25),
                       ),
                       Container(
-                        margin: EdgeInsets.all(20),
+                        // margin: EdgeInsets.all(20),
+                        child: Card(
+                          elevation: 10,
+                          color: Theme.of(context).accentColor,
+                          child: IconButton(
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LanguageSelect()));
+                              setState(() {
+                                firstButtonText = null;
+                                secondButtonText = null;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.language,
+                              color: Color(0xFFBF828A), //Color(0xFFBF828A),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        // margin: EdgeInsets.all(20),
                         child: Card(
                           elevation: 10,
                           color: Theme.of(context).accentColor,
@@ -652,7 +683,8 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(firstButtonText),
+                          Text(firstButtonText ??
+                              AppLocalizations.of(context)!.selectVideo),
                         ],
                       ),
                       Column(
@@ -677,7 +709,8 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(secondButtonText),
+                          Text(secondButtonText ??
+                              AppLocalizations.of(context)!.recordVideo),
                         ],
                       ),
                     ],

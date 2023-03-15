@@ -31,6 +31,8 @@ class _FirestoreFormState extends State<FirestoreForm> {
   double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
   String? _newVoiceText;
+  String prevText = "No symptom";
+  String nextText = "Next";
 
   TtsState ttsState = TtsState.stopped;
 
@@ -410,6 +412,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
       setState(() {
         state++;
         isAtStart = false;
+        prevText = "Previous";
       });
     } else {
       int noOfQuestions = selectedSymToTravarse.length;
@@ -418,6 +421,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
 
       setState(() {
         isAtStart = false;
+        prevText = "Previous";
         if (subState < maxGroups - 1) {
           subState++;
         } else {
@@ -426,6 +430,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
             state++;
           } else {
             isEnded = true;
+            nextText = "Finish";
           }
         }
       });
@@ -437,7 +442,9 @@ class _FirestoreFormState extends State<FirestoreForm> {
       setState(() {
         state = 0;
         isAtStart = true;
+        prevText = "No symptom";
         isEnded = false;
+        nextText = "Next";
       });
     } else {
       int noOfQuestions = selectedSymToTravarse.length;
@@ -446,6 +453,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
 
       setState(() {
         isEnded = false;
+        nextText = "Next";
         if (subState > 0) {
           subState--;
         } else {
@@ -457,6 +465,7 @@ class _FirestoreFormState extends State<FirestoreForm> {
             subState = maxGroups - 1;
           } else {
             isAtStart = true;
+            prevText = "No symptom";
           }
         }
       });
@@ -539,13 +548,18 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                   const Color(0xFFBF828A),
                                 ),
                               ),
-                              child: Text(
-                                isAtStart ? "No symptom" : "Previous",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
-                              ),
+                              child: FutureBuilder(
+                                  future: API.translate(
+                                      prevText, "en", dropdownValue),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      snapshot.data.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                      ),
+                                    );
+                                  }),
                               onPressed: () {
                                 if (isAtStart) {
                                   Navigator.pop(context);
@@ -569,13 +583,18 @@ class _FirestoreFormState extends State<FirestoreForm> {
                                   const Color(0xFFBF828A),
                                 ),
                               ),
-                              child: Text(
-                                !isEnded ? "Next" : "Finish",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
-                              ),
+                              child: FutureBuilder(
+                                  future: API.translate(
+                                      nextText, "en", dropdownValue),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      snapshot.data.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                      ),
+                                    );
+                                  }),
                               onPressed: () {
                                 if (state == 0) {
                                   allSelectedSym.clear();
